@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "386526925443",
+    "project_id": "justshop-79bcf",
+    "storage_bucket": "justshop-79bcf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386526925443:android:232cf81aa3ddaa6a2501b6",
+        "android_client_info": {
+          "package_name": "com.example.final_year_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386526925443-1pj6fdolalb28h4r5cqkbvd98lr8phpe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjjwWFamMOWkHubyTdUU4LGrk0jZhs6hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386526925443-1pj6fdolalb28h4r5cqkbvd98lr8phpe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

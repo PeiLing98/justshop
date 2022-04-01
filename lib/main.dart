@@ -4,11 +4,12 @@ import 'package:final_year_project/pages/login.dart';
 import 'package:final_year_project/pages/save_list.dart';
 import 'package:final_year_project/pages/sign_up_two.dart';
 import 'package:final_year_project/pages_controller.dart';
+import 'package:final_year_project/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:final_year_project/pages/sign_up.dart';
 
 void main() => runApp(MaterialApp(
-      initialRoute: '/login',
+      //initialRoute: '/login',
       routes: {
         '/signup': (context) => const SignUp(),
         '/signuptwo': (context) => const SignUpTwo(),
@@ -24,4 +25,5 @@ void main() => runApp(MaterialApp(
           textTheme: const TextTheme(
             bodyText1: TextStyle(color: Colors.black),
           )),
+      home: const Wrapper(),
     ));
