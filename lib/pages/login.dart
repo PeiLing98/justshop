@@ -1,5 +1,6 @@
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 
@@ -11,6 +12,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -61,8 +63,16 @@ class _LoginState extends State<Login> {
             const SizedBox(height: 20),
             BlackTextButton(
               buttonText: 'LOG IN',
-              onClick: () {
-                Navigator.pushNamed(context, '/pagescontroller');
+              onClick: () async {
+                //Navigator.pushNamed(context, '/pagescontroller');
+
+                dynamic result = await _auth.signInAnon();
+                if (result == null) {
+                  print('error signing in');
+                } else {
+                  print('signed in');
+                  print(result.uid);
+                }
               },
             ),
             Padding(

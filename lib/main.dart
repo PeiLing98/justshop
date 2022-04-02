@@ -7,23 +7,28 @@ import 'package:final_year_project/pages_controller.dart';
 import 'package:final_year_project/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:final_year_project/pages/sign_up.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MaterialApp(
-      //initialRoute: '/login',
-      routes: {
-        '/signup': (context) => const SignUp(),
-        '/signuptwo': (context) => const SignUpTwo(),
-        '/login': (context) => const Login(),
-        '/forgetpassword': (context) => const ForgetPassword(),
-        '/homepage': (context) => const HomePage(),
-        '/pagescontroller': (context) => const PagesController(),
-        '/savelist': (context) => const SaveList(),
-      },
-      theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          fontFamily: 'Roboto',
-          textTheme: const TextTheme(
-            bodyText1: TextStyle(color: Colors.black),
-          )),
-      home: const Wrapper(),
-    ));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(
+    //initialRoute: '/login',
+    routes: {
+      '/signup': (context) => const SignUp(),
+      '/signuptwo': (context) => const SignUpTwo(),
+      '/login': (context) => const Login(),
+      '/forgetpassword': (context) => const ForgetPassword(),
+      '/homepage': (context) => const HomePage(),
+      '/pagescontroller': (context) => const PagesController(),
+      '/savelist': (context) => const SaveList(),
+    },
+    theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Roboto',
+        textTheme: const TextTheme(
+          bodyText1: TextStyle(color: Colors.black),
+        )),
+    home: const Wrapper(),
+  ));
+}

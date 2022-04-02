@@ -1,4 +1,4 @@
-import 'package:final_year_project/pages/authentication_page.dart';
+import 'package:final_year_project/authentication_page.dart';
 import 'package:flutter/material.dart';
 
 class Wrapper extends StatelessWidget {
