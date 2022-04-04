@@ -1,5 +1,6 @@
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 
@@ -11,6 +12,14 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final AuthService _auth = AuthService();
+  final formKey = GlobalKey<FormState>();
+  String username = '';
+  String email = '';
+  String phoneNumber = '';
+  String password = '';
+  String error = '';
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -38,16 +47,70 @@ class _SignUpState extends State<SignUp> {
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Text('Sign Up', style: landingLabelStyle),
             ),
-            const StringInputTextBox(inputLabelText: 'Username'),
-            const StringInputTextBox(inputLabelText: 'Email'),
-            const StringInputTextBox(inputLabelText: 'Phone Number'),
-            const StringInputTextBox(inputLabelText: 'Password'),
-            const StringInputTextBox(inputLabelText: 'Confirm Password'),
+            Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    StringInputTextBox(
+                      inputLabelText: 'Username',
+                      onChanged: (val) {
+                        setState(() => username = val);
+                      },
+                      isPassword: false,
+                    ),
+                    StringInputTextBox(
+                      inputLabelText: 'Email',
+                      onChanged: (val) {
+                        setState(() => email = val);
+                      },
+                      isPassword: false,
+                      validator: (val) =>
+                          val!.isEmpty ? 'Enter an email' : null,
+                    ),
+                    StringInputTextBox(
+                      inputLabelText: 'Phone Number',
+                      onChanged: (val) {
+                        setState(() => phoneNumber = val);
+                      },
+                      isPassword: false,
+                    ),
+                    StringInputTextBox(
+                      inputLabelText: 'Password',
+                      onChanged: (val) {
+                        setState(() => password = val);
+                      },
+                      isPassword: false,
+                      validator: (val) => val!.length < 6
+                          ? 'Your password should be more than 6 characters'
+                          : null,
+                    ),
+                    StringInputTextBox(
+                      inputLabelText: 'Confirm Password',
+                      onChanged: (val) {
+                        setState(() => password = val);
+                      },
+                      isPassword: false,
+                    ),
+                  ],
+                )),
             const SizedBox(height: 20),
             BlackTextButton(
               buttonText: 'NEXT',
-              onClick: () {
-                Navigator.pushNamed(context, '/signuptwo');
+              onClick: () async {
+                // print(username);
+                // print(email);
+                // print(phoneNumber);
+                // print(password);
+                if (formKey.currentState!.validate()) {
+                  dynamic result =
+                      await _auth.registerWithEmailAndPassword(email, password);
+                  if (result == null) {
+                    setState(() =>
+                        error = "Please provide valid email and password");
+                  } else {
+                    Navigator.pushNamed(context, '/signuptwo');
+                  }
+                }
               },
             ),
             BlackTextButton(
@@ -55,6 +118,7 @@ class _SignUpState extends State<SignUp> {
                 onClick: () {
                   Navigator.pushNamed(context, '/login');
                 }),
+            Text(error)
           ]),
         ),
       ))),

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 class AlertTextModal extends StatefulWidget {
   final String alertContent;
-  VoidCallback onClick;
+  final VoidCallback onClick;
 
-  AlertTextModal({Key? key, required this.alertContent, required this.onClick})
+  const AlertTextModal(
+      {Key? key, required this.alertContent, required this.onClick})
       : super(key: key);
 
   @override

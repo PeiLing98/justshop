@@ -3,9 +3,10 @@ import 'package:final_year_project/constant.dart';
 
 class BlackTextButton extends StatefulWidget {
   final String buttonText;
-  VoidCallback onClick;
+  final VoidCallback onClick;
 
-  BlackTextButton({Key? key, required this.buttonText, required this.onClick})
+  const BlackTextButton(
+      {Key? key, required this.buttonText, required this.onClick})
       : super(key: key);
 
   @override
@@ -35,9 +36,9 @@ class _BlackTextButtonState extends State<BlackTextButton> {
 
 class LinkButton extends StatefulWidget {
   final String buttonText;
-  VoidCallback onClick;
+  final VoidCallback onClick;
 
-  LinkButton({Key? key, required this.buttonText, required this.onClick})
+  const LinkButton({Key? key, required this.buttonText, required this.onClick})
       : super(key: key);
 
   @override
@@ -50,5 +51,37 @@ class _LinkButtonState extends State<LinkButton> {
     return TextButton(
         onPressed: widget.onClick,
         child: Text(widget.buttonText, style: linkLabelStyle));
+  }
+}
+
+class WhiteTextButton extends StatefulWidget {
+  final String buttonText;
+  final VoidCallback onClick;
+
+  const WhiteTextButton(
+      {Key? key, required this.buttonText, required this.onClick})
+      : super(key: key);
+
+  @override
+  _WhiteTextButtonState createState() => _WhiteTextButtonState();
+}
+
+class _WhiteTextButtonState extends State<WhiteTextButton> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+          child: TextButton(
+              onPressed: widget.onClick,
+              child: Text(widget.buttonText, style: buttonLabelStyle),
+              style: OutlinedButton.styleFrom(
+                primary: Colors.black,
+                backgroundColor: Colors.white,
+                side: const BorderSide(color: Colors.grey, width: 1.0),
+                elevation: 1.0,
+              )),
+        ));
   }
 }

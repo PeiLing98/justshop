@@ -1,5 +1,6 @@
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/pages/home_page.dart';
+import 'package:final_year_project/pages/profile.dart';
 import 'package:flutter/material.dart';
 
 class PagesController extends StatefulWidget {
@@ -16,7 +17,7 @@ class _PagesControllerState extends State<PagesController> {
     Center(child: Text('Filter')),
     Center(child: Text('Start Business')),
     Center(child: Text('Rank')),
-    Center(child: Text('Profile'))
+    Profile()
   ];
 
   @override

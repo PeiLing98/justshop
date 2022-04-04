@@ -13,6 +13,13 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
+  final formKey = GlobalKey<FormState>();
+
+  //text field state
+  String email = '';
+  String password = '';
+  String error = '';
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -48,8 +55,31 @@ class _LoginState extends State<Login> {
                 ],
               ),
             ),
-            const StringInputTextBox(inputLabelText: 'Username'),
-            const StringInputTextBox(inputLabelText: 'Password'),
+            Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    StringInputTextBox(
+                      inputLabelText: 'Username',
+                      onChanged: (val) {
+                        setState(() => email = val);
+                      },
+                      isPassword: false,
+                      validator: (val) =>
+                          val!.isEmpty ? 'Enter an email' : null,
+                    ),
+                    StringInputTextBox(
+                      inputLabelText: 'Password',
+                      onChanged: (val) {
+                        setState(() => password = val);
+                      },
+                      isPassword: true,
+                      validator: (val) => val!.length < 6
+                          ? 'Your password should be more than 6 characters'
+                          : null,
+                    ),
+                  ],
+                )),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -64,14 +94,24 @@ class _LoginState extends State<Login> {
             BlackTextButton(
               buttonText: 'LOG IN',
               onClick: () async {
-                //Navigator.pushNamed(context, '/pagescontroller');
-
-                dynamic result = await _auth.signInAnon();
-                if (result == null) {
-                  print('error signing in');
-                } else {
-                  print('signed in');
-                  print(result.uid);
+                // dynamic result = await _auth.signInAnon();
+                // if (result == null) {
+                //   print('error signing in');
+                // } else {
+                //   print('signed in');
+                //   print(result.uid);
+                // }
+                // print(email);
+                // print(password);
+                if (formKey.currentState!.validate()) {
+                  dynamic result =
+                      await _auth.loginWithEmailAndPassword(email, password);
+                  if (result == null) {
+                    setState(
+                        () => error = "Could not login with these credentials");
+                  } else {
+                    Navigator.pushNamed(context, '/pagescontroller');
+                  }
                 }
               },
             ),
@@ -89,7 +129,8 @@ class _LoginState extends State<Login> {
                   )
                 ],
               ),
-            )
+            ),
+            Text(error)
           ]),
         ),
       ))),

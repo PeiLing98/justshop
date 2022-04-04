@@ -12,6 +12,9 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  String newPassword = '';
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -47,8 +50,25 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 ],
               ),
             ),
-            const StringInputTextBox(inputLabelText: 'New Password'),
-            const StringInputTextBox(inputLabelText: 'Confirm New Password'),
+            Form(
+              key: formKey,
+              child: Column(children: [
+                StringInputTextBox(
+                  inputLabelText: 'New Password',
+                  onChanged: (val) {
+                    newPassword = val;
+                  },
+                  isPassword: false,
+                ),
+                StringInputTextBox(
+                  inputLabelText: 'Confirm New Password',
+                  onChanged: (val) {
+                    newPassword = val;
+                  },
+                  isPassword: false,
+                ),
+              ]),
+            ),
             const SizedBox(height: 25),
             BlackTextButton(
               buttonText: 'CONFIRM',
