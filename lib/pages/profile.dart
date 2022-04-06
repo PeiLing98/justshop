@@ -1,5 +1,6 @@
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/top_app_bar.dart';
+import 'package:final_year_project/pages/listing_setting.dart';
 import 'package:final_year_project/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +21,12 @@ class _ProfileState extends State<Profile> {
       child: Column(
         children: [
           const TopAppBar(),
+          const Expanded(flex: 2, child: ListingSetting()),
           WhiteTextButton(
               buttonText: 'LOG OUT',
               onClick: () async {
                 await _auth.signOut();
-                Navigator.pushNamed(context, '/login');
+                //Navigator.pushNamed(context, '/login');
               })
         ],
       ),

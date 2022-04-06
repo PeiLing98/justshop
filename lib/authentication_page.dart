@@ -1,6 +1,4 @@
 import 'package:final_year_project/pages/login.dart';
-import 'package:final_year_project/pages/sign_up.dart';
-import 'package:final_year_project/pages/sign_up_two.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {

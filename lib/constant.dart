@@ -22,6 +22,12 @@ const linkLabelStyle = TextStyle(
     color: linkColor,
     decoration: TextDecoration.underline,
     decorationThickness: 1.5);
+const errorMessageStyle =
+    TextStyle(color: Colors.red, fontSize: 14, fontFamily: 'Roboto');
 const logoLabel =
     TextStyle(fontSize: 22, fontFamily: 'SecularOne', color: Colors.black);
 const modalContent = TextStyle(fontSize: 14, fontFamily: 'Roboto', height: 1.5);
+
+//-------------------------- reg expression ------------------------------------
+String emailReg =
+    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";

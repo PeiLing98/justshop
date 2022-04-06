@@ -1,4 +1,5 @@
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/pages/filter.dart';
 import 'package:final_year_project/pages/home_page.dart';
 import 'package:final_year_project/pages/profile.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class _PagesControllerState extends State<PagesController> {
   int currentIndex = 0;
   final screens = const [
     HomePage(),
-    Center(child: Text('Filter')),
+    Filter(),
     Center(child: Text('Start Business')),
     Center(child: Text('Rank')),
     Profile()
@@ -32,29 +33,47 @@ class _PagesControllerState extends State<PagesController> {
       },
       child: Scaffold(
         body: SafeArea(
-            child: SingleChildScrollView(
           child: screens[currentIndex],
-        )),
-        bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.grey[50],
-            selectedItemColor: secondaryColor,
-            unselectedItemColor: Colors.grey[700],
-            selectedFontSize: 12,
-            iconSize: 28,
-            showUnselectedLabels: false,
-            currentIndex: currentIndex,
-            onTap: (index) => setState(() => currentIndex = index),
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Filter'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.add_circle), label: 'Start Business'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.stacked_bar_chart), label: 'Rank'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.portrait), label: 'Profile')
-            ]),
+        ),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    blurRadius: 10, color: Colors.grey, offset: Offset(2, 2))
+              ],
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              )),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.grey[50],
+                selectedItemColor: secondaryColor,
+                unselectedItemColor: Colors.grey[700],
+                selectedFontSize: 12,
+                iconSize: 28,
+                showUnselectedLabels: false,
+                currentIndex: currentIndex,
+                onTap: (index) => setState(() => currentIndex = index),
+                items: const [
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.home), label: 'Home'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.list), label: 'Filter'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.add_circle), label: 'Start Business'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.stacked_bar_chart), label: 'Rank'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.portrait), label: 'Profile')
+                ]),
+          ),
+        ),
       ),
     );
   }
