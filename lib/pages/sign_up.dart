@@ -21,6 +21,7 @@ class _SignUpState extends State<SignUp> {
   String email = '';
   String phoneNumber = '';
   String password = '';
+  String confirmPassword = '';
   String error = '';
 
   @override
@@ -52,52 +53,73 @@ class _SignUpState extends State<SignUp> {
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                     child: Text('Sign Up', style: landingLabelStyle),
                   ),
-                  Form(
-                      key: formKey,
-                      child: Column(
-                        children: [
-                          StringInputTextBox(
-                            inputLabelText: 'Username',
-                            onChanged: (val) {
-                              setState(() => username = val);
-                            },
-                            isPassword: false,
-                          ),
-                          StringInputTextBox(
-                            inputLabelText: 'Email',
-                            onChanged: (val) {
-                              setState(() => email = val);
-                            },
-                            isPassword: false,
-                            validator: (val) =>
-                                val!.isEmpty ? 'Enter an email' : null,
-                          ),
-                          StringInputTextBox(
-                            inputLabelText: 'Phone Number',
-                            onChanged: (val) {
-                              setState(() => phoneNumber = val);
-                            },
-                            isPassword: false,
-                          ),
-                          StringInputTextBox(
-                            inputLabelText: 'Password',
-                            onChanged: (val) {
-                              setState(() => password = val);
-                            },
-                            isPassword: false,
-                            validator: (val) => val!.length < 6
-                                ? 'Your password should be more than 6 characters'
-                                : null,
-                          ),
-                          StringInputTextBox(
-                            inputLabelText: 'Confirm Password',
-                            onChanged: (val) {
-                              setState(() => password = val);
-                            },
-                            isPassword: false,
-                          ),
-                        ],
-                      )),
+                  SizedBox(
+                    height: 290,
+                    child: SingleChildScrollView(
+                      child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              StringInputTextBox(
+                                inputLabelText: 'Username',
+                                onChanged: (val) {
+                                  setState(() => username = val);
+                                },
+                                isPassword: false,
+                              ),
+                              StringInputTextBox(
+                                inputLabelText: 'Email',
+                                onChanged: (val) {
+                                  setState(() => email = val);
+                                },
+                                isPassword: false,
+                                validator: (val) =>
+                                    val!.isEmpty ? 'Enter an email' : null,
+                              ),
+                              StringInputTextBox(
+                                inputLabelText: 'Phone Number',
+                                onChanged: (val) {
+                                  setState(() => phoneNumber = val);
+                                },
+                                isPassword: false,
+                              ),
+                              StringInputTextBox(
+                                  inputLabelText: 'Password',
+                                  onChanged: (val) {
+                                    setState(() => password = val);
+                                  },
+                                  isPassword: true,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Please enter your password';
+                                    }
+                                    if (val.length < 6) {
+                                      return 'Your password should be at least 6 characters';
+                                    }
+                                    return null;
+                                  }),
+                              StringInputTextBox(
+                                  inputLabelText: 'Confirm Password',
+                                  onChanged: (val) {
+                                    setState(() => confirmPassword = val);
+                                  },
+                                  isPassword: true,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Please enter your confirm password';
+                                    }
+                                    if (val.length < 6) {
+                                      return 'Your confirm password should be at least 6 characters';
+                                    }
+                                    if (val != password) {
+                                      return 'Your password does not match';
+                                    }
+                                    return null;
+                                  }),
+                            ],
+                          )),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   BlackTextButton(
                     buttonText: 'NEXT',

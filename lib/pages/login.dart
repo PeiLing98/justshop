@@ -91,7 +91,6 @@ class _LoginState extends State<Login> {
                                 if (val.length < 6) {
                                   return 'Your password should be at least 6 characters';
                                 }
-
                                 return null;
                               }),
                         ],

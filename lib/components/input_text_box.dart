@@ -11,7 +11,7 @@ class StringInputTextBox extends StatefulWidget {
   const StringInputTextBox(
       {Key? key,
       required this.inputLabelText,
-      required this.onChanged,
+      this.onChanged,
       required this.isPassword,
       this.validator})
       : super(key: key);
@@ -25,36 +25,33 @@ class _StringInputTextBoxState extends State<StringInputTextBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(35, 10, 35, 0),
-      child: TextFormField(
-        validator: widget.validator,
-        obscureText: widget.isPassword,
-        //controller: _inputController,
-        cursorHeight: 18,
-        cursorColor: Colors.black,
-        decoration: InputDecoration(
-          labelText: widget.inputLabelText,
-          floatingLabelStyle: const TextStyle(
-            fontSize: 20,
-            color: secondaryColor,
-          ),
-          contentPadding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Colors.red),
-              borderRadius: BorderRadius.zero),
+    return TextFormField(
+      validator: widget.validator,
+      obscureText: widget.isPassword,
+      //controller: _inputController,
+      cursorHeight: 18,
+      cursorColor: Colors.black,
+      decoration: InputDecoration(
+        labelText: widget.inputLabelText,
+        floatingLabelStyle: const TextStyle(
+          fontSize: 20,
+          color: secondaryColor,
         ),
-        style: primaryFontStyle,
-        //onChanged: () => widget.onChanged!(_inputController.text),
-        onChanged: widget.onChanged,
+        contentPadding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+        errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(width: 1, color: Colors.red),
+            borderRadius: BorderRadius.zero),
       ),
+      style: primaryFontStyle,
+      //onChanged: () => widget.onChanged!(_inputController.text),
+      onChanged: widget.onChanged,
     );
   }
 }
@@ -108,6 +105,38 @@ class _IntegerInputTextBoxState extends State<IntegerInputTextBox> {
         ),
       ),
       onChanged: () => widget.onChanged,
+    );
+  }
+}
+
+class StringTextArea extends StatefulWidget {
+  final int textLine;
+  final String label;
+
+  const StringTextArea({Key? key, required this.label, required this.textLine})
+      : super(key: key);
+
+  @override
+  _StringTextAreaState createState() => _StringTextAreaState();
+}
+
+class _StringTextAreaState extends State<StringTextArea> {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: hintStyle,
+      minLines: widget.textLine,
+      maxLines: widget.textLine,
+      decoration: InputDecoration(
+        hintText: widget.label,
+        contentPadding: const EdgeInsets.all(10),
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:final_year_project/models/list.dart';
+import 'package:final_year_project/models/list_model.dart';
 import 'package:final_year_project/pages/listing_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

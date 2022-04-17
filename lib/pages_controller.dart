@@ -2,6 +2,7 @@ import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/pages/filter.dart';
 import 'package:final_year_project/pages/home_page.dart';
 import 'package:final_year_project/pages/profile.dart';
+import 'package:final_year_project/pages/register_business.dart';
 import 'package:flutter/material.dart';
 
 class PagesController extends StatefulWidget {
@@ -16,7 +17,7 @@ class _PagesControllerState extends State<PagesController> {
   final screens = const [
     HomePage(),
     Filter(),
-    Center(child: Text('Start Business')),
+    RegisterBusiness(),
     Center(child: Text('Rank')),
     Profile()
   ];

@@ -1,7 +1,7 @@
-import 'package:final_year_project/components/top_app_bar.dart';
+import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/components/search_bar.dart';
-import 'package:final_year_project/models/list.dart';
+import 'package:final_year_project/models/list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:final_year_project/services/database.dart';

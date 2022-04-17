@@ -13,6 +13,13 @@ const linkColor = Color.fromRGBO(107, 142, 194, 1);
 const primaryFontStyle = TextStyle(fontSize: 14, fontFamily: 'Roboto');
 const secondaryFontStyle =
     TextStyle(fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
+const titleAppBarFontStyle =
+    TextStyle(fontSize: 20, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
+const filterTitleFontStyle = TextStyle(
+    fontSize: 14,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    color: Colors.white);
 const landingLabelStyle = TextStyle(fontSize: 30, fontFamily: 'Lancelot');
 const buttonLabelStyle =
     TextStyle(fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w700);
@@ -24,9 +31,12 @@ const linkLabelStyle = TextStyle(
     decorationThickness: 1.5);
 const errorMessageStyle =
     TextStyle(color: Colors.red, fontSize: 14, fontFamily: 'Roboto');
+const hintStyle = TextStyle(fontSize: 12, fontFamily: 'Roboto');
 const logoLabel =
     TextStyle(fontSize: 22, fontFamily: 'SecularOne', color: Colors.black);
 const modalContent = TextStyle(fontSize: 14, fontFamily: 'Roboto', height: 1.5);
+const registerBusinessContentTitle =
+    TextStyle(fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
 
 //-------------------------- reg expression ------------------------------------
 String emailReg =

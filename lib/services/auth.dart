@@ -1,4 +1,4 @@
-import 'package:final_year_project/models/user.dart';
+import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -53,6 +53,16 @@ class AuthService {
       await DatabaseService(uid: user!.uid)
           .updateUserData('cake', 5.50, 'soft and fluffy');
       return _userFromUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  //reset password with email
+  Future resetPasswordWithEmail(String email) async {
+    try {
+      return await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
       print(e.toString());
       return null;

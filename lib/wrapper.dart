@@ -1,5 +1,5 @@
 import 'package:final_year_project/authentication_page.dart';
-import 'package:final_year_project/models/user.dart';
+import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

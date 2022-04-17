@@ -1,6 +1,6 @@
-import 'package:final_year_project/modals/alert_text_modal.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 
@@ -12,8 +12,10 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  String newPassword = '';
+  String email = '';
+  TextEditingController controller = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -54,38 +56,32 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               key: formKey,
               child: Column(children: [
                 StringInputTextBox(
-                  inputLabelText: 'New Password',
-                  onChanged: (val) {
-                    newPassword = val;
-                  },
-                  isPassword: false,
-                ),
-                StringInputTextBox(
-                  inputLabelText: 'Confirm New Password',
-                  onChanged: (val) {
-                    newPassword = val;
-                  },
-                  isPassword: false,
-                ),
+                    inputLabelText: 'Enter your email',
+                    onChanged: (val) {
+                      email = val;
+                    },
+                    isPassword: false,
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      if (!RegExp(emailReg).hasMatch(val)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    }),
               ]),
             ),
             const SizedBox(height: 25),
             BlackTextButton(
-              buttonText: 'CONFIRM',
-              onClick: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertTextModal(
-                        alertContent:
-                            'You have successfully reset your password !',
-                        onClick: () {
-                          Navigator.pushNamed(context, '/login');
-                        },
-                      );
+                buttonText: 'SEND REQUEST',
+                onClick: () async {
+                  if (formKey.currentState!.validate()) {
+                    await _auth.resetPasswordWithEmail(email).then((value) {
+                      Navigator.pushNamed(context, '/login');
                     });
-              },
-            ),
+                  }
+                }),
             BlackTextButton(
               buttonText: 'BACK TO LOGIN PAGE',
               onClick: () {

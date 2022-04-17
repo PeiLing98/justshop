@@ -1,5 +1,5 @@
 import 'package:final_year_project/components/loading.dart';
-import 'package:final_year_project/models/user.dart';
+import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,10 +20,10 @@ class _ListingSettingState extends State<ListingSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser?>(context);
+    final user = Provider.of<MyUser>(context);
 
     return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user!.uid).userData,
+        stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData? userData = snapshot.data;
@@ -51,10 +51,10 @@ class _ListingSettingState extends State<ListingSetting> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        print(_currentName);
-                        print(_currentPrice);
-                        print(_currentDescription);
-                        print(userData.uid);
+                        // print(_currentName);
+                        // print(_currentPrice);
+                        // print(_currentDescription);
+                        // print(userData.uid);
                         if (_formKey.currentState!.validate()) {
                           await DatabaseService(uid: user.uid).updateUserData(
                               _currentName ?? userData.name,
