@@ -63,36 +63,42 @@ class _LoginState extends State<Login> {
                       key: formKey,
                       child: Column(
                         children: [
-                          StringInputTextBox(
-                              inputLabelText: 'Email',
-                              onChanged: (val) {
-                                setState(() => email = val);
-                              },
-                              isPassword: false,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please enter your registered email';
-                                }
-                                if (!RegExp(emailReg).hasMatch(val)) {
-                                  return 'Please enter a valid email';
-                                }
-                                return null;
-                              }),
-                          StringInputTextBox(
-                              inputLabelText: 'Password',
-                              onChanged: (val) {
-                                setState(() => password = val);
-                              },
-                              isPassword: true,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please enter your password';
-                                }
-                                if (val.length < 6) {
-                                  return 'Your password should be at least 6 characters';
-                                }
-                                return null;
-                              }),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(35, 0, 35, 10),
+                            child: StringInputTextBox(
+                                inputLabelText: 'Email',
+                                onChanged: (val) {
+                                  setState(() => email = val);
+                                },
+                                isPassword: false,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Please enter your registered email';
+                                  }
+                                  if (!RegExp(emailReg).hasMatch(val)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 35),
+                            child: StringInputTextBox(
+                                inputLabelText: 'Password',
+                                onChanged: (val) {
+                                  setState(() => password = val);
+                                },
+                                isPassword: true,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'Please enter your password';
+                                  }
+                                  if (val.length < 6) {
+                                    return 'Your password should be at least 6 characters';
+                                  }
+                                  return null;
+                                }),
+                          ),
                         ],
                       )),
                   Padding(

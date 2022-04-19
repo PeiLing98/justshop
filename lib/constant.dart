@@ -35,9 +35,10 @@ const hintStyle = TextStyle(fontSize: 12, fontFamily: 'Roboto');
 const logoLabel =
     TextStyle(fontSize: 22, fontFamily: 'SecularOne', color: Colors.black);
 const modalContent = TextStyle(fontSize: 14, fontFamily: 'Roboto', height: 1.5);
-const registerBusinessContentTitle =
+const boldContentTitle =
     TextStyle(fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
 
 //-------------------------- reg expression ------------------------------------
 String emailReg =
     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+String phoneReg = r"^(+?6?01)[0-46-9]-*[0-9]{7,8}";

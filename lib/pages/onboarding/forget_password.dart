@@ -55,21 +55,24 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             Form(
               key: formKey,
               child: Column(children: [
-                StringInputTextBox(
-                    inputLabelText: 'Enter your email',
-                    onChanged: (val) {
-                      email = val;
-                    },
-                    isPassword: false,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      if (!RegExp(emailReg).hasMatch(val)) {
-                        return 'Please enter a valid email';
-                      }
-                      return null;
-                    }),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                  child: StringInputTextBox(
+                      inputLabelText: 'Enter your email',
+                      onChanged: (val) {
+                        email = val;
+                      },
+                      isPassword: false,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!RegExp(emailReg).hasMatch(val)) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      }),
+                ),
               ]),
             ),
             const SizedBox(height: 25),

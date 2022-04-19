@@ -22,6 +22,18 @@ class _ProfileState extends State<Profile> {
         children: [
           const TopAppBar(),
           const Expanded(flex: 2, child: ListingSetting()),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/sellerprofile');
+            },
+            child: const Text('Seller Profile'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/updatesellerprofile');
+            },
+            child: const Text('Update Seller Profile'),
+          ),
           WhiteTextButton(
               buttonText: 'LOG OUT',
               onClick: () async {

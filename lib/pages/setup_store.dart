@@ -117,8 +117,7 @@ class _SetupStoreState extends State<SetupStore> {
                             Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Image',
-                                      style: registerBusinessContentTitle),
+                                  const Text('Image', style: boldContentTitle),
                                   SizedBox(
                                     height: 20,
                                     child: IconButton(
@@ -130,7 +129,7 @@ class _SetupStoreState extends State<SetupStore> {
                                   ),
                                   const SizedBox(width: 100),
                                   const Text('Business Category',
-                                      style: registerBusinessContentTitle),
+                                      style: boldContentTitle),
                                 ]),
                             const SizedBox(height: 5),
                             Row(
@@ -217,32 +216,35 @@ class _SetupStoreState extends State<SetupStore> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
                                   Text('Listing Price',
-                                      style: registerBusinessContentTitle),
+                                      style: boldContentTitle),
                                   SizedBox(width: 110),
-                                  Text('Listing Name',
-                                      style: registerBusinessContentTitle),
+                                  Text('Listing Name', style: boldContentTitle),
                                 ]),
                             const SizedBox(height: 5),
                             SizedBox(
                               height: 35,
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                children: [
                                   SizedBox(
                                     width: 170,
                                     child: Expanded(
                                       child: StringTextArea(
-                                          label: 'Price', textLine: 1),
+                                        label: 'Price',
+                                        textLine: 1,
+                                        onChanged: (val) {},
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 20,
                                   ),
                                   Expanded(
                                     child: StringTextArea(
-                                        label:
-                                            'Nasi Lemak / Face Mask / Design',
-                                        textLine: 1),
+                                      label: 'Nasi Lemak / Face Mask / Design',
+                                      textLine: 1,
+                                      onChanged: (val) {},
+                                    ),
                                   ),
                                 ],
                               ),
@@ -254,15 +256,17 @@ class _SetupStoreState extends State<SetupStore> {
                         height: 105,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text('Listing Description',
-                                style: registerBusinessContentTitle),
-                            SizedBox(
+                          children: [
+                            const Text('Listing Description',
+                                style: boldContentTitle),
+                            const SizedBox(
                               height: 5,
                             ),
                             StringTextArea(
-                                label: 'Describe Your Listing In Details',
-                                textLine: 4),
+                              label: 'Describe Your Listing In Details',
+                              textLine: 4,
+                              onChanged: (val) {},
+                            ),
                           ],
                         ),
                       ),
@@ -272,7 +276,7 @@ class _SetupStoreState extends State<SetupStore> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text('Do you have characterization?',
-                                  style: registerBusinessContentTitle),
+                                  style: boldContentTitle),
                               const SizedBox(
                                 height: 5,
                               ),

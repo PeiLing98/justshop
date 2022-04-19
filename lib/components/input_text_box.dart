@@ -112,8 +112,15 @@ class _IntegerInputTextBoxState extends State<IntegerInputTextBox> {
 class StringTextArea extends StatefulWidget {
   final int textLine;
   final String label;
+  final Function(String)? onChanged;
+  final String? Function(String?)? validator;
 
-  const StringTextArea({Key? key, required this.label, required this.textLine})
+  const StringTextArea(
+      {Key? key,
+      required this.label,
+      required this.textLine,
+      required this.onChanged,
+      this.validator})
       : super(key: key);
 
   @override
@@ -123,7 +130,7 @@ class StringTextArea extends StatefulWidget {
 class _StringTextAreaState extends State<StringTextArea> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       style: hintStyle,
       minLines: widget.textLine,
       maxLines: widget.textLine,
@@ -137,6 +144,8 @@ class _StringTextAreaState extends State<StringTextArea> {
           borderRadius: BorderRadius.zero,
         ),
       ),
+      onChanged: widget.onChanged,
+      validator: widget.validator,
     );
   }
 }

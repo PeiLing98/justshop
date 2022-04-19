@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/constant.dart';
@@ -12,6 +14,7 @@ class Filter extends StatefulWidget {
 
 class _FilterState extends State<Filter> {
   RangeValues _currentRangeValues = const RangeValues(10, 100);
+  var options = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,45 @@ class _FilterState extends State<Filter> {
             child: ListView(
               children: [
                 const FilterTitleAppBar(title: 'CATEGORY'),
-                const SizedBox(
+                SizedBox(
                   height: 150,
+                  child: DefaultTabController(
+                    length: 3,
+                    child: Column(
+                      children: const [
+                        TabBar(
+                          labelColor: Colors.black,
+                          labelStyle: boldContentTitle,
+                          unselectedLabelColor: Colors.grey,
+                          indicatorColor: secondaryColor,
+                          indicatorWeight: 3,
+                          indicatorPadding:
+                              EdgeInsets.symmetric(horizontal: 20),
+                          tabs: [
+                            Tab(
+                              text: 'FOOD',
+                              height: 30,
+                            ),
+                            Tab(
+                              text: 'PRODUCT',
+                              height: 30,
+                            ),
+                            Tab(
+                              text: 'SERVICE',
+                              height: 30,
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(children: [
+                            Text('food'),
+                            Text('product'),
+                            Text('service'),
+                          ]),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 const FilterTitleAppBar(title: 'PRICE RANGE (RM)'),
                 SizedBox(

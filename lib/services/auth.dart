@@ -18,6 +18,10 @@ class AuthService {
     // return _auth.authStateChanges().map(_userFromUser);
   }
 
+  Future<User?> getCurrentUid() async {
+    return _auth.currentUser;
+  }
+
   // sign in anonymously
   Future signInAnon() async {
     try {
