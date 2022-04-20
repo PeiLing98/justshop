@@ -23,6 +23,8 @@ const filterTitleFontStyle = TextStyle(
 const landingLabelStyle = TextStyle(fontSize: 30, fontFamily: 'Lancelot');
 const buttonLabelStyle =
     TextStyle(fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w700);
+const ratingLabelStyle = TextStyle(
+    fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.normal);
 const linkLabelStyle = TextStyle(
     fontSize: 14,
     fontFamily: 'Roboto',
@@ -37,6 +39,12 @@ const logoLabel =
 const modalContent = TextStyle(fontSize: 14, fontFamily: 'Roboto', height: 1.5);
 const boldContentTitle =
     TextStyle(fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
+const categoryText = TextStyle(
+  fontSize: 10,
+  fontFamily: 'Roboto',
+  fontWeight: FontWeight.normal,
+  color: Colors.white,
+);
 
 //-------------------------- reg expression ------------------------------------
 String emailReg =

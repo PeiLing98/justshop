@@ -1,11 +1,7 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/constant.dart';
-import 'package:final_year_project/models/store_model.dart';
-import 'package:final_year_project/models/user_model.dart';
-import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';

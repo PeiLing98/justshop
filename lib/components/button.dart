@@ -190,3 +190,91 @@ class _MapButtonState extends State<MapButton> {
     );
   }
 }
+
+class ImageButton extends StatefulWidget {
+  final String categoryLabel;
+  final AssetImage imageLink;
+  final VoidCallback onTap;
+
+  const ImageButton(
+      {Key? key,
+      required this.categoryLabel,
+      required this.imageLink,
+      required this.onTap})
+      : super(key: key);
+
+  @override
+  _ImageButtonState createState() => _ImageButtonState();
+}
+
+class _ImageButtonState extends State<ImageButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 5),
+      child: Material(
+        borderRadius: BorderRadius.circular(10),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        color: secondaryColor,
+        child: InkWell(
+          splashColor: Colors.black26,
+          onTap: widget.onTap,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Ink.image(
+                image: widget.imageLink,
+                height: 50,
+                width: 70,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(
+                width: 70,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Center(
+                    child: Text(
+                      widget.categoryLabel,
+                      style: categoryText,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FilterOptionButton extends StatefulWidget {
+  final String buttonText;
+
+  const FilterOptionButton({Key? key, required this.buttonText})
+      : super(key: key);
+
+  @override
+  _FilterOptionButtonState createState() => _FilterOptionButtonState();
+}
+
+class _FilterOptionButtonState extends State<FilterOptionButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: SizedBox(
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            alignment: Alignment.center,
+            child: Text(widget.buttonText, style: ratingLabelStyle),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.circular(5))),
+      ),
+    );
+  }
+}

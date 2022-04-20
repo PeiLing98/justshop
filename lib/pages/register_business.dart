@@ -6,7 +6,6 @@ import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:final_year_project/services/storage_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' as i;
 

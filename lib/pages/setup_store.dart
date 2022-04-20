@@ -3,6 +3,8 @@ import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/models/category_model.dart';
+import 'package:final_year_project/pages/listing_setting.dart';
 import 'package:final_year_project/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' as i;
@@ -16,48 +18,12 @@ class SetupStore extends StatefulWidget {
 
 class _SetupStoreState extends State<SetupStore> {
   String selectedCategory = 'Food';
-  var categoryList = ['Food', 'Product', 'Service'];
-  var foodCategoryList = [
-    'Malay Cuisine',
-    'Chinese Cuisine',
-    'Indian Cuisine',
-    'Western Cuisine',
-    'Korean Cuisine',
-    'Japanese Cuisine',
-    'Thai Cuisine',
-    'Beverage',
-    'Bread & Cake & Dessert',
-    'Others'
-  ];
-  var productCategoryList = [
-    'Food',
-    'Health & Beauty',
-    'Hair',
-    'Fashion',
-    'Daily Life',
-    'Home & Living',
-    'Electronic',
-    'Sport & Outdoor',
-    'Automotive',
-    'Handmade',
-    'Others'
-  ];
-  var serviceCategoryList = [
-    'Home Cleaning',
-    'Photography & Videography',
-    'Art & Design',
-    'Mover & Logistics',
-    'Home Repair & Maintenance & Furnishing',
-    'Party & Event',
-    'Construction',
-    'Education',
-    'Beauty',
-    'Confinement',
-    'Health',
-    'Others'
-  ];
+
+  final category = Category();
+
+  //List categoryList = [category.category[0], 'Product', 'Service'];
   String selectedSubCategory = '';
-  var subCategoryList = [''];
+  List<String> subCategoryList = [];
   PlatformFile? selectedFile;
   String imagePath = '';
   String imageName = '';
@@ -171,7 +137,8 @@ class _SetupStoreState extends State<SetupStore> {
                                     children: [
                                       ItemDropdownButton(
                                         itemValue: selectedCategory,
-                                        items: categoryList,
+                                        items:
+                                            category.category as List<String>,
                                         onChanged: (val) {
                                           setState(() {
                                             selectedCategory = val!;
@@ -180,20 +147,33 @@ class _SetupStoreState extends State<SetupStore> {
                                       ),
                                       const SizedBox(height: 5),
                                       ItemDropdownButton(
-                                        itemValue: selectedCategory == 'Food'
-                                            ? selectedSubCategory =
-                                                'Malay Cuisine'
-                                            : selectedCategory == 'Product'
-                                                ? selectedSubCategory = 'Food'
-                                                : selectedSubCategory =
-                                                    'Home Cleaning',
-                                        items: selectedCategory == 'Food'
-                                            ? subCategoryList = foodCategoryList
-                                            : selectedCategory == 'Product'
+                                        itemValue: selectedCategory ==
+                                                category.category[0].toString()
+                                            ? selectedSubCategory = category
+                                                .subCategory[0][0]
+                                                .toString()
+                                            : selectedCategory ==
+                                                    category.category[1]
+                                                        .toString()
+                                                ? selectedSubCategory = category
+                                                    .subCategory[1][0]
+                                                    .toString()
+                                                : selectedSubCategory = category
+                                                    .subCategory[2][0]
+                                                    .toString(),
+                                        items: selectedCategory ==
+                                                category.category[0].toString()
+                                            ? subCategoryList = category
+                                                .subCategory[0] as List<String>
+                                            : selectedCategory ==
+                                                    category.category[1]
+                                                        .toString()
                                                 ? subCategoryList =
-                                                    productCategoryList
+                                                    category.subCategory[1]
+                                                        as List<String>
                                                 : subCategoryList =
-                                                    serviceCategoryList,
+                                                    category.subCategory[2]
+                                                        as List<String>,
                                         onChanged: (val) {
                                           setState(() {
                                             selectedSubCategory = val!;
