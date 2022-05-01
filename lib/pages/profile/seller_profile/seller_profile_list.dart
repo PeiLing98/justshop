@@ -1,5 +1,5 @@
 import 'package:final_year_project/models/store_model.dart';
-import 'package:final_year_project/pages/seller_profile/seller_profile_list_info.dart';
+import 'package:final_year_project/pages/profile/seller_profile/seller_profile_list_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,12 +13,12 @@ class SellerProfileList extends StatefulWidget {
 class _SellerProfileListState extends State<SellerProfileList> {
   @override
   Widget build(BuildContext context) {
-    final stores = Provider.of<List<Store>>(context);
+    final stores = Provider.of<List<Store>?>(context);
 
     return ListView.builder(
-      itemCount: stores.length,
+      itemCount: stores?.length ?? 0,
       itemBuilder: (context, index) {
-        return SellerProfileListInfo(store: stores[index]);
+        return SellerProfileListInfo(store: stores![index]);
       },
     );
   }

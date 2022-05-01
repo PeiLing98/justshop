@@ -115,13 +115,13 @@ class StringTextArea extends StatefulWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
 
-  const StringTextArea(
-      {Key? key,
-      required this.label,
-      required this.textLine,
-      required this.onChanged,
-      this.validator})
-      : super(key: key);
+  const StringTextArea({
+    Key? key,
+    required this.label,
+    required this.textLine,
+    required this.onChanged,
+    this.validator,
+  }) : super(key: key);
 
   @override
   _StringTextAreaState createState() => _StringTextAreaState();

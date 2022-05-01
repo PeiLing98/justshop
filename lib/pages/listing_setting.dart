@@ -27,43 +27,51 @@ class _ListingSettingState extends State<ListingSetting> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData? userData = snapshot.data;
-            return Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    initialValue: userData!.name,
-                    validator: (val) => val!.isEmpty ? 'Listing Name' : null,
-                    onChanged: (val) => setState(() => _currentName = val),
+            return SafeArea(
+              child: Scaffold(
+                body: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        initialValue: userData!.name,
+                        validator: (val) =>
+                            val!.isEmpty ? 'Listing Name' : null,
+                        onChanged: (val) => setState(() => _currentName = val),
+                      ),
+                      TextFormField(
+                        initialValue: userData.price.toString(),
+                        validator: (val) =>
+                            val!.isEmpty ? 'Listing Price' : null,
+                        onChanged: (val) => setState(
+                            () => _currentPrice = double.tryParse(val)),
+                      ),
+                      TextFormField(
+                        initialValue: userData.description,
+                        validator: (val) =>
+                            val!.isEmpty ? 'Listing Description' : null,
+                        onChanged: (val) =>
+                            setState(() => _currentDescription = val),
+                      ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            // print(_currentName);
+                            // print(_currentPrice);
+                            // print(_currentDescription);
+                            // print(userData.uid);
+                            if (_formKey.currentState!.validate()) {
+                              await DatabaseService(uid: user.uid)
+                                  .updateUserData(
+                                      _currentName ?? userData.name,
+                                      _currentPrice ?? userData.price,
+                                      _currentDescription ??
+                                          userData.description);
+                            }
+                          },
+                          child: const Text('Update'))
+                    ],
                   ),
-                  TextFormField(
-                    initialValue: userData.price.toString(),
-                    validator: (val) => val!.isEmpty ? 'Listing Price' : null,
-                    onChanged: (val) =>
-                        setState(() => _currentPrice = double.tryParse(val)),
-                  ),
-                  TextFormField(
-                    initialValue: userData.description,
-                    validator: (val) =>
-                        val!.isEmpty ? 'Listing Description' : null,
-                    onChanged: (val) =>
-                        setState(() => _currentDescription = val),
-                  ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        // print(_currentName);
-                        // print(_currentPrice);
-                        // print(_currentDescription);
-                        // print(userData.uid);
-                        if (_formKey.currentState!.validate()) {
-                          await DatabaseService(uid: user.uid).updateUserData(
-                              _currentName ?? userData.name,
-                              _currentPrice ?? userData.price,
-                              _currentDescription ?? userData.description);
-                        }
-                      },
-                      child: const Text('Update'))
-                ],
+                ),
               ),
             );
           } else {

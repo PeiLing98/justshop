@@ -2,15 +2,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/input_text_box.dart';
+import 'package:final_year_project/components/location_map.dart';
 import 'package:final_year_project/constant.dart';
-import 'package:final_year_project/models/user_model.dart';
-import 'package:final_year_project/services/database.dart';
-import 'package:final_year_project/services/storage_service.dart';
+// import 'package:final_year_project/models/user_model.dart';
+import 'package:final_year_project/pages/sign_up_store/setup_store.dart';
+// import 'package:final_year_project/services/database.dart';
+// import 'package:final_year_project/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' as i;
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 class RegisterBusiness extends StatefulWidget {
   const RegisterBusiness({Key? key}) : super(key: key);
@@ -25,9 +27,11 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   String imagePath = '';
   String imageName = '';
 
+  int storeId = 0;
   String businessName = '';
   String latitude = '';
   String longtitude = '';
+  String address = '';
   TimeOfDay startTime = TimeOfDay.now();
   TimeOfDay endTime = TimeOfDay.now();
   String phoneNumber = '';
@@ -103,10 +107,25 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     }
   }
 
+  void _awaitReturnValueFromLocationMap(BuildContext context) async {
+    // start the GoogleMap and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LocationMap(),
+        ));
+    // after the map result comes back update the Text widget with it
+    setState(() {
+      address = result[0];
+      latitude = result[1];
+      longtitude = result[2];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Storage storage = Storage();
-    final userId = Provider.of<MyUser>(context).uid;
+    // final Storage storage = Storage();
+    // final userId = Provider.of<MyUser>(context).uid;
 
     return Container(
       margin: const EdgeInsets.all(5),
@@ -196,7 +215,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                       ),
                     ),
                     SizedBox(
-                        height: 130,
+                        height: 140,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -204,43 +223,47 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                 style: boldContentTitle),
                             const SizedBox(height: 5),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width,
                               child: Column(
                                 children: [
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: StringTextArea(
-                                            label: 'Latitude',
-                                            textLine: 3,
-                                            onChanged: (val) {
-                                              setState(() => latitude = val);
-                                            },
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: StringTextArea(
-                                            label: 'Longtitude',
-                                            textLine: 3,
-                                            onChanged: (val) {
-                                              setState(() => longtitude = val);
-                                            },
-                                          ),
-                                        ),
-                                      ]),
+                                  Container(
+                                      height: 75,
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black),
+                                      ),
+                                      child: Text(
+                                        address,
+                                        style: ratingLabelStyle,
+                                      )),
                                   const SizedBox(height: 5),
                                   SizedBox(
                                     height: 30,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        MapButton(
-                                          title: 'LOCATE YOUR STORE BY MAP',
-                                        ),
-                                      ],
+                                    child: TextButton(
+                                      child: const Text(
+                                        'LOCATE YOUR STORE BY MAP',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 12),
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white),
+                                        overlayColor:
+                                            MaterialStateProperty.all<Color>(
+                                                secondaryColor),
+                                        elevation:
+                                            MaterialStateProperty.all<double>(
+                                                1.0),
+                                        side: MaterialStateProperty
+                                            .all<BorderSide>(const BorderSide(
+                                                width: 1.0,
+                                                color: Colors.grey)),
+                                      ),
+                                      onPressed: () {
+                                        _awaitReturnValueFromLocationMap(
+                                            context);
+                                      },
                                     ),
                                   ),
                                 ],
@@ -409,52 +432,70 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                             ),
                           ]),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: SizedBox(
-                        height: 35,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 35,
-                              child: PurpleTextButton(
-                                buttonText: 'Register',
-                                onClick: () async {
-                                  if (formKey.currentState!.validate()) {
-                                    storage
-                                        .uploadFile(imagePath, imageName)
-                                        .then((value) => print('Done'));
-
-                                    await DatabaseService(uid: userId)
-                                        .updateStoreData(
-                                            imagePath,
-                                            businessName,
-                                            latitude,
-                                            longtitude,
-                                            stringStartTime,
-                                            stringEndTime,
-                                            phoneNumber,
-                                            facebookLink,
-                                            instagramLink,
-                                            whatsappLink);
-                                  }
-                                },
-                              ),
+                    SizedBox(
+                      height: 35,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // SizedBox(
+                          //   width: 100,
+                          //   height: 35,
+                          //   child: PurpleTextButton(
+                          //     buttonText: 'Register',
+                          //     onClick: () async {
+                          //       if (formKey.currentState!.validate()) {
+                          //         storage
+                          //             .uploadFile(imagePath, imageName)
+                          //             .then((value) => print('Done'));
+                          //         storeId = UniqueKey().hashCode;
+                          //         await DatabaseService(uid: userId)
+                          //             .updateStoreData(
+                          //                 storeId,
+                          //                 imagePath,
+                          //                 businessName,
+                          //                 latitude,
+                          //                 longtitude,
+                          //                 address,
+                          //                 stringStartTime,
+                          //                 stringEndTime,
+                          //                 phoneNumber,
+                          //                 facebookLink,
+                          //                 instagramLink,
+                          //                 whatsappLink);
+                          //       }
+                          //     },
+                          //   ),
+                          // ),
+                          SizedBox(
+                            width: 100,
+                            height: 35,
+                            child: PurpleTextButton(
+                              buttonText: 'Next',
+                              onClick: () async {
+                                if (formKey.currentState!.validate()) {
+                                  storeId = UniqueKey().hashCode;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SetupStore(
+                                              storeId: storeId,
+                                              imagePath: imagePath,
+                                              imageName: imageName,
+                                              businessName: businessName,
+                                              latitude: latitude,
+                                              longtitude: longtitude,
+                                              address: address,
+                                              stringStartTime: stringStartTime,
+                                              stringEndTime: stringEndTime,
+                                              phoneNumber: phoneNumber,
+                                              facebookLink: facebookLink,
+                                              instagramLink: instagramLink,
+                                              whatsappLink: whatsappLink)));
+                                }
+                              },
                             ),
-                            SizedBox(
-                              width: 100,
-                              height: 35,
-                              child: PurpleTextButton(
-                                buttonText: 'Next',
-                                onClick: () {
-                                  Navigator.pushNamed(context, '/setupstore');
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

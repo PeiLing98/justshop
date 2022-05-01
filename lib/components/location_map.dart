@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:geocoder2/geocoder2.dart' as geoCo;
 import 'package:google_maps_webservice/places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,61 +23,48 @@ final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _LocationMapState extends State<LocationMap> {
   late GoogleMapController mapController;
-
   final Mode _mode = Mode.overlay;
-
   final LatLng _center = const LatLng(3.140853, 101.693207);
-  // double? lat;
-  // double? long;
-  String address = "";
+  String addressLocation = "";
+  String addressLatitude = "";
+  String addressLongtitude = "";
+  List<Marker> markers = [];
+  TextEditingController myController = TextEditingController();
 
-  Set<Marker> markers = {};
-  // Map<MarkerId, Marker> sellerMarker = <MarkerId, Marker>{};
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
 
-  // void initialMarker(specify, specifyId) async {
-  //   var markerIdVal = specifyId;
-  //   final MarkerId markerId = MarkerId(markerIdVal);
-  //   final Marker marker = Marker(
-  //     markerId: markerId,
-  //     position: LatLng(specify['latitude'], specify['longtitude']),
-  //     infoWindow: const InfoWindow(title: 'shops'),
-  //   );
+  Future initialize() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('store').get();
+    final name =
+        querySnapshot.docs.map((doc) => doc.get('businessName')).toList();
+    final latitude =
+        querySnapshot.docs.map((doc) => doc.get('latitude')).toList();
+    final longtitude =
+        querySnapshot.docs.map((doc) => doc.get('longtitude')).toList();
 
-  //   setState(() {
-  //     sellerMarker[markerId] = marker;
-  //   });
-  // }
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      markers.add(Marker(
+          markerId: MarkerId(name[i]),
+          position:
+              LatLng(double.parse(latitude[i]), double.parse(longtitude[i])),
+          infoWindow: InfoWindow(
+              title: name[i],
+              onTap: () => getFormattedAddressFromCoordinates(
+                  double.parse(latitude[i]), double.parse(longtitude[i]))),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueViolet)));
 
-  // getMarkerData() async {
-  //   FirebaseFirestore.instance.collection('store').get().then((myMockData) {
-  //     if (myMockData.docs.isNotEmpty) {
-  //       for (int i = 0; i < myMockData.docs.length; i++) {
-  //         initialMarker(myMockData.docs[i].data, myMockData.docs[i].id);
-  //       }
-  //       print(myMockData.docs);
-  //     }
-  //   });
-  // }
-
-  // void initState() {
-  //   getMarkerData();
-  //   super.initState();
-  // }
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Set<Marker> getMarker() {
-    //   return <Marker>{
-    //     const Marker(
-    //         markerId: MarkerId('Grocery store'),
-    //         position: LatLng(21.1458, 79.2883),
-    //         icon: BitmapDescriptor.defaultMarker,
-    //         infoWindow: InfoWindow(title: 'shop'))
-    //   };
-    // }
-
-    //final store = FirebaseFirestore.instance.collection('store').snapshots();
-
     return SafeArea(
         child: Scaffold(
       key: homeScaffoldKey,
@@ -85,9 +74,21 @@ class _LocationMapState extends State<LocationMap> {
               height: MediaQuery.of(context).size.height,
               width: double.infinity,
               child: GoogleMap(
-                markers: markers,
+                onTap: (tapped) {
+                  markers.add(
+                    Marker(
+                      markerId: const MarkerId("MarkerId"),
+                      position: LatLng(tapped.latitude, tapped.longitude),
+                    ),
+                  );
+
+                  setState(() {});
+
+                  getFormattedAddressFromCoordinates(
+                      tapped.latitude, tapped.longitude);
+                },
+                markers: Set<Marker>.of(markers),
                 mapType: MapType.normal,
-                //myLocationEnabled: true,
                 onMapCreated: (GoogleMapController controller) {
                   mapController = controller;
                 },
@@ -110,34 +111,43 @@ class _LocationMapState extends State<LocationMap> {
                         },
                       )),
                   Expanded(
-                    flex: 9,
-                    child: Material(
-                      elevation: 3.0,
-                      borderRadius: BorderRadius.circular(5),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: 'Enter Your Location',
-                            hintStyle: primaryFontStyle,
-                            suffixIcon: Icon(Icons.search),
-                            contentPadding:
-                                EdgeInsets.only(left: 20, bottom: 0, right: 0),
-                            focusedBorder:
-                                OutlineInputBorder(borderSide: BorderSide.none),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none)),
-                        onTap: _handleSearchPlaces,
-                        onChanged: (val) {
-                          setState(() => address = val);
-                        },
-                        // onChanged: (add) {
-                        //   address = add;
-                        //   setState(() {
-                        //     Text(add);
-                        //   });
-                        // },
-                      ),
+                    flex: 10,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.search),
+                            padding: const EdgeInsets.all(5),
+                            iconSize: 20,
+                            onPressed: _handleSearchPlaces,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: Container(
+                              //height: 40,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                              child: Text(
+                                addressLocation,
+                                style: ratingLabelStyle,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                        )
+                      ],
                     ),
                   ),
                 ],
@@ -156,11 +166,15 @@ class _LocationMapState extends State<LocationMap> {
                         target: LatLng(position.latitude, position.longitude),
                         zoom: 17.0)));
 
-                markers.clear();
-
                 markers.add(Marker(
                     markerId: const MarkerId('currentLocation'),
-                    position: LatLng(position.latitude, position.longitude)));
+                    position: LatLng(position.latitude, position.longitude),
+                    infoWindow: InfoWindow(
+                        title: "My current location",
+                        onTap: () => getFormattedAddressFromCoordinates(
+                            position.latitude, position.longitude)),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueYellow)));
 
                 setState(() {});
               },
@@ -176,17 +190,26 @@ class _LocationMapState extends State<LocationMap> {
           ),
           Positioned(
               bottom: 10,
-              left: 130,
+              left: 20,
               child: SizedBox(
-                width: 150,
+                width: 100,
                 child: PurpleTextButton(
                   buttonText: 'Save',
-                  onClick: () {},
+                  onClick: () {
+                    _sendBackMapResult(context);
+                  },
                 ),
-              ))
+              )),
         ],
       ),
     ));
+  }
+
+  void _sendBackMapResult(BuildContext context) {
+    String address = addressLocation;
+    String latitude = addressLatitude;
+    String longtitude = addressLongtitude;
+    Navigator.pop(context, [address, latitude, longtitude]);
   }
 
   Future<Position> _determinePosition() async {
@@ -213,38 +236,12 @@ class _LocationMapState extends State<LocationMap> {
       return Future.error('Location permissions are permanently denied');
     }
 
-    Position position = await Geolocator.getCurrentPosition(
+    Position currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
         forceAndroidLocationManager: true);
-    return position;
+
+    return currentPosition;
   }
-
-  // getLatLong() {
-  //   Future<Position> data = _determinePosition();
-
-  //   data.then((value) {
-  //     print("value $value");
-  //     setState(() {
-  //       lat = value.latitude;
-  //       long = value.longitude;
-  //     });
-
-  //     getAddress(value.latitude, value.longitude);
-  //   }).catchError((error) {
-  //     print("Error $error");
-  //   });
-  // }
-
-  // getAddress(lat, long) async {
-  //   List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
-  //   setState(() {
-  //     address = placemarks[0].street! + " " + placemarks[0].country!;
-  //   });
-
-  //   for (int i = 0; i < placemarks.length; i++) {
-  //     print("Indec $i ${placemarks[i]}");
-  //   }
-  // }
 
   Future<void> _handleSearchPlaces() async {
     Prediction? p = await PlacesAutocomplete.show(
@@ -280,20 +277,35 @@ class _LocationMapState extends State<LocationMap> {
 
     PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
 
-    //print(detail.result.geometry!.location);
-
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
 
-    markers.clear();
     markers.add(Marker(
         markerId: const MarkerId("0"),
         position: LatLng(lat, lng),
-        infoWindow: InfoWindow(title: detail.result.name)));
+        infoWindow: InfoWindow(
+          title: detail.result.name,
+          onTap: () => getFormattedAddressFromCoordinates(lat, lng),
+        )));
 
     setState(() {});
 
     mapController
         .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+  }
+
+  getFormattedAddressFromCoordinates(double latitude, double longtitude) async {
+    var address = await geoCo.Geocoder2.getDataFromCoordinates(
+        latitude: latitude,
+        longitude: longtitude,
+        googleMapApiKey: kGoogleApiKey);
+    var firstAddress = address.address;
+    var locationLatitude = address.latitude;
+    var locationLongtitude = address.longitude;
+    setState(() {
+      addressLocation = firstAddress;
+      addressLatitude = locationLatitude.toString();
+      addressLongtitude = locationLongtitude.toString();
+    });
   }
 }

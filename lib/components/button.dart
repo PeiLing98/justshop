@@ -114,11 +114,11 @@ class _WhiteTextButtonState extends State<WhiteTextButton> {
 }
 
 class ItemDropdownButton extends StatefulWidget {
-  String itemValue = '';
-  var items = [''];
+  final String itemValue;
+  final List<dynamic> items;
   final void Function(String?) onChanged;
 
-  ItemDropdownButton(
+  const ItemDropdownButton(
       {Key? key,
       required this.itemValue,
       required this.items,
@@ -135,6 +135,7 @@ class _ItemDropdownButtonState extends State<ItemDropdownButton> {
     return SizedBox(
       height: 30,
       child: DropdownButtonFormField<String>(
+        isExpanded: true,
         decoration: const InputDecoration(
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(width: 1),
@@ -151,42 +152,13 @@ class _ItemDropdownButtonState extends State<ItemDropdownButton> {
             value: items,
             child: Text(
               items,
-              style: primaryFontStyle,
+              style: ratingLabelStyle,
+              overflow: TextOverflow.ellipsis,
             ),
           );
         }).toList(),
         onChanged: widget.onChanged,
       ),
-    );
-  }
-}
-
-class MapButton extends StatefulWidget {
-  String title;
-  MapButton({Key? key, required this.title}) : super(key: key);
-
-  @override
-  _MapButtonState createState() => _MapButtonState();
-}
-
-class _MapButtonState extends State<MapButton> {
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      child: Text(
-        widget.title,
-        style: const TextStyle(color: Colors.black, fontSize: 12),
-      ),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        overlayColor: MaterialStateProperty.all<Color>(secondaryColor),
-        elevation: MaterialStateProperty.all<double>(1.0),
-        side: MaterialStateProperty.all<BorderSide>(
-            const BorderSide(width: 1.0, color: Colors.grey)),
-      ),
-      onPressed: () {
-        Navigator.pushNamed(context, '/locationmap');
-      },
     );
   }
 }
@@ -275,6 +247,95 @@ class _FilterOptionButtonState extends State<FilterOptionButton> {
                 ),
                 borderRadius: BorderRadius.circular(5))),
       ),
+    );
+  }
+}
+
+class SelectedFilterOption extends StatefulWidget {
+  final String buttonText;
+
+  const SelectedFilterOption({Key? key, required this.buttonText})
+      : super(key: key);
+
+  @override
+  _SelectedFilterOptionState createState() => _SelectedFilterOptionState();
+}
+
+class _SelectedFilterOptionState extends State<SelectedFilterOption> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: Stack(children: [
+        Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            alignment: Alignment.center,
+            child: Text(widget.buttonText, style: ratingLabelStyle),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.circular(5))),
+        Positioned(
+            bottom: 0,
+            right: -18,
+            child: IconButton(
+              iconSize: 15,
+              icon: const Icon(Icons.cancel_rounded),
+              onPressed: () {},
+            ))
+      ]),
+    );
+  }
+}
+
+class ProfileButton extends StatefulWidget {
+  final String buttonText;
+  final VoidCallback onClick;
+
+  const ProfileButton(
+      {Key? key, required this.buttonText, required this.onClick})
+      : super(key: key);
+
+  @override
+  _ProfileButtonState createState() => _ProfileButtonState();
+}
+
+class _ProfileButtonState extends State<ProfileButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: SizedBox(
+            height: 15,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.buttonText,
+                  style: const TextStyle(fontSize: 12, fontFamily: 'Roboto'),
+                ),
+                IconButton(
+                    padding: const EdgeInsets.all(0),
+                    alignment: Alignment.topRight,
+                    onPressed: widget.onClick,
+                    icon: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                    ))
+              ],
+            ),
+          ),
+        ),
+        Divider(
+          color: Colors.grey[300],
+          thickness: 1.0,
+        ),
+      ],
     );
   }
 }

@@ -22,7 +22,7 @@ const filterTitleFontStyle = TextStyle(
     color: Colors.white);
 const landingLabelStyle = TextStyle(fontSize: 30, fontFamily: 'Lancelot');
 const buttonLabelStyle =
-    TextStyle(fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w700);
+    TextStyle(fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w700);
 const ratingLabelStyle = TextStyle(
     fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.normal);
 const linkLabelStyle = TextStyle(

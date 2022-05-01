@@ -14,16 +14,19 @@ class UpdateSellerProfile extends StatefulWidget {
 class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
   final _formKey = GlobalKey<FormState>();
 
+  int? _currentStoreId;
   String? _currentImagePath;
   String? _currentBusinessName;
   String? _currentLatitude;
   String? _currentLongtitude;
+  String? _currentAddress;
   String? _currentStartTime;
   String? _currentEndTime;
   String? _currentPhoneNumber;
   String? _currentFacebookLink;
   String? _currentInstagramLink;
   String? _currentWhatsappLink;
+  List? _currentListing;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +80,12 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                 setState(() => _currentLongtitude = val),
                           ),
                           TextFormField(
+                            initialValue: userStoreData.address,
+                            validator: (val) => val!.isEmpty ? 'Address' : null,
+                            onChanged: (val) =>
+                                setState(() => _currentAddress = val),
+                          ),
+                          TextFormField(
                             initialValue: userStoreData.startTime,
                             validator: (val) =>
                                 val!.isEmpty ? 'Start Time' : null,
@@ -118,6 +127,12 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                             onChanged: (val) =>
                                 setState(() => _currentWhatsappLink = val),
                           ),
+                          TextFormField(
+                            initialValue: userStoreData.listing.toString(),
+                            validator: (val) => val!.isEmpty ? 'Listing' : null,
+                            onChanged: (val) =>
+                                setState(() => _currentListing = val as List?),
+                          ),
                           ElevatedButton(
                               onPressed: () async {
                                 // print(_currentName);
@@ -127,25 +142,32 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                 if (_formKey.currentState!.validate()) {
                                   await DatabaseService(uid: user.uid)
                                       .updateStoreData(
-                                    _currentImagePath ??
-                                        userStoreData.imagePath,
-                                    _currentBusinessName ??
-                                        userStoreData.businessName,
-                                    _currentLatitude ?? userStoreData.latitude,
-                                    _currentLongtitude ??
-                                        userStoreData.longtitude,
-                                    _currentStartTime ??
-                                        userStoreData.startTime,
-                                    _currentEndTime ?? userStoreData.endTime,
-                                    _currentPhoneNumber ??
-                                        userStoreData.phoneNumber,
-                                    _currentFacebookLink ??
-                                        userStoreData.facebookLink,
-                                    _currentInstagramLink ??
-                                        userStoreData.instagramLink,
-                                    _currentWhatsappLink ??
-                                        userStoreData.whatsappLink,
-                                  );
+                                          _currentStoreId ??
+                                              userStoreData.storeId,
+                                          _currentImagePath ??
+                                              userStoreData.imagePath,
+                                          _currentBusinessName ??
+                                              userStoreData.businessName,
+                                          _currentLatitude ??
+                                              userStoreData.latitude,
+                                          _currentLongtitude ??
+                                              userStoreData.longtitude,
+                                          _currentAddress ??
+                                              userStoreData.address,
+                                          _currentStartTime ??
+                                              userStoreData.startTime,
+                                          _currentEndTime ??
+                                              userStoreData.endTime,
+                                          _currentPhoneNumber ??
+                                              userStoreData.phoneNumber,
+                                          _currentFacebookLink ??
+                                              userStoreData.facebookLink,
+                                          _currentInstagramLink ??
+                                              userStoreData.instagramLink,
+                                          _currentWhatsappLink ??
+                                              userStoreData.whatsappLink,
+                                          _currentListing ??
+                                              userStoreData.listing);
                                 }
                               },
                               child: const Text('Update'))

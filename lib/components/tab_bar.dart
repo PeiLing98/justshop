@@ -1,4 +1,5 @@
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/models/category_model.dart';
 import 'package:flutter/material.dart';
 
 class ListingTabBar extends StatefulWidget {
@@ -18,6 +19,8 @@ class ListingTabBar extends StatefulWidget {
 }
 
 class _ListingTabBarState extends State<ListingTabBar> {
+  final category = Category();
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

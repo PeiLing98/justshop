@@ -61,7 +61,7 @@ class _TitleAppBarState extends State<TitleAppBar> {
             flex: widget.iconFlex,
             child: IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/pagescontroller');
+                Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back_ios),
               iconSize: 20,

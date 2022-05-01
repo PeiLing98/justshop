@@ -1,9 +1,13 @@
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/button.dart';
+import 'package:final_year_project/components/location_map.dart';
 import 'package:final_year_project/components/tab_bar.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/category_model.dart';
+import 'package:final_year_project/models/user_model.dart';
+import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Filter extends StatefulWidget {
   const Filter({Key? key}) : super(key: key);
@@ -13,17 +17,30 @@ class Filter extends StatefulWidget {
 }
 
 class _FilterState extends State<Filter> {
+  bool isFoodCategory = false;
+  bool isProductCategory = false;
+  bool isServiceCategory = false;
+  bool isPriceRange = false;
+  bool isRate = false;
+  bool isLocation = false;
+  bool isPopular = false;
+
   RangeValues _currentRangeValues = const RangeValues(10, 100);
+  int lowPriceRange = 10;
+  int highPriceRange = 100;
   int currentRank = 5;
   var rateList = [1, 2, 3, 4, 5];
-  bool isPopular = false;
 
   final category = Category();
   String selectedCategory = '';
   String selectedSubCategory = '';
+  String savedAddress = '';
+  String savedLatitude = '';
+  String savedLongtitude = '';
 
   @override
   Widget build(BuildContext context) {
+    final userId = Provider.of<MyUser>(context).uid;
     return Container(
       margin: const EdgeInsets.all(5),
       child: Column(
@@ -49,14 +66,25 @@ class _FilterState extends State<Filter> {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        FilterOptionButton(buttonText: selectedCategory),
-                        FilterOptionButton(buttonText: selectedSubCategory),
-                        FilterOptionButton(
-                            buttonText:
-                                'RM${_currentRangeValues.start.round().toString()} - RM${_currentRangeValues.end.round().toString()}'),
-                        FilterOptionButton(buttonText: '$currentRank Stars'),
+                        if (isFoodCategory ||
+                            isProductCategory ||
+                            isServiceCategory)
+                          SelectedFilterOption(buttonText: selectedCategory),
+                        if (isFoodCategory ||
+                            isProductCategory ||
+                            isServiceCategory)
+                          SelectedFilterOption(buttonText: selectedSubCategory),
+                        if (isPriceRange)
+                          SelectedFilterOption(
+                              buttonText:
+                                  'RM$lowPriceRange - RM$highPriceRange'),
+                        if (isRate)
+                          SelectedFilterOption(
+                              buttonText: '$currentRank Stars'),
+                        if (isLocation)
+                          SelectedFilterOption(buttonText: savedAddress),
                         if (isPopular)
-                          const FilterOptionButton(
+                          const SelectedFilterOption(
                               buttonText: 'Sorted by popularity'),
                       ],
                     ),
@@ -64,7 +92,20 @@ class _FilterState extends State<Filter> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: PurpleTextButton(buttonText: 'Filter', onClick: () {}),
+                  child: PurpleTextButton(
+                      buttonText: 'Filter',
+                      onClick: () async {
+                        await DatabaseService(uid: userId).updateFilterData(
+                            selectedCategory,
+                            selectedSubCategory,
+                            lowPriceRange,
+                            highPriceRange,
+                            currentRank,
+                            savedAddress,
+                            savedLatitude,
+                            savedLongtitude,
+                            isPopular);
+                      }),
                 )
               ]),
             ),
@@ -88,6 +129,7 @@ class _FilterState extends State<Filter> {
                               category.categoryImage[0][index].toString()),
                           onTap: () {
                             setState(() {
+                              isFoodCategory = true;
                               selectedCategory = category.category[0];
                               selectedSubCategory =
                                   category.subCategory[0][index].toString();
@@ -106,6 +148,7 @@ class _FilterState extends State<Filter> {
                           imageLink: AssetImage(
                               category.categoryImage[1][index].toString()),
                           onTap: () {
+                            isProductCategory = true;
                             selectedCategory = category.category[1];
                             selectedSubCategory =
                                 category.subCategory[1][index].toString();
@@ -123,6 +166,7 @@ class _FilterState extends State<Filter> {
                           imageLink: AssetImage(
                               category.categoryImage[2][index].toString()),
                           onTap: () {
+                            isProductCategory = true;
                             selectedCategory = category.category[2];
                             selectedSubCategory =
                                 category.subCategory[2][index].toString();
@@ -165,7 +209,12 @@ class _FilterState extends State<Filter> {
                             _currentRangeValues.end.round().toString(),
                           ),
                           onChanged: (RangeValues val) => setState(() {
+                            isPriceRange = true;
                             _currentRangeValues = val;
+                            lowPriceRange =
+                                _currentRangeValues.start.round().toInt();
+                            highPriceRange =
+                                _currentRangeValues.end.round().toInt();
                           }),
                         ),
                       ),
@@ -185,6 +234,7 @@ class _FilterState extends State<Filter> {
                           return GestureDetector(
                             onTap: () {
                               setState(() {
+                                isRate = true;
                                 currentRank = rateList[index];
                               });
                             },
@@ -200,10 +250,27 @@ class _FilterState extends State<Filter> {
                     )),
                 const FilterTitleAppBar(title: 'LOCATION'),
                 SizedBox(
-                  child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                      child: MapButton(title: 'SEARCH BY LOCATION')),
-                ),
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: TextButton(
+                          child: const Text(
+                            'SEARCH BY LOCATION',
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            overlayColor: MaterialStateProperty.all<Color>(
+                                secondaryColor),
+                            elevation: MaterialStateProperty.all<double>(1.0),
+                            side: MaterialStateProperty.all<BorderSide>(
+                                const BorderSide(
+                                    width: 1.0, color: Colors.grey)),
+                          ),
+                          onPressed: () {
+                            _awaitReturnValueFromLocationMap(context);
+                          },
+                        ))),
                 const FilterTitleAppBar(title: 'SORT BY'),
                 SizedBox(
                   child: Padding(
@@ -212,7 +279,6 @@ class _FilterState extends State<Filter> {
                       onTap: () {
                         setState(() {
                           isPopular = !isPopular;
-                          print(isPopular);
                         });
                       },
                       child: const FilterOptionButton(
@@ -227,5 +293,22 @@ class _FilterState extends State<Filter> {
         ],
       ),
     );
+  }
+
+  void _awaitReturnValueFromLocationMap(BuildContext context) async {
+    // start the GoogleMap and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LocationMap(),
+        ));
+
+    // after the map result comes back update the Text widget with it
+    setState(() {
+      savedAddress = result[0];
+      savedLatitude = result[1];
+      savedLongtitude = result[2];
+      isLocation = true;
+    });
   }
 }

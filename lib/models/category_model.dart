@@ -87,3 +87,30 @@ class Category {
     serviceCategoryImage
   ];
 }
+
+// import 'package:final_year_project/services/database.dart';
+
+// class Category {
+//   final String? categoryName;
+
+//   Category({this.categoryName});
+
+//   Category.fromJson(Map<String, Object?> json)
+//       : this(
+//           categoryName: json['categoryName']! as String,
+//         );
+
+//   Map<String, Object?> toJson() {
+//     return {
+//       'categoryName': categoryName,
+//     };
+//   }
+// }
+
+// DatabaseService _service = DatabaseService();
+// final categories = _service.categoriesCollection
+//     .where('active', isEqualTo: true)
+//     .withConverter(
+//       fromFirestore: (snapshot, _) => Category.fromJson(snapshot.data()!),
+//       toFirestore: (category, _) => category.toJson(),
+//     );

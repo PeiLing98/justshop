@@ -20,7 +20,8 @@ class SellerProfileListInfo extends StatelessWidget {
         Text(store.phoneNumber),
         Text(store.facebookLink),
         Text(store.instagramLink),
-        Text(store.whatsappLink)
+        Text(store.whatsappLink),
+        Text(store.listing.toString()),
       ],
     );
   }
