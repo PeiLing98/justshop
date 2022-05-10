@@ -339,3 +339,96 @@ class _ProfileButtonState extends State<ProfileButton> {
     );
   }
 }
+
+class QuantityButton extends StatefulWidget {
+  final double width;
+  final double height;
+
+  const QuantityButton({Key? key, required this.width, required this.height})
+      : super(key: key);
+
+  @override
+  _QuantityButtonState createState() => _QuantityButtonState();
+}
+
+class _QuantityButtonState extends State<QuantityButton> {
+  int quantity = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: widget.width,
+      height: widget.width,
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: secondaryColor),
+      ),
+      child: ClipRRect(
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    quantity++;
+                  });
+                },
+                child: Container(
+                  // height: 20,
+                  // width: 20,
+                  color: secondaryColor,
+                  child: const Center(
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: SizedBox(
+                // height: 20,
+                // width: 38,
+                child: Center(
+                  child: Text(
+                    '$quantity',
+                    style: buttonLabelStyle,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    if (quantity >= 1) {
+                      quantity--;
+                    }
+                  });
+                },
+                child: Container(
+                  // height: 20,
+                  // width: 20,
+                  color: secondaryColor,
+                  child: const Center(
+                    child: Icon(
+                      Icons.remove,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

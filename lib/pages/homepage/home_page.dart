@@ -2,6 +2,7 @@ import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/components/search_bar.dart';
 import 'package:final_year_project/models/list_model.dart';
+import 'package:final_year_project/pages/homepage/store_listing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:final_year_project/services/database.dart';
@@ -66,9 +67,13 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: const [
-                      Text('All Listings', style: secondaryFontStyle)
+                      Text('All Stores', style: secondaryFontStyle)
                     ],
                   ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: SizedBox(height: 500, child: StoreListing()),
                 ),
               ]),
             ),

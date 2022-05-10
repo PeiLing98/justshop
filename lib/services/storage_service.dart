@@ -7,6 +7,25 @@ class Storage {
       firebase_storage.FirebaseStorage.instance;
 
   //upload file to firebase storage
+  // Future<void> uploadFile(i.File image) async {
+  //   var pathImage = image.toString();
+  //   var temp = pathImage.lastIndexOf('/');
+  //   var result = pathImage.substring(temp + 1);
+  //   print(result);
+  //   final ref = storage.ref().child('test').child(result);
+  //   var response = await ref.putFile(image);
+  //   print("Updated $response");
+  //   var imageUrl = await ref.getDownloadURL();
+
+  //   try {
+  //     var response = await FirebaseFirestore.instance.collection('store').add({
+  //       'imagePath': imageUrl,
+  //     });
+  //     print("Firebase response111 $response");
+  //   } catch (exception) {
+  //     print('Error uploading image at firestore $response');
+  //   }
+  // }
   Future<void> uploadFile(
     String filePath,
     String fileName,

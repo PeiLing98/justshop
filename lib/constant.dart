@@ -25,6 +25,11 @@ const buttonLabelStyle =
     TextStyle(fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w700);
 const ratingLabelStyle = TextStyle(
     fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.normal);
+const priceLabelStyle = TextStyle(
+    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    color: secondaryColor);
 const linkLabelStyle = TextStyle(
     fontSize: 14,
     fontFamily: 'Roboto',
@@ -49,4 +54,6 @@ const categoryText = TextStyle(
 //-------------------------- reg expression ------------------------------------
 String emailReg =
     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-String phoneReg = r"^(+?6?01)[0-46-9]-*[0-9]{7,8}";
+String pRegex = r"^([+]?6?01)[02-46-9]-*[0-9]{7}|^(+?6?01)[1]-*[0-9]{8}";
+
+// r"^(+?6?01)[0-46-9]-*[0-9]{7,8}";

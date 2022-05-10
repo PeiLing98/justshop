@@ -26,7 +26,7 @@ class ListingTile extends StatelessWidget {
                     height: 50,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color.fromARGB(251, 209, 202, 202),
+                      color: Color.fromARGB(250, 129, 89, 89),
                     ),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),

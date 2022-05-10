@@ -22,11 +22,11 @@ class _ListingSettingState extends State<ListingSetting> {
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
 
-    return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
+    return StreamBuilder<UserListingData>(
+        stream: DatabaseService(uid: user.uid).userListingData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            UserData? userData = snapshot.data;
+            UserListingData? userData = snapshot.data;
             return SafeArea(
               child: Scaffold(
                 body: Form(
@@ -61,7 +61,7 @@ class _ListingSettingState extends State<ListingSetting> {
                             // print(userData.uid);
                             if (_formKey.currentState!.validate()) {
                               await DatabaseService(uid: user.uid)
-                                  .updateUserData(
+                                  .updateListingData(
                                       _currentName ?? userData.name,
                                       _currentPrice ?? userData.price,
                                       _currentDescription ??

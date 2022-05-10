@@ -1,7 +1,9 @@
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/constant.dart';
-import 'package:final_year_project/services/auth.dart';
+import 'package:final_year_project/modals/alert_text_modal.dart';
+import 'package:final_year_project/pages/onboarding/sign_up_two.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 
@@ -13,7 +15,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final AuthService _auth = AuthService();
   final formKey = GlobalKey<FormState>();
   bool loading = false;
 
@@ -38,140 +39,179 @@ class _SignUpState extends State<SignUp> {
           ? const Loading()
           : Scaffold(
               body: SafeArea(
-                  child: Center(
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    child: Image.asset(
-                      'assets/images/app_logo_large.png',
-                      height: 140,
-                      width: 140,
-                    ),
+                  child: SingleChildScrollView(
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: Image.asset(
+                    'assets/images/app_logo_large.png',
+                    height: 120,
+                    width: 120,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: Text('Sign Up', style: landingLabelStyle),
-                  ),
-                  SizedBox(
-                    height: 290,
-                    child: SingleChildScrollView(
-                      child: Form(
-                          key: formKey,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 0, 35, 5),
-                                child: StringInputTextBox(
-                                  inputLabelText: 'Username',
-                                  onChanged: (val) {
-                                    setState(() => username = val);
-                                  },
-                                  isPassword: false,
-                                ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Text('Sign Up', style: landingLabelStyle),
+                ),
+                SizedBox(
+                  height: 320,
+                  child: SingleChildScrollView(
+                    child: Form(
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(35, 0, 35, 5),
+                              child: StringInputTextBox(
+                                inputLabelText: 'Username',
+                                onChanged: (val) {
+                                  setState(() => username = val);
+                                },
+                                isPassword: false,
+                                validator: (val) =>
+                                    val!.isEmpty ? 'Enter an username' : null,
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 0, 35, 5),
-                                child: StringInputTextBox(
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(35, 0, 35, 5),
+                              child: StringInputTextBox(
                                   inputLabelText: 'Email',
                                   onChanged: (val) {
                                     setState(() => email = val);
                                   },
                                   isPassword: false,
-                                  validator: (val) =>
-                                      val!.isEmpty ? 'Enter an email' : null,
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 0, 35, 5),
-                                child: StringInputTextBox(
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Enter an email';
+                                    }
+
+                                    if (!RegExp(emailReg).hasMatch(val)) {
+                                      return 'Please enter a valid email';
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(35, 0, 35, 5),
+                              child: StringInputTextBox(
                                   inputLabelText: 'Phone Number',
                                   onChanged: (val) {
                                     setState(() => phoneNumber = val);
                                   },
                                   isPassword: false,
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 0, 35, 5),
-                                child: StringInputTextBox(
-                                    inputLabelText: 'Password',
-                                    onChanged: (val) {
-                                      setState(() => password = val);
-                                    },
-                                    isPassword: true,
-                                    validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return 'Please enter your password';
-                                      }
-                                      if (val.length < 6) {
-                                        return 'Your password should be at least 6 characters';
-                                      }
-                                      return null;
-                                    }),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 0, 35, 5),
-                                child: StringInputTextBox(
-                                    inputLabelText: 'Confirm Password',
-                                    onChanged: (val) {
-                                      setState(() => confirmPassword = val);
-                                    },
-                                    isPassword: true,
-                                    validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return 'Please enter your confirm password';
-                                      }
-                                      if (val.length < 6) {
-                                        return 'Your confirm password should be at least 6 characters';
-                                      }
-                                      if (val != password) {
-                                        return 'Your password does not match';
-                                      }
-                                      return null;
-                                    }),
-                              ),
-                            ],
-                          )),
-                    ),
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Enter a phone number';
+                                    }
+
+                                    // if (!RegExp(pRegex).hasMatch(val)) {
+                                    //   return 'Please enter a valid phone number';
+                                    // }
+
+                                    return null;
+                                  }),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(35, 0, 35, 5),
+                              child: StringInputTextBox(
+                                  inputLabelText: 'Password',
+                                  onChanged: (val) {
+                                    setState(() => password = val);
+                                  },
+                                  isPassword: true,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Please enter your password';
+                                    }
+                                    if (val.length < 6) {
+                                      return 'Your password should be at least 6 characters';
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(35, 0, 35, 5),
+                              child: StringInputTextBox(
+                                  inputLabelText: 'Confirm Password',
+                                  onChanged: (val) {
+                                    setState(() => confirmPassword = val);
+                                  },
+                                  isPassword: true,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Please enter your confirm password';
+                                    }
+                                    if (val.length < 6) {
+                                      return 'Your confirm password should be at least 6 characters';
+                                    }
+                                    if (val != password) {
+                                      return 'Your password does not match';
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                          ],
+                        )),
                   ),
-                  const SizedBox(height: 10),
-                  BlackTextButton(
+                ),
+                BlackTextButton(
                     buttonText: 'NEXT',
                     onClick: () async {
-                      // print(username);
-                      // print(email);
-                      // print(phoneNumber);
-                      // print(password);
                       if (formKey.currentState!.validate()) {
-                        dynamic result = await _auth
-                            .registerWithEmailAndPassword(email, password);
-                        setState(() => loading = true);
-                        if (result == null) {
-                          setState(() {
-                            error = "Please provide valid email and password";
-                            loading = false;
-                          });
+                        bool emailInUse = await checkIfEmailInUse(email);
+                        if (emailInUse == true) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertTextModal(
+                                  alertContent:
+                                      'This email has been registered! Please try with other email!',
+                                  onClick: () {
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              });
+                          loading = false;
                         } else {
-                          Navigator.pushNamed(context, '/signuptwo');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignUpTwo(
+                                        username: username,
+                                        email: email,
+                                        phoneNumber: phoneNumber,
+                                        password: password,
+                                      )));
                         }
                       }
-                    },
-                  ),
-                  BlackTextButton(
-                      buttonText: 'BACK TO LOGIN PAGE',
-                      onClick: () {
-                        Navigator.pushNamed(context, '/login');
-                      }),
-                  Text(error)
-                ]),
-              ),
+                    }),
+                BlackTextButton(
+                    buttonText: 'BACK TO LOGIN PAGE',
+                    onClick: () {
+                      Navigator.pushNamed(context, '/login');
+                    }),
+                Text(
+                  error,
+                  style: errorMessageStyle,
+                )
+              ]),
             ))),
     );
+  }
+
+  Future<bool> checkIfEmailInUse(String email) async {
+    try {
+      final list =
+          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+
+      if (list.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      print(error.toString());
+      return true;
+    }
   }
 }

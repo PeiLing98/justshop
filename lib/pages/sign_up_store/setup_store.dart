@@ -3,8 +3,10 @@ import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/modals/alert_text_modal.dart';
 import 'package:final_year_project/models/category_model.dart';
 import 'package:final_year_project/models/user_model.dart';
+import 'package:final_year_project/pages/profile/view_store.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:final_year_project/services/storage_service.dart';
 import 'package:flutter/material.dart';
@@ -13,36 +15,14 @@ import 'dart:io' as i;
 import 'package:provider/provider.dart';
 
 class SetupStore extends StatefulWidget {
-  final int storeId;
-  final String imagePath;
-  final String imageName;
+  final String storeId;
   final String businessName;
-  final String latitude;
-  final String longtitude;
-  final String address;
-  final String stringStartTime;
-  final String stringEndTime;
-  final String phoneNumber;
-  final String facebookLink;
-  final String instagramLink;
-  final String whatsappLink;
 
-  const SetupStore(
-      {Key? key,
-      required this.storeId,
-      required this.imagePath,
-      required this.imageName,
-      required this.businessName,
-      required this.latitude,
-      required this.longtitude,
-      required this.address,
-      required this.stringStartTime,
-      required this.stringEndTime,
-      required this.phoneNumber,
-      required this.facebookLink,
-      required this.instagramLink,
-      required this.whatsappLink})
-      : super(key: key);
+  const SetupStore({
+    Key? key,
+    required this.storeId,
+    required this.businessName,
+  }) : super(key: key);
 
   @override
   _SetupStoreState createState() => _SetupStoreState();
@@ -51,12 +31,16 @@ class SetupStore extends StatefulWidget {
 class _SetupStoreState extends State<SetupStore> {
   final formKey = GlobalKey<FormState>();
   final category = Category();
+  final Storage storage = Storage();
 
   List subCategoryList = [];
   PlatformFile? selectedFile;
   List listing = [];
+  int listingQuantity = 0;
   List attribute = [];
 
+  String downloadLogoPath = "";
+  String downloadListingImagePath = "";
   String listingImagePath = '';
   String listingImageName = '';
   String selectedCategory = 'Food';
@@ -70,6 +54,7 @@ class _SetupStoreState extends State<SetupStore> {
 
   int attributeValueNumber = 2;
   int attributeNumber = 1;
+  int addListing = 0;
 
   //select file from local device
   Future selectFile() async {
@@ -91,7 +76,6 @@ class _SetupStoreState extends State<SetupStore> {
 
   @override
   Widget build(BuildContext context) {
-    final Storage storage = Storage();
     final userId = Provider.of<MyUser>(context).uid;
 
     return GestureDetector(
@@ -115,6 +99,7 @@ class _SetupStoreState extends State<SetupStore> {
                     title: '2: Set Up Your Store',
                     iconFlex: 1,
                     titleFlex: 3,
+                    hasArrow: true,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -125,7 +110,7 @@ class _SetupStoreState extends State<SetupStore> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Listing (${listing.length})',
+                            'Listing ($listingQuantity)',
                             style: ratingLabelStyle,
                           ),
                         ],
@@ -208,8 +193,8 @@ class _SetupStoreState extends State<SetupStore> {
                                                 onChanged: (val) {
                                                   setState(() {
                                                     selectedCategory = val!;
-                                                    print(
-                                                        "category: $selectedCategory");
+                                                    // print(
+                                                    //     "category: $selectedCategory");
                                                   });
                                                 },
                                               ),
@@ -247,8 +232,8 @@ class _SetupStoreState extends State<SetupStore> {
                                                 onChanged: (val) {
                                                   setState(() {
                                                     selectedSubCategory = val!;
-                                                    print(
-                                                        "subCategory: $selectedSubCategory");
+                                                    // print(
+                                                    //     "subCategory: $selectedSubCategory");
                                                   });
                                                 },
                                               )
@@ -333,264 +318,264 @@ class _SetupStoreState extends State<SetupStore> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 60,
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text('Do you have characterization?',
-                                        style: boldContentTitle),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                      child: WhiteTextButton(
-                                          buttonText: isSelected
-                                              ? 'REMOVE CHARACTERIZATION'
-                                              : 'ADD CHARACTERIZATION',
-                                          onClick: () {
-                                            setState(() {
-                                              isSelected = !isSelected;
-                                            });
-                                          }),
-                                    )
-                                  ]),
-                            ),
-                            if (isSelected == true)
-                              SizedBox(
-                                  height: 180,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Divider(
-                                        color: Colors.grey,
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('Characterization',
-                                                style: boldContentTitle),
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(Icons.info),
-                                              iconSize: 20,
-                                              padding: const EdgeInsets.all(0),
-                                              alignment: Alignment.topRight,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 135,
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              for (int i = 0;
-                                                  i < attributeNumber;
-                                                  i++)
-                                                Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          const Text(
-                                                            'Attribute name',
-                                                            style:
-                                                                ratingLabelStyle,
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          SizedBox(
-                                                            height: 30,
-                                                            child:
-                                                                StringTextArea(
-                                                              label: 'Size',
-                                                              textLine: 1,
-                                                              onChanged: (val) {
-                                                                setState(() {
-                                                                  attributeName =
-                                                                      val;
-                                                                  print(
-                                                                      "attributeName: $attributeName");
-                                                                });
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 10),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          SizedBox(
-                                                            height: 15,
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                const Expanded(
-                                                                  flex: 10,
-                                                                  child: Text(
-                                                                    'Attribute value',
-                                                                    style:
-                                                                        ratingLabelStyle,
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      IconButton(
-                                                                    icon: const Icon(
-                                                                        Icons
-                                                                            .add_circle),
-                                                                    iconSize:
-                                                                        20,
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        attributeValueNumber++;
-                                                                      });
-                                                                    },
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(0),
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerRight,
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      IconButton(
-                                                                    icon: const Icon(
-                                                                        Icons
-                                                                            .delete),
-                                                                    iconSize:
-                                                                        20,
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        attributeValueNumber--;
-                                                                      });
-                                                                    },
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(0),
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerRight,
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          ListView(
-                                                              shrinkWrap: true,
-                                                              physics:
-                                                                  const NeverScrollableScrollPhysics(),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      bottom:
-                                                                          5),
-                                                              children: [
-                                                                for (int i = 0;
-                                                                    i < attributeValueNumber;
-                                                                    i++)
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        bottom:
-                                                                            5),
-                                                                    child:
-                                                                        SizedBox(
-                                                                      height:
-                                                                          30,
-                                                                      child:
-                                                                          StringTextArea(
-                                                                        label:
-                                                                            'Large',
-                                                                        textLine:
-                                                                            1,
-                                                                        onChanged:
-                                                                            (val) {
-                                                                          setState(
-                                                                              () {
-                                                                            attributeValue[i] =
-                                                                                val;
-                                                                            print("value $i : ${attributeValue[i]}");
-                                                                          });
-                                                                        },
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                              ]),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              SizedBox(
-                                                  height: 30,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 150,
-                                                        child: PurpleTextButton(
-                                                            buttonText:
-                                                                'Add Attribute',
-                                                            onClick: () {
-                                                              setState(() {
-                                                                attributeNumber++;
-                                                              });
-                                                            }),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 150,
-                                                        child: PurpleTextButton(
-                                                            buttonText:
-                                                                'Remove Attribute',
-                                                            onClick: () {
-                                                              setState(() {
-                                                                attributeNumber--;
-                                                              });
-                                                            }),
-                                                      ),
-                                                    ],
-                                                  ))
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )),
+                            // SizedBox(
+                            //   height: 60,
+                            //   child: Column(
+                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                            //       children: [
+                            //         const Text('Do you have characterization?',
+                            //             style: boldContentTitle),
+                            //         const SizedBox(
+                            //           height: 5,
+                            //         ),
+                            //         SizedBox(
+                            //           height: 30,
+                            //           child: WhiteTextButton(
+                            //               buttonText: isSelected
+                            //                   ? 'REMOVE CHARACTERIZATION'
+                            //                   : 'ADD CHARACTERIZATION',
+                            //               onClick: () {
+                            //                 setState(() {
+                            //                   isSelected = !isSelected;
+                            //                 });
+                            //               }),
+                            //         )
+                            //       ]),
+                            // ),
+                            // if (isSelected == true)
+                            //   SizedBox(
+                            //       height: 180,
+                            //       child: Column(
+                            //         crossAxisAlignment:
+                            //             CrossAxisAlignment.start,
+                            //         children: [
+                            //           const Divider(
+                            //             color: Colors.grey,
+                            //           ),
+                            //           SizedBox(
+                            //             height: 25,
+                            //             child: Row(
+                            //               crossAxisAlignment:
+                            //                   CrossAxisAlignment.start,
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.spaceBetween,
+                            //               children: [
+                            //                 const Text('Characterization',
+                            //                     style: boldContentTitle),
+                            //                 IconButton(
+                            //                   onPressed: () {},
+                            //                   icon: const Icon(Icons.info),
+                            //                   iconSize: 20,
+                            //                   padding: const EdgeInsets.all(0),
+                            //                   alignment: Alignment.topRight,
+                            //                 )
+                            //               ],
+                            //             ),
+                            //           ),
+                            //           SizedBox(
+                            //             height: 135,
+                            //             child: SingleChildScrollView(
+                            //               child: Column(
+                            //                 children: [
+                            //                   for (int i = 0;
+                            //                       i < attributeNumber;
+                            //                       i++)
+                            //                     Column(
+                            //                       children: [
+                            //                         SizedBox(
+                            //                           child: Column(
+                            //                             crossAxisAlignment:
+                            //                                 CrossAxisAlignment
+                            //                                     .start,
+                            //                             children: [
+                            //                               const Text(
+                            //                                 'Attribute name',
+                            //                                 style:
+                            //                                     ratingLabelStyle,
+                            //                               ),
+                            //                               const SizedBox(
+                            //                                 height: 5,
+                            //                               ),
+                            //                               SizedBox(
+                            //                                 height: 30,
+                            //                                 child:
+                            //                                     StringTextArea(
+                            //                                   label: 'Size',
+                            //                                   textLine: 1,
+                            //                                   onChanged: (val) {
+                            //                                     setState(() {
+                            //                                       attributeName =
+                            //                                           val;
+                            //                                       print(
+                            //                                           "attributeName: $attributeName");
+                            //                                     });
+                            //                                   },
+                            //                                 ),
+                            //                               ),
+                            //                             ],
+                            //                           ),
+                            //                         ),
+                            //                         Padding(
+                            //                           padding:
+                            //                               const EdgeInsets.only(
+                            //                                   top: 10),
+                            //                           child: Column(
+                            //                             crossAxisAlignment:
+                            //                                 CrossAxisAlignment
+                            //                                     .start,
+                            //                             children: [
+                            //                               SizedBox(
+                            //                                 height: 15,
+                            //                                 child: Row(
+                            //                                   mainAxisAlignment:
+                            //                                       MainAxisAlignment
+                            //                                           .spaceBetween,
+                            //                                   children: [
+                            //                                     const Expanded(
+                            //                                       flex: 10,
+                            //                                       child: Text(
+                            //                                         'Attribute value',
+                            //                                         style:
+                            //                                             ratingLabelStyle,
+                            //                                       ),
+                            //                                     ),
+                            //                                     Expanded(
+                            //                                       flex: 1,
+                            //                                       child:
+                            //                                           IconButton(
+                            //                                         icon: const Icon(
+                            //                                             Icons
+                            //                                                 .add_circle),
+                            //                                         iconSize:
+                            //                                             20,
+                            //                                         onPressed:
+                            //                                             () {
+                            //                                           setState(
+                            //                                               () {
+                            //                                             attributeValueNumber++;
+                            //                                           });
+                            //                                         },
+                            //                                         padding:
+                            //                                             const EdgeInsets
+                            //                                                 .all(0),
+                            //                                         alignment:
+                            //                                             Alignment
+                            //                                                 .centerRight,
+                            //                                       ),
+                            //                                     ),
+                            //                                     Expanded(
+                            //                                       flex: 1,
+                            //                                       child:
+                            //                                           IconButton(
+                            //                                         icon: const Icon(
+                            //                                             Icons
+                            //                                                 .delete),
+                            //                                         iconSize:
+                            //                                             20,
+                            //                                         onPressed:
+                            //                                             () {
+                            //                                           setState(
+                            //                                               () {
+                            //                                             attributeValueNumber--;
+                            //                                           });
+                            //                                         },
+                            //                                         padding:
+                            //                                             const EdgeInsets
+                            //                                                 .all(0),
+                            //                                         alignment:
+                            //                                             Alignment
+                            //                                                 .centerRight,
+                            //                                       ),
+                            //                                     )
+                            //                                   ],
+                            //                                 ),
+                            //                               ),
+                            //                               const SizedBox(
+                            //                                 height: 5,
+                            //                               ),
+                            //                               ListView(
+                            //                                   shrinkWrap: true,
+                            //                                   physics:
+                            //                                       const NeverScrollableScrollPhysics(),
+                            //                                   padding:
+                            //                                       const EdgeInsets
+                            //                                               .only(
+                            //                                           bottom:
+                            //                                               5),
+                            //                                   children: [
+                            //                                     for (int i = 0;
+                            //                                         i < attributeValueNumber;
+                            //                                         i++)
+                            //                                       Padding(
+                            //                                         padding: const EdgeInsets
+                            //                                                 .only(
+                            //                                             bottom:
+                            //                                                 5),
+                            //                                         child:
+                            //                                             SizedBox(
+                            //                                           height:
+                            //                                               30,
+                            //                                           child:
+                            //                                               StringTextArea(
+                            //                                             label:
+                            //                                                 'Large',
+                            //                                             textLine:
+                            //                                                 1,
+                            //                                             onChanged:
+                            //                                                 (val) {
+                            //                                               setState(
+                            //                                                   () {
+                            //                                                 attributeValue[i] =
+                            //                                                     val;
+                            //                                                 print("value $i : ${attributeValue[i]}");
+                            //                                               });
+                            //                                             },
+                            //                                           ),
+                            //                                         ),
+                            //                                       )
+                            //                                   ]),
+                            //                             ],
+                            //                           ),
+                            //                         ),
+                            //                       ],
+                            //                     ),
+                            //                   SizedBox(
+                            //                       height: 30,
+                            //                       child: Row(
+                            //                         mainAxisAlignment:
+                            //                             MainAxisAlignment
+                            //                                 .spaceAround,
+                            //                         children: [
+                            //                           SizedBox(
+                            //                             width: 150,
+                            //                             child: PurpleTextButton(
+                            //                                 buttonText:
+                            //                                     'Add Attribute',
+                            //                                 onClick: () {
+                            //                                   setState(() {
+                            //                                     attributeNumber++;
+                            //                                   });
+                            //                                 }),
+                            //                           ),
+                            //                           SizedBox(
+                            //                             width: 150,
+                            //                             child: PurpleTextButton(
+                            //                                 buttonText:
+                            //                                     'Remove Attribute',
+                            //                                 onClick: () {
+                            //                                   setState(() {
+                            //                                     attributeNumber--;
+                            //                                   });
+                            //                                 }),
+                            //                           ),
+                            //                         ],
+                            //                       ))
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //           ),
+                            //       ],
+                            //     )),
                           ],
                         ),
                       ),
@@ -617,26 +602,108 @@ class _SetupStoreState extends State<SetupStore> {
                           child: PurpleTextButton(
                             buttonText: 'Add listing',
                             onClick: () {
-                              // for (int i = 0; i < listing.length; i++) {
-                              setState(() {
-                                listing.add({
-                                  "listingImagePath": listingImagePath,
-                                  "selectedCategory": selectedCategory,
-                                  "selectedSubCategory": selectedSubCategory,
-                                  "price": price,
-                                  "listingName": listingName,
-                                  "listingDescription": listingDescription,
-                                  "isSelected": isSelected,
-                                  "attribute": attribute
-                                });
-                                attribute.add({
-                                  "attributeName": attributeName,
-                                  "attributeValue": attributeValue
-                                });
-                                print(listing);
+                              if (formKey.currentState!.validate()) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return YesNoAlertModal(
+                                        alertContent:
+                                            'Are you sure to add this listing to your store?',
+                                        closeOnClick: () {
+                                          Navigator.pop(context);
+                                        },
+                                        yesOnClick: () async {
+                                          storage
+                                              .uploadFile(listingImagePath,
+                                                  listingImageName)
+                                              .then((value) => print('Done'));
 
-                                // Navigator.pop(context);
-                              });
+                                          downloadListingImagePath =
+                                              await storage.downloadURL(
+                                                  listingImageName);
+
+                                          await DatabaseService(uid: userId)
+                                              .updateItemData(
+                                                  widget.storeId,
+                                                  widget.businessName,
+                                                  downloadListingImagePath,
+                                                  selectedCategory,
+                                                  selectedSubCategory,
+                                                  price,
+                                                  listingName,
+                                                  listingDescription);
+
+                                          setState(() {
+                                            listingQuantity++;
+                                          });
+
+                                          Navigator.pop(context);
+                                        },
+                                        noOnClick: () {
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    });
+                              }
+
+                              // print(downloadListingImagePath);
+                              // listing.add(
+                              //    listing[addListing].listingImagePath =
+                              //     downloadListingImagePath,
+                              // listing[addListing].selectedCategory =
+                              //     selectedCategory,
+                              // listing[addListing].selectedSubCategory =
+                              //     selectedSubCategory,
+                              // listing[addListing].price = price,
+                              // listing[addListing].listingName = listingName,
+                              // listing[addListing].listingDescription =
+                              //     listingDescription,
+                              // );
+
+                              // addListing++;
+                              // print(addListing);
+                              // setState(() {
+                              // Map tempListing = {
+                              //   'listingImagePath': listingImagePath,
+                              //   "selectedCategory": selectedCategory,
+                              //   "selectedSubCategory": selectedSubCategory,
+                              //   "price": price,
+                              //   "listingName": listingName,
+                              //   "listingDescription": listingDescription,
+                              // };
+
+                              // tempListing.forEach((key, value) =>
+                              //     listing.add(Listing(key, value)));
+                              //   var tempListing = Listing(
+                              //       listingImagePath: listingImagePath,
+                              //       selectedCategory: selectedCategory,
+                              //       selectedSubCategory: selectedSubCategory,
+                              //       price: price,
+                              //       listingName: listingName,
+                              //       listingDescription: listingDescription);
+
+                              //   listing.add(tempListing);
+
+                              //   print(listing);
+                              // });
+
+                              // listing.add({
+                              //   // "listingImagePath": downloadListingImagePath,
+                              //   // "selectedCategory": selectedCategory,
+                              //   // "selectedSubCategory": selectedSubCategory,
+                              //   // "price": price,
+                              //   // "listingName": listingName,
+                              //   // "listingDescription": listingDescription,
+                              //   // "isSelected": isSelected,
+                              //   // "attribute": attribute
+                              // });
+
+                              // attribute.add({
+                              //   "attributeName": attributeName,
+                              //   "attributeValue": attributeValue
+                              // });
+
+                              // Navigator.pop(context);
                             },
                           ),
                         ),
@@ -645,32 +712,22 @@ class _SetupStoreState extends State<SetupStore> {
                           width: 130,
                           child: PurpleTextButton(
                             buttonText: 'Set up your store',
-                            onClick: () async {
-                              if (formKey.currentState!.validate()) {
-                                storage
-                                    .uploadFile(
-                                        widget.imagePath, widget.imageName)
-                                    .then((value) => print('Done'));
-                                storage
-                                    .uploadFile(
-                                        listingImagePath, listingImageName)
-                                    .then((value) => print('Done'));
-                                await DatabaseService(uid: userId)
-                                    .updateStoreData(
-                                        widget.storeId,
-                                        widget.imagePath,
-                                        widget.businessName,
-                                        widget.latitude,
-                                        widget.longtitude,
-                                        widget.address,
-                                        widget.stringStartTime,
-                                        widget.stringEndTime,
-                                        widget.phoneNumber,
-                                        widget.facebookLink,
-                                        widget.instagramLink,
-                                        widget.whatsappLink,
-                                        listing);
-                              }
+                            onClick: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertTextModal(
+                                      alertContent:
+                                          'You have successfully set up your store!',
+                                      onClick: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ViewStore()));
+                                      },
+                                    );
+                                  });
                             },
                           ),
                         ),

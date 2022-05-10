@@ -23,7 +23,9 @@ class TopAppBar extends StatelessWidget {
             },
             child: const Text('JUSTSHOP', style: logoLabel)),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/cartpage');
+          },
           icon: const Icon(Icons.shopping_bag_outlined),
           iconSize: 30,
         ),
@@ -36,12 +38,14 @@ class TitleAppBar extends StatefulWidget {
   final String title;
   final int iconFlex;
   final int titleFlex;
+  final bool hasArrow;
 
   const TitleAppBar(
       {Key? key,
       required this.title,
       required this.iconFlex,
-      required this.titleFlex})
+      required this.titleFlex,
+      required this.hasArrow})
       : super(key: key);
 
   @override
@@ -57,21 +61,29 @@ class _TitleAppBarState extends State<TitleAppBar> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            flex: widget.iconFlex,
-            child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios),
-              iconSize: 20,
-              alignment: Alignment.centerLeft,
+          if (widget.hasArrow == true)
+            Expanded(
+              flex: widget.iconFlex,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back_ios),
+                iconSize: 20,
+                alignment: Alignment.centerLeft,
+              ),
             ),
-          ),
-          Expanded(
-            flex: widget.titleFlex,
-            child: Text(widget.title, style: titleAppBarFontStyle),
-          )
+          if (widget.hasArrow == true)
+            Expanded(
+              flex: widget.titleFlex,
+              child: Text(widget.title, style: titleAppBarFontStyle),
+            ),
+          if (widget.hasArrow == false)
+            Expanded(
+              flex: widget.titleFlex,
+              child: Center(
+                  child: Text(widget.title, style: titleAppBarFontStyle)),
+            )
         ],
       ),
     );

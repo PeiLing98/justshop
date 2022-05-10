@@ -28,6 +28,8 @@ class _LocationMapState extends State<LocationMap> {
   String addressLocation = "";
   String addressLatitude = "";
   String addressLongtitude = "";
+  String addressCity = "";
+  String addressState = "";
   List<Marker> markers = [];
   TextEditingController myController = TextEditingController();
 
@@ -209,7 +211,9 @@ class _LocationMapState extends State<LocationMap> {
     String address = addressLocation;
     String latitude = addressLatitude;
     String longtitude = addressLongtitude;
-    Navigator.pop(context, [address, latitude, longtitude]);
+    String state = addressState;
+    String city = addressCity;
+    Navigator.pop(context, [address, latitude, longtitude, city, state]);
   }
 
   Future<Position> _determinePosition() async {
@@ -302,10 +306,14 @@ class _LocationMapState extends State<LocationMap> {
     var firstAddress = address.address;
     var locationLatitude = address.latitude;
     var locationLongtitude = address.longitude;
+    var locationCity = address.postalCode;
+    var locationState = address.state;
     setState(() {
       addressLocation = firstAddress;
       addressLatitude = locationLatitude.toString();
       addressLongtitude = locationLongtitude.toString();
+      addressCity = locationCity;
+      addressState = locationState;
     });
   }
 }

@@ -64,3 +64,122 @@ class _ListingTabBarState extends State<ListingTabBar> {
     );
   }
 }
+
+class StoreTabBar extends StatefulWidget {
+  final Widget listingBody;
+  final Widget reviewBody;
+
+  const StoreTabBar(
+      {Key? key, required this.listingBody, required this.reviewBody})
+      : super(key: key);
+
+  @override
+  _StoreTabBarState createState() => _StoreTabBarState();
+}
+
+class _StoreTabBarState extends State<StoreTabBar> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          const TabBar(
+            labelColor: Colors.black,
+            labelStyle: buttonLabelStyle,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Colors.black,
+            indicatorWeight: 3,
+            indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
+            tabs: [
+              Tab(
+                text: 'LISTINGS',
+                height: 30,
+              ),
+              Tab(
+                text: 'REVIEWS',
+                height: 30,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              child: TabBarView(children: [
+                widget.listingBody,
+                widget.reviewBody,
+              ]),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class RatingMonthTabBar extends StatefulWidget {
+  final String latestFirstMonth;
+  final String latestSecondMonth;
+  final String latestThirdMonth;
+  final Widget latestFirstMonthBody;
+  final Widget latestSecondMonthBody;
+  final Widget latestThirdMonthBody;
+
+  const RatingMonthTabBar(
+      {Key? key,
+      required this.latestFirstMonth,
+      required this.latestSecondMonth,
+      required this.latestThirdMonth,
+      required this.latestFirstMonthBody,
+      required this.latestSecondMonthBody,
+      required this.latestThirdMonthBody})
+      : super(key: key);
+
+  @override
+  _RatingMonthTabBarState createState() => _RatingMonthTabBarState();
+}
+
+class _RatingMonthTabBarState extends State<RatingMonthTabBar> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Column(
+        children: [
+          TabBar(
+            labelColor: Colors.black,
+            labelStyle: boldContentTitle,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: secondaryColor,
+            indicatorWeight: 3,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+            tabs: [
+              Tab(
+                text: widget.latestThirdMonth,
+                height: 30,
+              ),
+              Tab(
+                text: widget.latestSecondMonth,
+                height: 30,
+              ),
+              Tab(
+                text: widget.latestFirstMonth,
+                height: 30,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: TabBarView(children: [
+                widget.latestThirdMonthBody,
+                widget.latestSecondMonthBody,
+                widget.latestFirstMonthBody
+              ]),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

@@ -4,15 +4,16 @@ import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 import 'package:final_year_project/components/location_map.dart';
 import 'package:final_year_project/constant.dart';
-// import 'package:final_year_project/models/user_model.dart';
+import 'package:final_year_project/modals/alert_text_modal.dart';
+import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/sign_up_store/setup_store.dart';
-// import 'package:final_year_project/services/database.dart';
-// import 'package:final_year_project/services/storage_service.dart';
+import 'package:final_year_project/services/database.dart';
+import 'package:final_year_project/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' as i;
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class RegisterBusiness extends StatefulWidget {
   const RegisterBusiness({Key? key}) : super(key: key);
@@ -23,15 +24,19 @@ class RegisterBusiness extends StatefulWidget {
 
 class _RegisterBusinessState extends State<RegisterBusiness> {
   final formKey = GlobalKey<FormState>();
+  final Storage storage = Storage();
+
   PlatformFile? pickedFile;
   String imagePath = '';
   String imageName = '';
 
-  int storeId = 0;
+  String downloadLogoPath = "";
   String businessName = '';
   String latitude = '';
   String longtitude = '';
   String address = '';
+  String city = '';
+  String state = '';
   TimeOfDay startTime = TimeOfDay.now();
   TimeOfDay endTime = TimeOfDay.now();
   String phoneNumber = '';
@@ -49,13 +54,18 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
       allowedExtensions: ['png', 'jpg'],
     );
 
-    if (result == null) return;
+    if (result == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('No image is selected.')));
+      return null;
+    }
 
     imagePath = result.files.single.path!;
     imageName = result.files.single.name;
 
     setState(() {
       pickedFile = result.files.first;
+      // pickedFile = result;
     });
   }
 
@@ -119,13 +129,14 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
       address = result[0];
       latitude = result[1];
       longtitude = result[2];
+      city = result[3];
+      state = result[4];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final Storage storage = Storage();
-    // final userId = Provider.of<MyUser>(context).uid;
+    final userId = Provider.of<MyUser>(context).uid;
 
     return Container(
       margin: const EdgeInsets.all(5),
@@ -134,10 +145,14 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 40, child: TopAppBar()),
-            const TitleAppBar(
-              title: '1: Register Your Business',
-              iconFlex: 2,
-              titleFlex: 8,
+            const SizedBox(
+              height: 40,
+              child: TitleAppBar(
+                title: '1: Register Your Business',
+                iconFlex: 2,
+                titleFlex: 8,
+                hasArrow: false,
+              ),
             ),
             const SizedBox(height: 5),
             Form(
@@ -167,10 +182,12 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                   child: Container(
                                     width: 70,
                                     height: 70,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color.fromARGB(250, 233, 221, 221),
-                                    ),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: const Color.fromARGB(
+                                            250, 233, 221, 221),
+                                        border: Border.all(
+                                            width: 0.5, color: Colors.grey)),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(50),
                                       child: (pickedFile != null)
@@ -437,60 +454,93 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          // SizedBox(
-                          //   width: 100,
-                          //   height: 35,
-                          //   child: PurpleTextButton(
-                          //     buttonText: 'Register',
-                          //     onClick: () async {
-                          //       if (formKey.currentState!.validate()) {
-                          //         storage
-                          //             .uploadFile(imagePath, imageName)
-                          //             .then((value) => print('Done'));
-                          //         storeId = UniqueKey().hashCode;
-                          //         await DatabaseService(uid: userId)
-                          //             .updateStoreData(
-                          //                 storeId,
-                          //                 imagePath,
-                          //                 businessName,
-                          //                 latitude,
-                          //                 longtitude,
-                          //                 address,
-                          //                 stringStartTime,
-                          //                 stringEndTime,
-                          //                 phoneNumber,
-                          //                 facebookLink,
-                          //                 instagramLink,
-                          //                 whatsappLink);
-                          //       }
-                          //     },
-                          //   ),
-                          // ),
                           SizedBox(
                             width: 100,
                             height: 35,
                             child: PurpleTextButton(
                               buttonText: 'Next',
-                              onClick: () async {
+                              onClick: () {
                                 if (formKey.currentState!.validate()) {
-                                  storeId = UniqueKey().hashCode;
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SetupStore(
-                                              storeId: storeId,
-                                              imagePath: imagePath,
-                                              imageName: imageName,
-                                              businessName: businessName,
-                                              latitude: latitude,
-                                              longtitude: longtitude,
-                                              address: address,
-                                              stringStartTime: stringStartTime,
-                                              stringEndTime: stringEndTime,
-                                              phoneNumber: phoneNumber,
-                                              facebookLink: facebookLink,
-                                              instagramLink: instagramLink,
-                                              whatsappLink: whatsappLink)));
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return YesNoAlertModal(
+                                          alertContent:
+                                              'Are you sure to register this business?',
+                                          closeOnClick: () {
+                                            Navigator.pop(context);
+                                          },
+                                          yesOnClick: () async {
+                                            String storeId = const Uuid().v1();
+
+                                            storage
+                                                .uploadFile(
+                                                    imagePath, imageName)
+                                                .then((value) => print('Done'));
+
+                                            downloadLogoPath = await storage
+                                                .downloadURL(imageName);
+
+                                            await DatabaseService(uid: userId)
+                                                .updateStoreData(
+                                              storeId,
+                                              downloadLogoPath,
+                                              businessName,
+                                              latitude,
+                                              longtitude,
+                                              address,
+                                              city,
+                                              state,
+                                              stringStartTime,
+                                              stringEndTime,
+                                              phoneNumber,
+                                              facebookLink,
+                                              instagramLink,
+                                              whatsappLink,
+                                            );
+
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SetupStore(
+                                                          storeId: storeId,
+                                                          businessName:
+                                                              businessName,
+                                                        )));
+                                          },
+                                          noOnClick: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      });
+
+                                  // dynamic result =
+                                  //     await DatabaseService(uid: userId)
+                                  //         .updateStoreData(
+                                  //   storeId,
+                                  //   downloadLogoPath,
+                                  //   businessName,
+                                  //   latitude,
+                                  //   longtitude,
+                                  //   address,
+                                  //   city,
+                                  //   state,
+                                  //   stringStartTime,
+                                  //   stringEndTime,
+                                  //   phoneNumber,
+                                  //   facebookLink,
+                                  //   instagramLink,
+                                  //   whatsappLink,
+                                  // );
+
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => SetupStore(
+                                  //               storeId: storeId,
+                                  //               businessName: businessName,
+                                  //             )));
                                 }
                               },
                             ),

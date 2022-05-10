@@ -53,6 +53,7 @@ class _FilterState extends State<Filter> {
                 title: 'Filter',
                 iconFlex: 3,
                 titleFlex: 4,
+                hasArrow: false,
               )),
           Expanded(
             flex: 1,
