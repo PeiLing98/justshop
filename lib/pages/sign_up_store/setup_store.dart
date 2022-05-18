@@ -17,11 +17,13 @@ import 'package:provider/provider.dart';
 class SetupStore extends StatefulWidget {
   final String storeId;
   final String businessName;
+  final String storeImage;
 
   const SetupStore({
     Key? key,
     required this.storeId,
     required this.businessName,
+    required this.storeImage,
   }) : super(key: key);
 
   @override
@@ -72,6 +74,12 @@ class _SetupStoreState extends State<SetupStore> {
     setState(() {
       selectedFile = result.files.first;
     });
+  }
+
+  @override
+  void initState() {
+    subCategoryList = category.subCategory[0];
+    super.initState();
   }
 
   @override
@@ -193,6 +201,26 @@ class _SetupStoreState extends State<SetupStore> {
                                                 onChanged: (val) {
                                                   setState(() {
                                                     selectedCategory = val!;
+                                                    if (val == 'Food') {
+                                                      selectedSubCategory =
+                                                          category.subCategory[
+                                                              0][0];
+                                                      subCategoryList = category
+                                                          .subCategory[0];
+                                                    } else if (val ==
+                                                        'Product') {
+                                                      selectedSubCategory =
+                                                          category.subCategory[
+                                                              1][0];
+                                                      subCategoryList = category
+                                                          .subCategory[1];
+                                                    } else {
+                                                      selectedSubCategory =
+                                                          category.subCategory[
+                                                              2][0];
+                                                      subCategoryList = category
+                                                          .subCategory[2];
+                                                    }
                                                     // print(
                                                     //     "category: $selectedCategory");
                                                   });
@@ -200,35 +228,8 @@ class _SetupStoreState extends State<SetupStore> {
                                               ),
                                               const SizedBox(height: 5),
                                               ItemDropdownButton(
-                                                itemValue: selectedCategory ==
-                                                        category.category[0]
-                                                            .toString()
-                                                    ? selectedSubCategory =
-                                                        category.subCategory[0]
-                                                            [0]
-                                                    : selectedCategory ==
-                                                            category.category[1]
-                                                        ? selectedSubCategory =
-                                                            category.subCategory[
-                                                                1][0]
-                                                        : selectedSubCategory =
-                                                            category.subCategory[
-                                                                2][0],
-                                                // itemValue: selectedSubCategory,
-                                                items: selectedCategory ==
-                                                        category.category[0]
-                                                            .toString()
-                                                    ? subCategoryList =
-                                                        category.subCategory[0]
-                                                    : selectedCategory ==
-                                                            category.category[1]
-                                                                .toString()
-                                                        ? subCategoryList =
-                                                            category
-                                                                .subCategory[1]
-                                                        : subCategoryList =
-                                                            category
-                                                                .subCategory[2],
+                                                itemValue: selectedSubCategory,
+                                                items: subCategoryList,
                                                 onChanged: (val) {
                                                   setState(() {
                                                     selectedSubCategory = val!;
@@ -623,9 +624,10 @@ class _SetupStoreState extends State<SetupStore> {
                                                   listingImageName);
 
                                           await DatabaseService(uid: userId)
-                                              .updateItemData(
+                                              .addItemData(
                                                   widget.storeId,
                                                   widget.businessName,
+                                                  widget.storeImage,
                                                   downloadListingImagePath,
                                                   selectedCategory,
                                                   selectedSubCategory,

@@ -44,6 +44,10 @@ const logoLabel =
 const modalContent = TextStyle(fontSize: 14, fontFamily: 'Roboto', height: 1.5);
 const boldContentTitle =
     TextStyle(fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
+const listingTitle =
+    TextStyle(fontSize: 10, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
+const listingDescription = TextStyle(
+    fontSize: 10, fontFamily: 'Roboto', fontWeight: FontWeight.normal);
 const categoryText = TextStyle(
   fontSize: 10,
   fontFamily: 'Roboto',

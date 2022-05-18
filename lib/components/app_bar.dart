@@ -10,24 +10,30 @@ class TopAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/savelist');
-          },
-          icon: const Icon(Icons.bookmark_border_rounded),
-          iconSize: 30,
-        ),
-        TextButton(
+        SizedBox(
+          child: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/pagescontroller');
+              Navigator.pushNamed(context, '/savelist');
             },
-            child: const Text('JUSTSHOP', style: logoLabel)),
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/cartpage');
-          },
-          icon: const Icon(Icons.shopping_bag_outlined),
-          iconSize: 30,
+            icon: const Icon(Icons.bookmark_border_rounded),
+            iconSize: 30,
+          ),
+        ),
+        SizedBox(
+          child: TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/pagescontroller');
+              },
+              child: const Text('JUSTSHOP', style: logoLabel)),
+        ),
+        SizedBox(
+          child: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/cartpage');
+            },
+            icon: const Icon(Icons.shopping_bag_outlined),
+            iconSize: 30,
+          ),
         ),
       ],
     );

@@ -253,8 +253,14 @@ class _FilterOptionButtonState extends State<FilterOptionButton> {
 
 class SelectedFilterOption extends StatefulWidget {
   final String buttonText;
+  final bool? isClose;
+  final VoidCallback? closeButtonAction;
 
-  const SelectedFilterOption({Key? key, required this.buttonText})
+  const SelectedFilterOption(
+      {Key? key,
+      required this.buttonText,
+      this.isClose,
+      this.closeButtonAction})
       : super(key: key);
 
   @override
@@ -276,14 +282,15 @@ class _SelectedFilterOptionState extends State<SelectedFilterOption> {
                   color: Colors.grey,
                 ),
                 borderRadius: BorderRadius.circular(5))),
-        Positioned(
-            bottom: 0,
-            right: -18,
-            child: IconButton(
-              iconSize: 15,
-              icon: const Icon(Icons.cancel_rounded),
-              onPressed: () {},
-            ))
+        if (widget.isClose == true)
+          Positioned(
+              bottom: 0,
+              right: -18,
+              child: IconButton(
+                iconSize: 15,
+                icon: const Icon(Icons.cancel_rounded),
+                onPressed: widget.closeButtonAction,
+              ))
       ]),
     );
   }

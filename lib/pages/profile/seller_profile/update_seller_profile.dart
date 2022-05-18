@@ -9,6 +9,7 @@ import 'package:final_year_project/modals/alert_text_modal.dart';
 import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/profile/seller_profile/seller_profile.dart';
 import 'package:final_year_project/services/database.dart';
+import 'package:final_year_project/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:io' as i;
@@ -22,6 +23,7 @@ class UpdateSellerProfile extends StatefulWidget {
 
 class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
   final _formKey = GlobalKey<FormState>();
+  final Storage storage = Storage();
 
   String imagePath = "";
   String imageName = "";
@@ -358,6 +360,21 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                                         Navigator.pop(context);
                                                       },
                                                       yesOnClick: () async {
+                                                        if (imagePath != "") {
+                                                          storage
+                                                              .uploadFile(
+                                                                  imagePath,
+                                                                  imageName)
+                                                              .then((value) =>
+                                                                  print(
+                                                                      'Done'));
+
+                                                          _currentImagePath =
+                                                              await storage
+                                                                  .downloadURL(
+                                                                      imageName);
+                                                        }
+
                                                         await DatabaseService(
                                                                 uid: user.uid)
                                                             .updateStoreData(
@@ -404,6 +421,17 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                                               userStoreData
                                                                   .whatsappLink,
                                                         );
+
+                                                        // await DatabaseService(uid: user.uid).updateItemData(
+                                                        //   docId,
+                                                        //   storeId,
+                                                        //   storeName,
+                                                        //   storeImage,
+                                                        //   listingImagePath,
+                                                        //   selectedCategory,
+                                                        //   selectedSubCategory,
+                                                        //   price, listingName, listingDescription)
+
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(

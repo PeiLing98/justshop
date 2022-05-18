@@ -30,17 +30,4 @@ class Store {
     required this.instagramLink,
     required this.whatsappLink,
   });
-
-  // List<Listing> getListing(String imagePath, String category,
-  //     String subCategory, String price, String name, String description) {
-  //   return [
-  //     Listing(
-  //         listingImagePath: imagePath,
-  //         selectedCategory: category,
-  //         selectedSubCategory: subCategory,
-  //         price: price,
-  //         listingName: name,
-  //         listingDescription: description)
-  //   ];
-  // }
 }

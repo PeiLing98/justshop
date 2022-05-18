@@ -128,61 +128,61 @@ class _ViewStoreState extends State<ViewStore> {
                                         const SizedBox(
                                           height: 5,
                                         ),
-                                        Container(
-                                          height: 25,
-                                          alignment: Alignment.center,
-                                          child: ListView.builder(
-                                              shrinkWrap: true,
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: 2,
-                                              itemBuilder: (context, index) {
-                                                List<String> categorylist = [
-                                                  matchedStoreItem![index]
-                                                      .selectedCategory
-                                                ];
-                                                List<String> subCategorylist = [
-                                                  matchedStoreItem[index]
-                                                      .selectedSubCategory
-                                                ];
-                                                List<List<String>>
-                                                    categoryDistinctList = [
-                                                  LinkedHashSet<String>.from(
-                                                          categorylist)
-                                                      .toList(),
-                                                  LinkedHashSet<String>.from(
-                                                          subCategorylist)
-                                                      .toList()
-                                                ];
+                                        // Container(
+                                        //   height: 25,
+                                        //   alignment: Alignment.center,
+                                        //   child: ListView.builder(
+                                        //       shrinkWrap: true,
+                                        //       scrollDirection: Axis.horizontal,
+                                        //       itemCount: 2,
+                                        //       itemBuilder: (context, index) {
+                                        //         List<String> categorylist = [
+                                        //           matchedStoreItem![index]
+                                        //               .selectedCategory
+                                        //         ];
+                                        //         List<String> subCategorylist = [
+                                        //           matchedStoreItem[index]
+                                        //               .selectedSubCategory
+                                        //         ];
+                                        //         List<List<String>>
+                                        //             categoryDistinctList = [
+                                        //           LinkedHashSet<String>.from(
+                                        //                   categorylist)
+                                        //               .toList(),
+                                        //           LinkedHashSet<String>.from(
+                                        //                   subCategorylist)
+                                        //               .toList()
+                                        //         ];
 
-                                                return Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 5),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: Colors.grey),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5)),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 5),
-                                                      child: Text(
-                                                        categoryDistinctList[
-                                                            index][0],
-                                                        style: const TextStyle(
-                                                            fontSize: 12,
-                                                            fontFamily:
-                                                                'Roboto'),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                        ),
+                                        //         return Padding(
+                                        //           padding:
+                                        //               const EdgeInsets.only(
+                                        //                   right: 5),
+                                        //           child: Container(
+                                        //             decoration: BoxDecoration(
+                                        //                 border: Border.all(
+                                        //                     color: Colors.grey),
+                                        //                 borderRadius:
+                                        //                     BorderRadius
+                                        //                         .circular(5)),
+                                        //             child: Padding(
+                                        //               padding: const EdgeInsets
+                                        //                       .symmetric(
+                                        //                   horizontal: 10,
+                                        //                   vertical: 5),
+                                        //               child: Text(
+                                        //                 categoryDistinctList[
+                                        //                     index][0],
+                                        //                 style: const TextStyle(
+                                        //                     fontSize: 12,
+                                        //                     fontFamily:
+                                        //                         'Roboto'),
+                                        //               ),
+                                        //             ),
+                                        //           ),
+                                        //         );
+                                        //       }),
+                                        // ),
                                         const SizedBox(
                                           height: 10,
                                         ),
@@ -376,12 +376,12 @@ class _ViewStoreState extends State<ViewStore> {
                                           height: 10,
                                         ),
                                         SizedBox(
-                                            height: 345,
+                                            height: 400,
                                             child: StoreTabBar(
                                               listingBody:
                                                   SingleChildScrollView(
                                                 child: SizedBox(
-                                                    height: 300,
+                                                    height: 350,
                                                     child: ListView.builder(
                                                         itemCount:
                                                             matchedStoreItem!
@@ -397,8 +397,8 @@ class _ViewStoreState extends State<ViewStore> {
                                                                       MaterialPageRoute(
                                                                           builder: (context) => ListingDetail(
                                                                                 listing: matchedStoreItem![index],
-                                                                                storeName: userStoreData.businessName,
-                                                                                storeImagePath: userStoreData.imagePath,
+                                                                                // storeName: userStoreData.businessName,
+                                                                                // storeImagePath: userStoreData.imagePath,
                                                                               )));
                                                                 },
                                                                 child: Padding(
@@ -446,7 +446,7 @@ class _ViewStoreState extends State<ViewStore> {
                                               ),
                                               reviewBody: SingleChildScrollView(
                                                 child: SizedBox(
-                                                    height: 300,
+                                                    height: 350,
                                                     child: ListView.builder(
                                                         itemCount: 5,
                                                         //userStoreData.listing.length,

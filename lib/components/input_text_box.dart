@@ -117,14 +117,16 @@ class StringTextArea extends StatefulWidget {
   final String label;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final String? initialValue;
 
-  const StringTextArea({
-    Key? key,
-    required this.label,
-    required this.textLine,
-    required this.onChanged,
-    this.validator,
-  }) : super(key: key);
+  const StringTextArea(
+      {Key? key,
+      required this.label,
+      required this.textLine,
+      required this.onChanged,
+      this.validator,
+      this.initialValue})
+      : super(key: key);
 
   @override
   _StringTextAreaState createState() => _StringTextAreaState();
@@ -134,6 +136,7 @@ class _StringTextAreaState extends State<StringTextArea> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: widget.initialValue,
       style: hintStyle,
       minLines: widget.textLine,
       maxLines: widget.textLine,
@@ -207,7 +210,8 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
               minLines: widget.textFieldLine,
               maxLines: widget.textFieldLine,
               decoration: const InputDecoration(
-                contentPadding: EdgeInsets.all(10),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
                 ),

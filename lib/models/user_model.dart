@@ -25,19 +25,6 @@ class UserData {
       required this.state});
 }
 
-class UserListingData {
-  final String uid;
-  final String name;
-  final double price;
-  final String description;
-
-  UserListingData(
-      {required this.uid,
-      required this.name,
-      required this.price,
-      required this.description});
-}
-
 class UserStoreData {
   final String uid;
   final String storeId;
@@ -78,6 +65,8 @@ class UserItemData {
   final String uid;
   final String storeId;
   final String storeName;
+  final String storeImage;
+  final String listingId;
   final String listingImagePath;
   final String selectedCategory;
   final String selectedSubCategory;
@@ -89,6 +78,8 @@ class UserItemData {
     required this.uid,
     required this.storeId,
     required this.storeName,
+    required this.storeImage,
+    required this.listingId,
     required this.listingImagePath,
     required this.selectedCategory,
     required this.selectedSubCategory,

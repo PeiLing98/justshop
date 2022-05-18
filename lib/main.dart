@@ -1,8 +1,8 @@
 import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/cart_page.dart';
-import 'package:final_year_project/pages/listing_setting.dart';
+import 'package:final_year_project/pages/profile/manage_listing/manage_listing.dart';
 import 'package:final_year_project/pages/profile/seller_profile/seller_profile.dart';
-import 'package:final_year_project/pages/filter.dart';
+import 'package:final_year_project/pages/filter/filter.dart';
 import 'package:final_year_project/pages/onboarding/forget_password.dart';
 import 'package:final_year_project/pages/homepage/home_page.dart';
 import 'package:final_year_project/components/location_map.dart';
@@ -43,7 +43,7 @@ Future<void> main() async {
           '/registerbusiness': (context) => const RegisterBusiness(),
           '/sellerprofile': (context) => const SellerProfile(),
           '/updatesellerprofile': (context) => const UpdateSellerProfile(),
-          '/listingsetting': (context) => const ListingSetting(),
+          '/managelisting': (context) => const ManageListing(),
           '/viewstore': (context) => const ViewStore(),
           '/cartpage': (context) => const CartPage(),
           '/userprofile': (context) => const UserProfile(),

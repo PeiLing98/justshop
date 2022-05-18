@@ -1,5 +1,5 @@
 import 'package:final_year_project/constant.dart';
-import 'package:final_year_project/pages/filter.dart';
+import 'package:final_year_project/pages/filter/filter.dart';
 import 'package:final_year_project/pages/homepage/home_page.dart';
 import 'package:final_year_project/pages/profile/profile.dart';
 import 'package:final_year_project/pages/ranking_blog.dart';

@@ -29,7 +29,7 @@ class _ListingTabBarState extends State<ListingTabBar> {
         children: [
           const TabBar(
             labelColor: Colors.black,
-            labelStyle: boldContentTitle,
+            labelStyle: buttonLabelStyle,
             unselectedLabelColor: Colors.grey,
             indicatorColor: secondaryColor,
             indicatorWeight: 3,
@@ -56,6 +56,60 @@ class _ListingTabBarState extends State<ListingTabBar> {
                 widget.foodBody,
                 widget.productBody,
                 widget.serviceBody
+              ]),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class FilterTabBar extends StatefulWidget {
+  final Widget filterOption;
+  final Widget locationOption;
+
+  const FilterTabBar({
+    Key? key,
+    required this.filterOption,
+    required this.locationOption,
+  }) : super(key: key);
+
+  @override
+  _FilterTabBarState createState() => _FilterTabBarState();
+}
+
+class _FilterTabBarState extends State<FilterTabBar> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          const TabBar(
+            labelColor: Colors.black,
+            labelStyle: boldContentTitle,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: secondaryColor,
+            indicatorWeight: 3,
+            indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+            tabs: [
+              Tab(
+                text: 'FILTER OPTIONS',
+                height: 30,
+              ),
+              Tab(
+                text: 'LOCATION',
+                height: 30,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              child: TabBarView(children: [
+                widget.filterOption,
+                widget.locationOption,
               ]),
             ),
           )

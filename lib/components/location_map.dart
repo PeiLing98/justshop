@@ -290,7 +290,9 @@ class _LocationMapState extends State<LocationMap> {
         infoWindow: InfoWindow(
           title: detail.result.name,
           onTap: () => getFormattedAddressFromCoordinates(lat, lng),
-        )));
+        ),
+        icon:
+            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)));
 
     setState(() {});
 

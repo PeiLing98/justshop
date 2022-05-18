@@ -2,7 +2,9 @@ import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/modals/alert_text_modal.dart';
 import 'package:final_year_project/models/user_model.dart';
+import 'package:final_year_project/pages/sign_up_store/register_business.dart';
 import 'package:final_year_project/services/auth.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
@@ -78,31 +80,108 @@ class _ProfileState extends State<Profile> {
                           const SizedBox(
                             height: 30,
                           ),
-                          const Text(
-                            'BUSINESS ( FOR SELLER ONLY )',
-                            style: buttonLabelStyle,
-                          ),
-                          const Divider(
-                            color: Colors.grey,
-                            thickness: 0.5,
-                          ),
-                          ProfileButton(
-                              buttonText: 'Manage Business Profile',
-                              onClick: () {
-                                Navigator.pushNamed(context, '/sellerprofile');
-                              }),
-                          ProfileButton(
-                              buttonText: 'View Store',
-                              onClick: () {
-                                Navigator.pushNamed(context, '/viewstore');
-                              }),
-                          ProfileButton(
-                              buttonText: 'Manage Listing',
-                              onClick: () {
-                                Navigator.pushNamed(context, '/listingsetting');
-                              }),
-                          ProfileButton(
-                              buttonText: 'Business Order', onClick: () {}),
+                          StreamBuilder<UserStoreData>(
+                            stream:
+                                DatabaseService(uid: user?.uid).userStoreData,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'BUSINESS ( FOR SELLER ONLY )',
+                                      style: buttonLabelStyle,
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                      thickness: 0.5,
+                                    ),
+                                    ProfileButton(
+                                        buttonText: 'Manage Business Profile',
+                                        onClick: () {
+                                          Navigator.pushNamed(
+                                              context, '/sellerprofile');
+                                        }),
+                                    ProfileButton(
+                                        buttonText: 'View Store',
+                                        onClick: () {
+                                          Navigator.pushNamed(
+                                              context, '/viewstore');
+                                        }),
+                                    ProfileButton(
+                                        buttonText: 'Manage Listing',
+                                        onClick: () {
+                                          Navigator.pushNamed(
+                                              context, '/managelisting');
+                                        }),
+                                    ProfileButton(
+                                        buttonText: 'Business Order',
+                                        onClick: () {}),
+                                  ],
+                                );
+                              } else {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text(
+                                          'Are you a seller? Join us to be part of JustShop!',
+                                          style: boldContentTitle,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 250,
+                                          child: PurpleTextButton(
+                                            buttonText:
+                                                'Click here to register your business',
+                                            onClick: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return YesNoAlertModal(
+                                                        alertContent:
+                                                            'Are you ready to register business in JustShop?',
+                                                        closeOnClick: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        yesOnClick: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          const RegisterBusiness()));
+                                                        },
+                                                        noOnClick: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
+                                                  });
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                );
+                              }
+                            },
+                          )
                         ],
                       ),
                     ),

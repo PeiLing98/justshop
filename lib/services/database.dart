@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_year_project/models/list_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
 import 'package:final_year_project/models/store_model.dart';
 import 'package:final_year_project/models/user_model.dart';
@@ -42,53 +41,6 @@ class DatabaseService {
 
   Stream<UserData> get userData {
     return userCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
-  }
-
-// --------------------------- listing ---------------------------------------------------
-  //collection reference
-  final CollectionReference listingCollection =
-      FirebaseFirestore.instance.collection('listing');
-
-  Future updateListingData(
-      String name, double price, String description) async {
-    return await listingCollection.doc(uid).set({
-      'name': name,
-      'price': price,
-      'description': description,
-    });
-  }
-
-  // listing from snapshot
-  List<ItemList> _itemListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return ItemList(
-          name: doc.get('name') ?? '',
-          price: doc.get('price') ?? 0,
-          description: doc.get('description') ?? '');
-    }).toList();
-  }
-
-  // userData from snapshot
-  UserListingData _userListingDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserListingData(
-      uid: uid!,
-      name: snapshot.get('name'),
-      price: snapshot.get('price'),
-      description: snapshot.get('description'),
-    );
-  }
-
-  // get listing streams
-  Stream<List<ItemList>> get listings {
-    return listingCollection.snapshots().map(_itemListFromSnapshot);
-  }
-
-  //get user doc stream
-  Stream<UserListingData> get userListingData {
-    return listingCollection
-        .doc(uid)
-        .snapshots()
-        .map(_userListingDataFromSnapshot);
   }
 
 // -------------------------------- store --------------------------------------------------
@@ -187,9 +139,10 @@ class DatabaseService {
   final CollectionReference itemCollection =
       FirebaseFirestore.instance.collection('item');
 
-  Future updateItemData(
+  Future addItemData(
     String storeId,
     String storeName,
+    String storeImage,
     String listingImagePath,
     String selectedCategory,
     String selectedSubCategory,
@@ -197,10 +150,12 @@ class DatabaseService {
     String listingName,
     String listingDescription,
   ) async {
-    String itemId = const Uuid().v1();
-    return await itemCollection.doc(itemId).set({
+    String listingId = const Uuid().v1();
+    return await itemCollection.doc(listingId).set({
       'storeId': storeId,
       'storeName': storeName,
+      'storeImage': storeImage,
+      'listingId': listingId,
       'listingImagePath': listingImagePath,
       'selectedCategory': selectedCategory,
       'selectedSubCategory': selectedSubCategory,
@@ -210,11 +165,42 @@ class DatabaseService {
     });
   }
 
+  Future updateItemData(
+    String docId,
+    String storeId,
+    String storeName,
+    String storeImage,
+    String listingImagePath,
+    String selectedCategory,
+    String selectedSubCategory,
+    String price,
+    String listingName,
+    String listingDescription,
+  ) async {
+    return await itemCollection.doc(docId).update({
+      'storeId': storeId,
+      'storeName': storeName,
+      'storeImage': storeImage,
+      'listingImagePath': listingImagePath,
+      'selectedCategory': selectedCategory,
+      'selectedSubCategory': selectedSubCategory,
+      'price': price,
+      'listingName': listingName,
+      'listingDescription': listingDescription,
+    });
+  }
+
+  Future deleteItemData(String docId) async {
+    return await itemCollection.doc(docId).delete();
+  }
+
   List<Listing> _itemFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Listing(
         storeId: doc.get('storeId') ?? '',
         storeName: doc.get('storeName') ?? '',
+        storeImage: doc.get('storeImage') ?? '',
+        listingId: doc.get('listingId') ?? '',
         listingImagePath: doc.get('listingImagePath') ?? '',
         selectedCategory: doc.get('selectedCategory') ?? '',
         selectedSubCategory: doc.get('selectedSubCategory') ?? '',
@@ -230,6 +216,8 @@ class DatabaseService {
       uid: uid!,
       storeId: snapshot.get('storeId'),
       storeName: snapshot.get('storeName'),
+      storeImage: snapshot.get('storeImage'),
+      listingId: snapshot.get('listingId'),
       listingImagePath: snapshot.get('listingImagePath'),
       selectedCategory: snapshot.get('selectedCategory'),
       selectedSubCategory: snapshot.get('selectedSubCategory'),
@@ -249,71 +237,35 @@ class DatabaseService {
     return itemCollection.doc(uid).snapshots().map(_userItemDataFromSnapshot);
   }
 
-// // --------------------------------------- store listing -----------------------------------------
-//   final CollectionReference storeListingCollection =
-//       FirebaseFirestore.instance.collection('storeListing');
-//   // int? storeId;
-//   // Future getStoreId() async {
-//   //   QuerySnapshot querySnapshot =
-//   //       await FirebaseFirestore.instance.collection('store').get();
-//   //   return querySnapshot.docs.map((doc) {
-//   //     storeId = doc.get('storeId');
-//   //   });
-//   // }
-
-//   Future addStoreListingData(Map listingData, File image) async {
-//     return await storeListingCollection.doc(uid).set({});
-//   }
-
-//   // Future updateStoreListingData(Map listingData, File image) async {
-//   //   var pathimage = image.toString();
-//   //   var temp = pathimage.lastIndexOf('/');
-//   //   var result = pathimage.substring(temp + 1);
-//   //   print(result);
-//   //   final ref = FirebaseStorage.instance.ref().child('imagePath').child(result);
-//   //   var response = await ref.putFile(image);
-//   //   print("Updated $response");
-//   //   var imageUrl = await ref.getDownloadURL();
-
-//   //   try{
-//   //     var response = await storeListingCollection.doc(storeId.toString()).set({
-//   //       'imagePath':
-//   //     })
-//   //   }catch(e){
-
-//   //   }
-//   //   return await storeListingCollection.doc(storeId.toString()).set({});
-//   // }
-
 //--------------------------------------- categories --------------------------------------
   final CollectionReference categoriesCollection =
       FirebaseFirestore.instance.collection('categories');
 
-// --------------------------------------- filter ------------------------------------------
-  final CollectionReference filterCollection =
-      FirebaseFirestore.instance.collection('filter');
+// // --------------------------------------- filter ------------------------------------------
+//   final CollectionReference filterCollection =
+//       FirebaseFirestore.instance.collection('filter');
 
-  Future updateFilterData(
-    String category,
-    String subCategory,
-    int lowPriceRange,
-    int highPriceRange,
-    int rate,
-    String address,
-    String latitude,
-    String longtitude,
-    bool popularity,
-  ) async {
-    return await filterCollection.doc(uid).set({
-      'category': category,
-      'subCategory': subCategory,
-      'lowPriceRange': lowPriceRange,
-      'highPriceRange': highPriceRange,
-      'rate': rate,
-      'address': address,
-      'latitude': latitude,
-      'longtitude': longtitude,
-      'popularity': popularity,
-    });
-  }
+//   Future updateFilterData(
+//     String category,
+//     String subCategory,
+//     int lowPriceRange,
+//     int highPriceRange,
+//     int rate,
+//     String address,
+//     String latitude,
+//     String longtitude,
+//     bool popularity,
+//   ) async {
+//     return await filterCollection.doc(uid).set({
+//       'category': category,
+//       'subCategory': subCategory,
+//       'lowPriceRange': lowPriceRange,
+//       'highPriceRange': highPriceRange,
+//       'rate': rate,
+//       'address': address,
+//       'latitude': latitude,
+//       'longtitude': longtitude,
+//       'popularity': popularity,
+//     });
+//   }
 }
