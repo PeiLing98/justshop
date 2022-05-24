@@ -88,3 +88,38 @@ class UserItemData {
     required this.listingDescription,
   });
 }
+
+class UserCartData {
+  final String uid;
+  final String cartId;
+  final String userId;
+  final String listingId;
+  final String storeId;
+  final String quantity;
+  final bool isSelected;
+
+  UserCartData(
+      {required this.uid,
+      required this.cartId,
+      required this.userId,
+      required this.listingId,
+      required this.storeId,
+      required this.quantity,
+      required this.isSelected});
+}
+
+class UserSaveListData {
+  final String uid;
+  final String saveListId;
+  final String userId;
+  final String listingId;
+  final String storeId;
+
+  UserSaveListData({
+    required this.uid,
+    required this.saveListId,
+    required this.userId,
+    required this.listingId,
+    required this.storeId,
+  });
+}

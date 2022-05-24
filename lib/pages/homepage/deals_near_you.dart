@@ -18,10 +18,10 @@ class DealsNearYou extends StatefulWidget {
 class _DealsNearYouState extends State<DealsNearYou> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
+    final user = Provider.of<MyUser?>(context);
 
     return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
+        stream: DatabaseService(uid: user?.uid).userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData? userData = snapshot.data;
@@ -35,6 +35,21 @@ class _DealsNearYouState extends State<DealsNearYou> {
                       return stores.city == userData?.postcode ||
                           stores.state == userData?.state;
                     }).toList();
+
+                    if (matchedStoreItem.isEmpty) {
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'No store is near you currently.',
+                              style: boldContentTitle,
+                            )
+                          ],
+                        ),
+                      );
+                    }
 
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -51,6 +66,21 @@ class _DealsNearYouState extends State<DealsNearYou> {
                                       matchedStoreItem![index].storeId;
                                 }).toList();
 
+                                if (matchedItem.isEmpty) {
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text(
+                                          'No store is near you currently.',
+                                          style: boldContentTitle,
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }
                                 return SizedBox(
                                   height: 100,
                                   width: matchedItem.length * 250,
@@ -78,11 +108,6 @@ class _DealsNearYouState extends State<DealsNearYou> {
                                                                 listing:
                                                                     matchedItem![
                                                                         index2],
-                                                                // storeImagePath:
-                                                                //     matchedStore![index]
-                                                                //         .imagePath,
-                                                                // storeName: matchedStore[index]
-                                                                //     .businessName
                                                               )));
                                                 },
                                                 child: Row(
@@ -225,18 +250,19 @@ class _DealsNearYouState extends State<DealsNearYou> {
                       },
                     );
                   } else {
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'No store is near you currently.',
-                            style: boldContentTitle,
-                          )
-                        ],
-                      ),
-                    );
+                    // return SizedBox(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: const [
+                    //       Text(
+                    //         'No store is near you currently.',
+                    //         style: boldContentTitle,
+                    //       )
+                    //     ],
+                    //   ),
+                    // );
+                    return const Loading();
                   }
                 });
           } else {

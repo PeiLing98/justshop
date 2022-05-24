@@ -143,7 +143,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
+    final user = Provider.of<MyUser?>(context);
 
     return GestureDetector(
         onTap: () {
@@ -154,7 +154,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
           }
         },
         child: StreamBuilder<UserStoreData>(
-            stream: DatabaseService(uid: user.uid).userStoreData,
+            stream: DatabaseService(uid: user?.uid).userStoreData,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 UserStoreData? userStoreData = snapshot.data;
@@ -376,7 +376,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                                         }
 
                                                         await DatabaseService(
-                                                                uid: user.uid)
+                                                                uid: user?.uid)
                                                             .updateStoreData(
                                                           _currentStoreId ??
                                                               userStoreData

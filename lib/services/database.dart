@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_year_project/models/cart_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
+import 'package:final_year_project/models/save_list_model.dart';
 import 'package:final_year_project/models/store_model.dart';
 import 'package:final_year_project/models/user_model.dart';
+import 'package:final_year_project/pages/save_list.dart';
 import 'package:uuid/uuid.dart';
 
 class DatabaseService {
@@ -237,35 +240,131 @@ class DatabaseService {
     return itemCollection.doc(uid).snapshots().map(_userItemDataFromSnapshot);
   }
 
-//--------------------------------------- categories --------------------------------------
-  final CollectionReference categoriesCollection =
-      FirebaseFirestore.instance.collection('categories');
+// --------------------------------------- cart ------------------------------------------
+  final CollectionReference cartCollection =
+      FirebaseFirestore.instance.collection('cart');
 
-// // --------------------------------------- filter ------------------------------------------
-//   final CollectionReference filterCollection =
-//       FirebaseFirestore.instance.collection('filter');
+  Future addCartData(
+    String userId,
+    String listingId,
+    String storeId,
+    int quantity,
+    bool isSelected,
+  ) async {
+    String cartId = const Uuid().v1();
+    return await cartCollection.doc(cartId).set({
+      'cartId': cartId,
+      'userId': userId,
+      'listingId': listingId,
+      'storeId': storeId,
+      'quantity': quantity,
+      'isSelected': isSelected,
+    });
+  }
 
-//   Future updateFilterData(
-//     String category,
-//     String subCategory,
-//     int lowPriceRange,
-//     int highPriceRange,
-//     int rate,
-//     String address,
-//     String latitude,
-//     String longtitude,
-//     bool popularity,
-//   ) async {
-//     return await filterCollection.doc(uid).set({
-//       'category': category,
-//       'subCategory': subCategory,
-//       'lowPriceRange': lowPriceRange,
-//       'highPriceRange': highPriceRange,
-//       'rate': rate,
-//       'address': address,
-//       'latitude': latitude,
-//       'longtitude': longtitude,
-//       'popularity': popularity,
-//     });
-//   }
+  Future updateCartQuantity(int quantity, String cartId) async {
+    return await cartCollection.doc(cartId).update({
+      'quantity': quantity,
+    });
+  }
+
+  Future updateCartSelectedListing(bool isSelected, String cartId) async {
+    return await cartCollection.doc(cartId).update({
+      'isSelected': isSelected,
+    });
+  }
+
+  Future deleteCartData(String cartId) async {
+    return await cartCollection.doc(cartId).delete();
+  }
+
+  List<Cart> _cartFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Cart(
+        cartId: doc.get('cartId') ?? '',
+        userId: doc.get('userId') ?? '',
+        listingId: doc.get('listingId') ?? '',
+        storeId: doc.get('storeId') ?? '',
+        quantity: doc.get('quantity') ?? '',
+        isSelected: doc.get('isSelected') ?? '',
+      );
+    }).toList();
+  }
+
+  UserCartData _userCartDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserCartData(
+        uid: uid!,
+        cartId: snapshot.get('cartId'),
+        userId: snapshot.get('userId'),
+        listingId: snapshot.get('listingId'),
+        storeId: snapshot.get('storeId'),
+        quantity: snapshot.get('quantity'),
+        isSelected: snapshot.get('isSelected'));
+  }
+
+  // get item stream
+  Stream<List<Cart>> get cart {
+    return cartCollection.snapshots().map(_cartFromSnapshot);
+  }
+
+  //get users item doc stream
+  Stream<UserCartData> get userCartData {
+    return cartCollection.doc(uid).snapshots().map(_userCartDataFromSnapshot);
+  }
+
+// --------------------------------------- save list ------------------------------------------
+  final CollectionReference saveListCollection =
+      FirebaseFirestore.instance.collection('saveList');
+
+  Future addSaveListData(
+    String userId,
+    String listingId,
+    String storeId,
+  ) async {
+    String saveListId = const Uuid().v1();
+    return await saveListCollection.doc(saveListId).set({
+      'saveListId': saveListId,
+      'userId': userId,
+      'listingId': listingId,
+      'storeId': storeId,
+    });
+  }
+
+  Future deleteSaveListData(String saveListId) async {
+    return await saveListCollection.doc(saveListId).delete();
+  }
+
+  List<SaveListModel> _saveListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return SaveListModel(
+        saveListId: doc.get('saveListId') ?? '',
+        userId: doc.get('userId') ?? '',
+        listingId: doc.get('listingId') ?? '',
+        storeId: doc.get('storeId') ?? '',
+      );
+    }).toList();
+  }
+
+  UserSaveListData _userSaveListDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserSaveListData(
+      uid: uid!,
+      saveListId: snapshot.get('saveListId'),
+      userId: snapshot.get('userId'),
+      listingId: snapshot.get('listingId'),
+      storeId: snapshot.get('storeId'),
+    );
+  }
+
+  // get item stream
+  Stream<List<SaveListModel>> get saveList {
+    return saveListCollection.snapshots().map(_saveListFromSnapshot);
+  }
+
+  //get users item doc stream
+  Stream<UserSaveListData> get userSaveListData {
+    return saveListCollection
+        .doc(uid)
+        .snapshots()
+        .map(_userSaveListDataFromSnapshot);
+  }
 }

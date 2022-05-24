@@ -21,16 +21,7 @@ class Filter extends StatefulWidget {
 
 class _FilterState extends State<Filter> {
   bool isCategory = false;
-  bool isPriceRange = false;
-  bool isRate = false;
   bool isLocation = false;
-  bool isPopular = false;
-
-  RangeValues _currentRangeValues = const RangeValues(10, 100);
-  int lowPriceRange = 0;
-  int highPriceRange = 0;
-  int currentRank = 0;
-  var rateList = [1, 2, 3, 4, 5];
 
   final category = Category();
   String selectedCategory = '';
@@ -109,58 +100,15 @@ class _FilterState extends State<Filter> {
                                               });
                                             },
                                           ),
-                                        if (isPriceRange)
-                                          SelectedFilterOption(
-                                            buttonText:
-                                                'RM$lowPriceRange - RM$highPriceRange',
-                                            isClose: true,
-                                            closeButtonAction: () {
-                                              setState(() {
-                                                isPriceRange = false;
-                                                _currentRangeValues =
-                                                    const RangeValues(10, 100);
-                                                lowPriceRange = 0;
-                                                highPriceRange = 0;
-                                              });
-                                            },
-                                          ),
-                                        if (isRate)
-                                          SelectedFilterOption(
-                                              buttonText: '$currentRank Stars',
-                                              isClose: true,
-                                              closeButtonAction: () {
-                                                setState(() {
-                                                  isRate = false;
-                                                  currentRank = 0;
-                                                });
-                                              }),
-                                        if (isPopular)
-                                          SelectedFilterOption(
-                                            buttonText: 'Sorted by popularity',
-                                            isClose: true,
-                                            closeButtonAction: () {
-                                              setState(() {
-                                                isPopular = false;
-                                              });
-                                            },
-                                          ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
                               Expanded(
-                                flex: !isCategory &&
-                                        !isPriceRange &&
-                                        !isRate &&
-                                        !isPopular
-                                    ? 5
-                                    : 2,
+                                flex: !isCategory ? 5 : 2,
                                 child: PurpleTextButton(
-                                    buttonText: !isCategory &&
-                                            !isPriceRange &&
-                                            !isRate &&
-                                            !isPopular
+                                    buttonText: !isCategory
                                         ? 'Check All Listing'
                                         : 'Filter',
                                     onClick: () {
@@ -169,17 +117,11 @@ class _FilterState extends State<Filter> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   FilterListing(
-                                                      selectedCategory:
-                                                          selectedCategory,
-                                                      selectedSubCategory:
-                                                          selectedSubCategory,
-                                                      minPriceRange:
-                                                          lowPriceRange,
-                                                      maxPriceRange:
-                                                          highPriceRange,
-                                                      rating: currentRank,
-                                                      isPopularity:
-                                                          isPopular)));
+                                                    selectedCategory:
+                                                        selectedCategory,
+                                                    selectedSubCategory:
+                                                        selectedSubCategory,
+                                                  )));
                                     }),
                               )
                             ]),
@@ -189,11 +131,13 @@ class _FilterState extends State<Filter> {
                           height: 420,
                           child: ListView(
                             children: [
-                              const FilterTitleAppBar(title: 'CATEGORY'),
+                              const FilterTitleAppBar(title: 'FOOD'),
                               SizedBox(
-                                height: 150,
-                                child: ListingTabBar(
-                                  foodBody: ListView.builder(
+                                height: 110,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: category.subCategory[0].length,
                                     itemBuilder: (context, index) {
@@ -217,7 +161,15 @@ class _FilterState extends State<Filter> {
                                       );
                                     },
                                   ),
-                                  productBody: ListView.builder(
+                                ),
+                              ),
+                              const FilterTitleAppBar(title: 'PRODUCT'),
+                              SizedBox(
+                                height: 110,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: category.subCategory[1].length,
                                     itemBuilder: (context, index) {
@@ -241,7 +193,15 @@ class _FilterState extends State<Filter> {
                                       );
                                     },
                                   ),
-                                  serviceBody: ListView.builder(
+                                ),
+                              ),
+                              const FilterTitleAppBar(title: 'SERVICE'),
+                              SizedBox(
+                                height: 120,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: category.subCategory[2].length,
                                     itemBuilder: (context, index) {
@@ -267,107 +227,6 @@ class _FilterState extends State<Filter> {
                                   ),
                                 ),
                               ),
-                              const FilterTitleAppBar(
-                                  title: 'PRICE RANGE (RM)'),
-                              SizedBox(
-                                height: 70,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          18, 10, 18, 0),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'RM ${_currentRangeValues.start.round().toString()}',
-                                              style: ratingLabelStyle,
-                                            ),
-                                            Text(
-                                              'RM ${_currentRangeValues.end.round().toString()}',
-                                              style: ratingLabelStyle,
-                                            ),
-                                          ]),
-                                    ),
-                                    SizedBox(
-                                      height: 40,
-                                      child: RangeSlider(
-                                        values: _currentRangeValues,
-                                        min: 1,
-                                        max: 1000,
-                                        divisions: 1000,
-                                        activeColor: secondaryColor,
-                                        labels: RangeLabels(
-                                          _currentRangeValues.start
-                                              .round()
-                                              .toString(),
-                                          _currentRangeValues.end
-                                              .round()
-                                              .toString(),
-                                        ),
-                                        onChanged: (RangeValues val) =>
-                                            setState(() {
-                                          isPriceRange = true;
-                                          _currentRangeValues = val;
-                                          lowPriceRange = _currentRangeValues
-                                              .start
-                                              .round()
-                                              .toInt();
-                                          highPriceRange = _currentRangeValues
-                                              .end
-                                              .round()
-                                              .toInt();
-                                        }),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const FilterTitleAppBar(title: 'RATING'),
-                              SizedBox(
-                                  height: 50,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 10),
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: 5,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              isRate = true;
-                                              currentRank = rateList[index];
-                                            });
-                                          },
-                                          child: SizedBox(
-                                            width: 76,
-                                            child: FilterOptionButton(
-                                              buttonText: '${index + 1} Stars',
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  )),
-                              const FilterTitleAppBar(title: 'SORT BY'),
-                              SizedBox(
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      15, 10, 280, 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isPopular = true;
-                                      });
-                                    },
-                                    child: const FilterOptionButton(
-                                      buttonText: 'Popularity',
-                                    ),
-                                  ),
-                                ),
-                              )
                             ],
                           ),
                         ),

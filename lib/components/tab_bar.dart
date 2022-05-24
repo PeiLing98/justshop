@@ -95,7 +95,7 @@ class _FilterTabBarState extends State<FilterTabBar> {
             indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
             tabs: [
               Tab(
-                text: 'FILTER OPTIONS',
+                text: 'CATEGORIES',
                 height: 30,
               ),
               Tab(

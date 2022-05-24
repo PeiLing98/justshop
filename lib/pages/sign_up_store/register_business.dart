@@ -136,7 +136,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = Provider.of<MyUser>(context).uid;
+    final userId = Provider.of<MyUser?>(context)?.uid;
 
     return StreamBuilder<UserStoreData>(
         stream: DatabaseService(uid: userId).userStoreData,

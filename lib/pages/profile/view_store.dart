@@ -24,7 +24,7 @@ class ViewStore extends StatefulWidget {
 class _ViewStoreState extends State<ViewStore> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
+    final user = Provider.of<MyUser?>(context);
 
     return GestureDetector(
       onTap: () {
@@ -35,7 +35,7 @@ class _ViewStoreState extends State<ViewStore> {
         }
       },
       child: StreamBuilder<UserStoreData>(
-          stream: DatabaseService(uid: user.uid).userStoreData,
+          stream: DatabaseService(uid: user?.uid).userStoreData,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Loading();

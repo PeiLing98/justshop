@@ -3,11 +3,16 @@ import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/components/review_component.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:final_year_project/modals/alert_text_modal.dart';
+import 'package:final_year_project/models/cart_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
+import 'package:final_year_project/models/save_list_model.dart';
 import 'package:final_year_project/models/store_model.dart';
+import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/homepage/store_listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListingDetail extends StatefulWidget {
   final Listing listing;
@@ -22,8 +27,13 @@ class ListingDetail extends StatefulWidget {
 }
 
 class _ListingDetailState extends State<ListingDetail> {
+  int quantity = 1;
+  bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
+    final userId = Provider.of<MyUser?>(context)?.uid;
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -69,8 +79,10 @@ class _ListingDetailState extends State<ListingDetail> {
                                             width: 0.5, color: Colors.grey)),
                                     child: ClipRRect(
                                       child: Image.network(
-                                          widget.listing.listingImagePath,
-                                          fit: BoxFit.cover),
+                                        widget.listing.listingImagePath,
+                                        fit: BoxFit.cover,
+                                        filterQuality: FilterQuality.high,
+                                      ),
                                     ),
                                   ),
                                 )
@@ -130,14 +142,89 @@ class _ListingDetailState extends State<ListingDetail> {
                                 ),
                                 Row(
                                   children: [
-                                    IconButton(
-                                        padding: const EdgeInsets.all(0),
-                                        alignment: Alignment.centerRight,
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.bookmark_border_rounded,
-                                          size: 25,
-                                        )),
+                                    StreamBuilder<List<SaveListModel>>(
+                                        stream:
+                                            DatabaseService(uid: "").saveList,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            List<SaveListModel>? saveList =
+                                                snapshot.data;
+                                            List<SaveListModel>?
+                                                matchedSaveList = [];
+
+                                            matchedSaveList =
+                                                saveList?.where((saveList) {
+                                              return saveList.userId ==
+                                                      userId &&
+                                                  saveList.listingId ==
+                                                      widget.listing.listingId;
+                                            }).toList();
+
+                                            return IconButton(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                onPressed: () async {
+                                                  if (matchedSaveList!
+                                                      .isEmpty) {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return YesNoAlertModal(
+                                                              alertContent:
+                                                                  'Are you sure to save this listing?',
+                                                              closeOnClick: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              yesOnClick:
+                                                                  () async {
+                                                                await DatabaseService(
+                                                                        uid:
+                                                                            userId)
+                                                                    .addSaveListData(
+                                                                        userId!,
+                                                                        widget
+                                                                            .listing
+                                                                            .listingId,
+                                                                        widget
+                                                                            .listing
+                                                                            .storeId);
+
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              noOnClick: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              });
+                                                        });
+                                                  } else {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertTextModal(
+                                                              alertContent:
+                                                                  'This listing was already saved in your cart before.',
+                                                              onClick: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              });
+                                                        });
+                                                  }
+                                                },
+                                                icon: Icon(
+                                                  matchedSaveList!.isNotEmpty
+                                                      ? Icons.bookmark_rounded
+                                                      : Icons
+                                                          .bookmark_border_rounded,
+                                                  size: 25,
+                                                ));
+                                          } else {
+                                            return const Loading();
+                                          }
+                                        }),
                                     IconButton(
                                         padding: const EdgeInsets.all(0),
                                         alignment: Alignment.centerRight,
@@ -309,14 +396,95 @@ class _ListingDetailState extends State<ListingDetail> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const QuantityButton(
+                          QuantityButton(
                             width: 150,
                             height: 30,
+                            addOnTap: () {
+                              setState(() {
+                                quantity++;
+                              });
+                            },
+                            minusOnTap: () {
+                              setState(() {
+                                if (quantity > 1) {
+                                  quantity--;
+                                }
+                              });
+                            },
+                            quantity: quantity,
                           ),
-                          SizedBox(
-                              width: 150,
-                              child: PurpleTextButton(
-                                  buttonText: 'Add To Cart', onClick: () {}))
+                          StreamBuilder<List<Cart>>(
+                              stream: DatabaseService(uid: "").cart,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  List<Cart>? cart = snapshot.data;
+                                  List<Cart>? matchedCart = [];
+                                  //List<Cart>? matchedListingCart = [];
+
+                                  matchedCart = cart?.where((cart) {
+                                    return cart.userId == userId &&
+                                        cart.listingId ==
+                                            widget.listing.listingId;
+                                  }).toList();
+
+                                  // matchedListingCart = matchedCart?.where((cart) {
+                                  //   return cart.listingId ==
+                                  //       widget.listing.listingId;
+                                  // }).toList();
+
+                                  return SizedBox(
+                                      width: 150,
+                                      child: PurpleTextButton(
+                                          buttonText: 'Add To Cart',
+                                          onClick: () {
+                                            if (matchedCart!.isEmpty) {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return YesNoAlertModal(
+                                                        alertContent:
+                                                            'Are you sure to add this listing to the cart?',
+                                                        closeOnClick: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        yesOnClick: () async {
+                                                          await DatabaseService(
+                                                                  uid: userId)
+                                                              .addCartData(
+                                                                  userId!,
+                                                                  widget.listing
+                                                                      .listingId,
+                                                                  widget.listing
+                                                                      .storeId,
+                                                                  quantity,
+                                                                  isSelected);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        noOnClick: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
+                                                  });
+                                            } else {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertTextModal(
+                                                        alertContent:
+                                                            'This listing was already in your cart before.',
+                                                        onClick: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
+                                                  });
+                                            }
+                                          }));
+                                } else {
+                                  return const Loading();
+                                }
+                              })
                         ],
                       ),
                     ),

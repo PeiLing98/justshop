@@ -84,7 +84,7 @@ class _SetupStoreState extends State<SetupStore> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = Provider.of<MyUser>(context).uid;
+    final userId = Provider.of<MyUser?>(context)?.uid;
 
     return GestureDetector(
       onTap: () {

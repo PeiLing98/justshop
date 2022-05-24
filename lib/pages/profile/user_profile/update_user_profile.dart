@@ -49,7 +49,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
+    final user = Provider.of<MyUser?>(context);
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -61,7 +61,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
       child: loading
           ? const Loading()
           : StreamBuilder<UserData>(
-              stream: DatabaseService(uid: user.uid).userData,
+              stream: DatabaseService(uid: user?.uid).userData,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Loading();
@@ -302,7 +302,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                                               },
                                                               yesOnClick:
                                                                   () async {
-                                                                await DatabaseService(uid: user.uid).updateUserData(
+                                                                await DatabaseService(uid: user?.uid).updateUserData(
                                                                     _currentUsername ??
                                                                         userData
                                                                             .username,

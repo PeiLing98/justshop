@@ -73,7 +73,7 @@ class _AddListingState extends State<AddListing> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = Provider.of<MyUser>(context).uid;
+    final userId = Provider.of<MyUser?>(context)?.uid;
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);

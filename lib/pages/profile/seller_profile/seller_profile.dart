@@ -17,7 +17,7 @@ class SellerProfile extends StatefulWidget {
 class _SellerProfileState extends State<SellerProfile> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
+    final user = Provider.of<MyUser?>(context);
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -27,7 +27,7 @@ class _SellerProfileState extends State<SellerProfile> {
         }
       },
       child: StreamBuilder<UserStoreData>(
-          stream: DatabaseService(uid: user.uid).userStoreData,
+          stream: DatabaseService(uid: user?.uid).userStoreData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               UserStoreData? userStoreData = snapshot.data;

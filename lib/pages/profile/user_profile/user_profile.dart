@@ -17,7 +17,7 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
+    final user = Provider.of<MyUser?>(context);
 
     return GestureDetector(
       onTap: () {
@@ -28,7 +28,7 @@ class _UserProfileState extends State<UserProfile> {
         }
       },
       child: StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
+        stream: DatabaseService(uid: user?.uid).userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData? userData = snapshot.data;

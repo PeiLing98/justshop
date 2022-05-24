@@ -16,7 +16,7 @@ const secondaryFontStyle =
 const titleAppBarFontStyle =
     TextStyle(fontSize: 20, fontFamily: 'Roboto', fontWeight: FontWeight.bold);
 const filterTitleFontStyle = TextStyle(
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     color: Colors.white);

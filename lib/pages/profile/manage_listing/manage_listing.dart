@@ -22,7 +22,7 @@ class ManageListing extends StatefulWidget {
 class _ManageListingState extends State<ManageListing> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context);
+    final user = Provider.of<MyUser?>(context);
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -32,7 +32,7 @@ class _ManageListingState extends State<ManageListing> {
         }
       },
       child: StreamBuilder<UserStoreData>(
-          stream: DatabaseService(uid: user.uid).userStoreData,
+          stream: DatabaseService(uid: user?.uid).userStoreData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               UserStoreData? userStoreData = snapshot.data;
@@ -182,7 +182,7 @@ class _ManageListingState extends State<ManageListing> {
                                                                             },
                                                                             yesOnClick:
                                                                                 () async {
-                                                                              await DatabaseService(uid: user.uid).deleteItemData(matchedStoreItem![index].listingId);
+                                                                              await DatabaseService(uid: user?.uid).deleteItemData(matchedStoreItem![index].listingId);
                                                                               Navigator.pop(context);
                                                                             },
                                                                             noOnClick:

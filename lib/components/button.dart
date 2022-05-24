@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:final_year_project/constant.dart';
+import 'package:flutter/services.dart';
 
 class BlackTextButton extends StatefulWidget {
   final String buttonText;
@@ -350,17 +351,24 @@ class _ProfileButtonState extends State<ProfileButton> {
 class QuantityButton extends StatefulWidget {
   final double width;
   final double height;
+  final VoidCallback addOnTap;
+  final VoidCallback minusOnTap;
+  final int quantity;
 
-  const QuantityButton({Key? key, required this.width, required this.height})
-      : super(key: key);
+  const QuantityButton({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.addOnTap,
+    required this.minusOnTap,
+    required this.quantity,
+  }) : super(key: key);
 
   @override
   _QuantityButtonState createState() => _QuantityButtonState();
 }
 
 class _QuantityButtonState extends State<QuantityButton> {
-  int quantity = 1;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -377,11 +385,7 @@ class _QuantityButtonState extends State<QuantityButton> {
             Expanded(
               flex: 1,
               child: InkWell(
-                onTap: () {
-                  setState(() {
-                    quantity++;
-                  });
-                },
+                onTap: widget.addOnTap,
                 child: Container(
                   // height: 20,
                   // width: 20,
@@ -403,7 +407,7 @@ class _QuantityButtonState extends State<QuantityButton> {
                 // width: 38,
                 child: Center(
                   child: Text(
-                    '$quantity',
+                    widget.quantity.toString(),
                     style: buttonLabelStyle,
                   ),
                 ),
@@ -412,13 +416,7 @@ class _QuantityButtonState extends State<QuantityButton> {
             Expanded(
               flex: 1,
               child: InkWell(
-                onTap: () {
-                  setState(() {
-                    if (quantity >= 1) {
-                      quantity--;
-                    }
-                  });
-                },
+                onTap: widget.minusOnTap,
                 child: Container(
                   // height: 20,
                   // width: 20,
