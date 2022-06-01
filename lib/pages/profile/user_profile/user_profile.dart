@@ -32,6 +32,7 @@ class _UserProfileState extends State<UserProfile> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData? userData = snapshot.data;
+
             return Scaffold(
               body: SafeArea(
                 child: Column(
@@ -79,11 +80,13 @@ class _UserProfileState extends State<UserProfile> {
                               children: [
                                 Expanded(
                                   child: ProfileTextField(
-                                      textFieldLabel: 'Username',
-                                      textFieldValue: userData!.username,
-                                      textFieldLine: 1,
-                                      textFieldHeight: 30,
-                                      isReadOnly: true),
+                                    textFieldLabel: 'Username',
+                                    textFieldValue: userData!.username,
+                                    textFieldLine: 1,
+                                    textFieldHeight: 30,
+                                    isReadOnly: true,
+                                    isBold: true,
+                                  ),
                                 )
                               ],
                             ),
@@ -91,11 +94,13 @@ class _UserProfileState extends State<UserProfile> {
                               children: [
                                 Expanded(
                                   child: ProfileTextField(
-                                      textFieldLabel: 'Email',
-                                      textFieldValue: userData.email,
-                                      textFieldLine: 1,
-                                      textFieldHeight: 30,
-                                      isReadOnly: true),
+                                    textFieldLabel: 'Email',
+                                    textFieldValue: userData.email,
+                                    textFieldLine: 1,
+                                    textFieldHeight: 30,
+                                    isReadOnly: true,
+                                    isBold: true,
+                                  ),
                                 )
                               ],
                             ),
@@ -103,11 +108,13 @@ class _UserProfileState extends State<UserProfile> {
                               children: [
                                 Expanded(
                                   child: ProfileTextField(
-                                      textFieldLabel: 'Phone Number',
-                                      textFieldValue: userData.phoneNumber,
-                                      textFieldLine: 1,
-                                      textFieldHeight: 30,
-                                      isReadOnly: true),
+                                    textFieldLabel: 'Phone Number',
+                                    textFieldValue: userData.phoneNumber,
+                                    textFieldLine: 1,
+                                    textFieldHeight: 30,
+                                    isReadOnly: true,
+                                    isBold: true,
+                                  ),
                                 )
                               ],
                             ),
@@ -115,11 +122,13 @@ class _UserProfileState extends State<UserProfile> {
                               children: [
                                 Expanded(
                                   child: ProfileTextField(
-                                      textFieldLabel: 'Address',
-                                      textFieldValue: userData.address,
-                                      textFieldLine: 2,
-                                      textFieldHeight: 50,
-                                      isReadOnly: true),
+                                    textFieldLabel: 'Address',
+                                    textFieldValue: userData.address,
+                                    textFieldLine: 2,
+                                    textFieldHeight: 50,
+                                    isReadOnly: true,
+                                    isBold: true,
+                                  ),
                                 )
                               ],
                             ),
@@ -127,22 +136,26 @@ class _UserProfileState extends State<UserProfile> {
                               children: [
                                 Expanded(
                                   child: ProfileTextField(
-                                      textFieldLabel: 'Postcode',
-                                      textFieldValue: userData.postcode,
-                                      textFieldLine: 1,
-                                      textFieldHeight: 30,
-                                      isReadOnly: true),
+                                    textFieldLabel: 'Postcode',
+                                    textFieldValue: userData.postcode,
+                                    textFieldLine: 1,
+                                    textFieldHeight: 30,
+                                    isReadOnly: true,
+                                    isBold: true,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child: ProfileTextField(
-                                      textFieldLabel: 'City',
-                                      textFieldValue: userData.city,
-                                      textFieldLine: 1,
-                                      textFieldHeight: 30,
-                                      isReadOnly: true),
+                                    textFieldLabel: 'City',
+                                    textFieldValue: userData.city,
+                                    textFieldLine: 1,
+                                    textFieldHeight: 30,
+                                    isReadOnly: true,
+                                    isBold: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -150,11 +163,13 @@ class _UserProfileState extends State<UserProfile> {
                               children: [
                                 Expanded(
                                   child: ProfileTextField(
-                                      textFieldLabel: 'State',
-                                      textFieldValue: userData.state,
-                                      textFieldLine: 1,
-                                      textFieldHeight: 30,
-                                      isReadOnly: true),
+                                    textFieldLabel: 'State',
+                                    textFieldValue: userData.state,
+                                    textFieldLine: 1,
+                                    textFieldHeight: 30,
+                                    isReadOnly: true,
+                                    isBold: true,
+                                  ),
                                 )
                               ],
                             ),

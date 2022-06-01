@@ -154,9 +154,11 @@ class _FilterListingState extends State<FilterListing> {
                                       });
                                     },
                                     child: SizedBox(
-                                      width: 76,
+                                      width: 140,
                                       child: FilterOptionButton(
-                                        buttonText: '${index + 1} Stars',
+                                        buttonText: index == 4
+                                            ? '5 Stars'
+                                            : '${index + 1} Stars And Above',
                                       ),
                                     ),
                                   );
@@ -176,7 +178,7 @@ class _FilterListingState extends State<FilterListing> {
                                 });
                               },
                               child: const FilterOptionButton(
-                                buttonText: 'Popularity',
+                                buttonText: 'Top Sales',
                               ),
                             ),
                           ),
@@ -214,7 +216,9 @@ class _FilterListingState extends State<FilterListing> {
                                   ),
                                 if (isRate)
                                   SelectedFilterOption(
-                                    buttonText: '$currentRank Stars',
+                                    buttonText: currentRank == 5
+                                        ? '5 Stars'
+                                        : '$currentRank Stars And Above',
                                     isClose: true,
                                     closeButtonAction: () {
                                       setState(() {
@@ -225,7 +229,7 @@ class _FilterListingState extends State<FilterListing> {
                                   ),
                                 if (isPopular)
                                   SelectedFilterOption(
-                                      buttonText: 'Sorted by popularity',
+                                      buttonText: 'Sorted by top sales',
                                       isClose: true,
                                       closeButtonAction: () {
                                         setState(() {
@@ -329,10 +333,12 @@ class _FilterListingState extends State<FilterListing> {
                                                 'RM$minPrice - RM$maxPrice'),
                                       if (rating != 0)
                                         SelectedFilterOption(
-                                            buttonText: '$rating Stars'),
+                                            buttonText: rating == 5
+                                                ? '5 Stars'
+                                                : '$rating Stars And Above'),
                                       if (sortedByPopularity == true)
                                         const SelectedFilterOption(
-                                          buttonText: 'Sorted by popularity',
+                                          buttonText: 'Sorted by top sales',
                                         ),
                                     ])),
                             Expanded(
@@ -364,17 +370,69 @@ class _FilterListingState extends State<FilterListing> {
                               if (widget.selectedCategory == "" &&
                                   widget.selectedSubCategory == "") {
                                 matchedItem = item;
-                                if (minPrice != 0 ||
-                                    maxPrice != 0 ||
-                                    rating != 0 ||
+
+                                if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    rating != 0 &&
                                     sortedByPopularity) {
-                                  if (minPrice != 0 && maxPrice != 0) {
-                                    matchedItem = matchedItem?.where((item) {
-                                      return (int.parse(item.price) >=
-                                              minPrice &&
-                                          int.parse(item.price) <= maxPrice);
-                                    }).toList();
-                                  }
+                                  matchedItem = matchedItem?.where((item) {
+                                    return (double.parse(item.price) >=
+                                                minPrice.toDouble() &&
+                                            double.parse(item.price) <=
+                                                maxPrice.toDouble()) &&
+                                        double.parse(item.rating) >=
+                                            rating.toDouble();
+                                  }).toList();
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    rating != 0) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble() &&
+                                        double.parse(item.rating) >=
+                                            rating.toDouble();
+                                  }).toList();
+                                } else if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    sortedByPopularity) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return (double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble());
+                                  }).toList();
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (rating != 0 && sortedByPopularity) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return double.parse(item.rating) >=
+                                        rating.toDouble();
+                                  }).toList();
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (minPrice != 0 && maxPrice != 0) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return (double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble());
+                                  }).toList();
+                                } else if (rating != 0) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return double.parse(item.rating) >=
+                                        rating.toDouble();
+                                  }).toList();
+                                } else if (sortedByPopularity) {
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
                                 }
                               } else {
                                 matchedItem = item?.where((item) {
@@ -383,11 +441,69 @@ class _FilterListingState extends State<FilterListing> {
                                       item.selectedSubCategory ==
                                           widget.selectedSubCategory;
                                 }).toList();
-                                if (minPrice != 0 && maxPrice != 0) {
+
+                                if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    rating != 0 &&
+                                    sortedByPopularity) {
                                   matchedItem = matchedItem?.where((item) {
-                                    return (int.parse(item.price) >= minPrice &&
-                                        int.parse(item.price) <= maxPrice);
+                                    return (double.parse(item.price) >=
+                                                minPrice.toDouble() &&
+                                            double.parse(item.price) <=
+                                                maxPrice.toDouble()) &&
+                                        double.parse(item.rating) >=
+                                            rating.toDouble();
                                   }).toList();
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    rating != 0) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble() &&
+                                        double.parse(item.rating) >=
+                                            rating.toDouble();
+                                  }).toList();
+                                } else if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    sortedByPopularity) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return (double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble());
+                                  }).toList();
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (rating != 0 && sortedByPopularity) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return double.parse(item.rating) >=
+                                        rating.toDouble();
+                                  }).toList();
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (minPrice != 0 && maxPrice != 0) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return (double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble());
+                                  }).toList();
+                                } else if (rating != 0) {
+                                  matchedItem = matchedItem?.where((item) {
+                                    return double.parse(item.rating) >=
+                                        rating.toDouble();
+                                  }).toList();
+                                } else if (sortedByPopularity) {
+                                  matchedItem?.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
                                 }
                               }
 
@@ -408,10 +524,10 @@ class _FilterListingState extends State<FilterListing> {
                                     child: GridView.builder(
                                         gridDelegate:
                                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 5,
-                                        ),
+                                                crossAxisCount: 2,
+                                                mainAxisSpacing: 5,
+                                                crossAxisSpacing: 5,
+                                                childAspectRatio: 0.9),
                                         itemCount: matchedItem.length,
                                         itemBuilder: (context, index) {
                                           return SizedBox(
@@ -509,9 +625,11 @@ class _FilterListingState extends State<FilterListing> {
                                                                         .start,
                                                                 children: [
                                                                   RatingBar.builder(
+                                                                      allowHalfRating: true,
+                                                                      ignoreGestures: true,
                                                                       glow: false,
                                                                       updateOnDrag: true,
-                                                                      initialRating: 1,
+                                                                      initialRating: double.parse(matchedItem[index].rating),
                                                                       unratedColor: Colors.grey[300],
                                                                       minRating: 1,
                                                                       itemSize: 15,
@@ -584,6 +702,28 @@ class _FilterListingState extends State<FilterListing> {
                                                                     style:
                                                                         listingDescription,
                                                                   ),
+                                                                ],
+                                                              ),
+                                                              const SizedBox(
+                                                                  height: 10),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  Text(
+                                                                    'Sold: ${matchedItem[index].totalSales}',
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            10,
+                                                                        fontFamily:
+                                                                            'Roboto',
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color:
+                                                                            secondaryColor),
+                                                                  )
                                                                 ],
                                                               )
                                                             ],

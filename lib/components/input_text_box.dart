@@ -165,6 +165,7 @@ class ProfileTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
   final bool? isNotUpdated;
+  final bool? isBold;
 
   const ProfileTextField({
     Key? key,
@@ -176,6 +177,7 @@ class ProfileTextField extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.isNotUpdated,
+    this.isBold,
   }) : super(key: key);
 
   @override
@@ -190,7 +192,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
       children: [
         Text(
           widget.textFieldLabel,
-          style: buttonLabelStyle,
+          style: widget.isBold == true ? buttonLabelStyle : ratingLabelStyle,
         ),
         const SizedBox(
           height: 5,

@@ -13,21 +13,24 @@ class Store {
   final String facebookLink;
   final String instagramLink;
   final String whatsappLink;
+  final String rating;
+  final int totalSales;
 
-  Store({
-    required this.storeId,
-    required this.imagePath,
-    required this.businessName,
-    required this.latitude,
-    required this.longtitude,
-    required this.address,
-    required this.city,
-    required this.state,
-    required this.startTime,
-    required this.endTime,
-    required this.phoneNumber,
-    required this.facebookLink,
-    required this.instagramLink,
-    required this.whatsappLink,
-  });
+  Store(
+      {required this.storeId,
+      required this.imagePath,
+      required this.businessName,
+      required this.latitude,
+      required this.longtitude,
+      required this.address,
+      required this.city,
+      required this.state,
+      required this.startTime,
+      required this.endTime,
+      required this.phoneNumber,
+      required this.facebookLink,
+      required this.instagramLink,
+      required this.whatsappLink,
+      required this.rating,
+      required this.totalSales});
 }

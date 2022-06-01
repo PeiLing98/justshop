@@ -1,7 +1,6 @@
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/modals/alert_text_modal.dart';
-import 'package:final_year_project/models/cart_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
 import 'package:final_year_project/models/save_list_model.dart';
 import 'package:final_year_project/models/store_model.dart';
@@ -112,9 +111,12 @@ class _SaveListComponentState extends State<SaveListComponent> {
                                           MainAxisAlignment.center,
                                       children: [
                                         RatingBar.builder(
+                                            allowHalfRating: true,
+                                            ignoreGestures: true,
                                             glow: false,
                                             updateOnDrag: true,
-                                            initialRating: 1,
+                                            initialRating: double.parse(
+                                                widget.listing.rating),
                                             unratedColor: Colors.grey[300],
                                             minRating: 1,
                                             itemSize: 15,

@@ -6,6 +6,7 @@ import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/homepage/listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 class DealsNearYou extends StatefulWidget {
@@ -160,7 +161,7 @@ class _DealsNearYouState extends State<DealsNearYou> {
                                                                   .start,
                                                           children: [
                                                             SizedBox(
-                                                              height: 50,
+                                                              height: 62,
                                                               child: Column(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
@@ -177,6 +178,26 @@ class _DealsNearYouState extends State<DealsNearYou> {
                                                                             .visible,
                                                                   ),
                                                                   const SizedBox(
+                                                                    height: 2,
+                                                                  ),
+                                                                  RatingBar.builder(
+                                                                      allowHalfRating: true,
+                                                                      ignoreGestures: true,
+                                                                      glow: false,
+                                                                      updateOnDrag: true,
+                                                                      initialRating: double.parse(matchedItem[index2].rating),
+                                                                      unratedColor: Colors.grey[300],
+                                                                      minRating: 1,
+                                                                      itemSize: 13,
+                                                                      itemBuilder: (context, _) => const Icon(
+                                                                            Icons.star,
+                                                                            color:
+                                                                                secondaryColor,
+                                                                          ),
+                                                                      onRatingUpdate: (rating) {
+                                                                        //print(rating);
+                                                                      }),
+                                                                  const SizedBox(
                                                                     height: 5,
                                                                   ),
                                                                   Text(
@@ -192,21 +213,18 @@ class _DealsNearYouState extends State<DealsNearYou> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 5,
-                                                            ),
                                                             SizedBox(
-                                                              height: 15,
+                                                              height: 10,
                                                               child: Row(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
                                                                         .end,
-                                                                children: const [
+                                                                children: [
                                                                   Text(
-                                                                    '5 Sold',
-                                                                    style: TextStyle(
+                                                                    'Sales: ${matchedItem[index2].totalSales}',
+                                                                    style: const TextStyle(
                                                                         fontSize:
-                                                                            12,
+                                                                            10,
                                                                         fontFamily:
                                                                             'Roboto',
                                                                         fontWeight:

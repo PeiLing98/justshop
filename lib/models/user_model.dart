@@ -1,7 +1,33 @@
+import 'package:intl/intl.dart';
+
 class MyUser {
   final String uid;
 
   MyUser({required this.uid});
+}
+
+class AllUser {
+  final String userId;
+  final String username;
+  final String email;
+  final String phoneNumber;
+  final String address;
+  final String postcode;
+  final String city;
+  final String state;
+  final List searchHistory;
+
+  AllUser({
+    required this.userId,
+    required this.username,
+    required this.email,
+    required this.phoneNumber,
+    required this.address,
+    required this.postcode,
+    required this.city,
+    required this.state,
+    required this.searchHistory,
+  });
 }
 
 class UserData {
@@ -13,6 +39,7 @@ class UserData {
   final String postcode;
   final String city;
   final String state;
+  final List searchHistory;
 
   UserData(
       {required this.uid,
@@ -22,7 +49,8 @@ class UserData {
       required this.address,
       required this.postcode,
       required this.city,
-      required this.state});
+      required this.state,
+      required this.searchHistory});
 }
 
 class UserStoreData {
@@ -41,24 +69,27 @@ class UserStoreData {
   final String facebookLink;
   final String instagramLink;
   final String whatsappLink;
+  final String rating;
+  final int totalSales;
 
-  UserStoreData({
-    required this.uid,
-    required this.storeId,
-    required this.imagePath,
-    required this.businessName,
-    required this.latitude,
-    required this.longtitude,
-    required this.address,
-    required this.city,
-    required this.state,
-    required this.startTime,
-    required this.endTime,
-    required this.phoneNumber,
-    required this.facebookLink,
-    required this.instagramLink,
-    required this.whatsappLink,
-  });
+  UserStoreData(
+      {required this.uid,
+      required this.storeId,
+      required this.imagePath,
+      required this.businessName,
+      required this.latitude,
+      required this.longtitude,
+      required this.address,
+      required this.city,
+      required this.state,
+      required this.startTime,
+      required this.endTime,
+      required this.phoneNumber,
+      required this.facebookLink,
+      required this.instagramLink,
+      required this.whatsappLink,
+      required this.rating,
+      required this.totalSales});
 }
 
 class UserItemData {
@@ -73,20 +104,23 @@ class UserItemData {
   final String price;
   final String listingName;
   final String listingDescription;
+  final String rating;
+  final int totalSales;
 
-  UserItemData({
-    required this.uid,
-    required this.storeId,
-    required this.storeName,
-    required this.storeImage,
-    required this.listingId,
-    required this.listingImagePath,
-    required this.selectedCategory,
-    required this.selectedSubCategory,
-    required this.price,
-    required this.listingName,
-    required this.listingDescription,
-  });
+  UserItemData(
+      {required this.uid,
+      required this.storeId,
+      required this.storeName,
+      required this.storeImage,
+      required this.listingId,
+      required this.listingImagePath,
+      required this.selectedCategory,
+      required this.selectedSubCategory,
+      required this.price,
+      required this.listingName,
+      required this.listingDescription,
+      required this.rating,
+      required this.totalSales});
 }
 
 class UserCartData {
@@ -121,5 +155,57 @@ class UserSaveListData {
     required this.userId,
     required this.listingId,
     required this.storeId,
+  });
+}
+
+class UserOrderData {
+  final String uid;
+  final String orderId;
+  final String userId;
+  final List orderItem;
+  final String totalPrice;
+  final String recipientName;
+  final String recipientPhoneNumber;
+  final String recipientAddress;
+  final String recipientPostcode;
+  final String recipientCity;
+  final String recipientState;
+  final DateFormat createdAt;
+
+  UserOrderData({
+    required this.uid,
+    required this.orderId,
+    required this.userId,
+    required this.orderItem,
+    required this.totalPrice,
+    required this.recipientName,
+    required this.recipientPhoneNumber,
+    required this.recipientAddress,
+    required this.recipientPostcode,
+    required this.recipientCity,
+    required this.recipientState,
+    required this.createdAt,
+  });
+}
+
+class UserReviewData {
+  final String uid;
+  final String reviewId;
+  final String userId;
+  final String storeId;
+  final String listingId;
+  final String orderId;
+  final String ratingStar;
+  final String review;
+
+  UserReviewData({
+    required this.uid,
+    required this.reviewId,
+    required this.userId,
+    required this.storeId,
+    required this.listingId,
+    required this.orderId,
+    required this.ratingStar,
+    required this.review,
   });
 }

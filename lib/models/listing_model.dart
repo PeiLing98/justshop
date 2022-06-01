@@ -9,6 +9,8 @@ class Listing {
   final String price;
   final String listingName;
   final String listingDescription;
+  final String rating;
+  final int totalSales;
 
   Listing(
       {required this.storeId,
@@ -20,5 +22,7 @@ class Listing {
       required this.selectedSubCategory,
       required this.price,
       required this.listingName,
-      required this.listingDescription});
+      required this.listingDescription,
+      required this.rating,
+      required this.totalSales});
 }

@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/components/review_component.dart';
 import 'package:final_year_project/components/tab_bar.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/listing_model.dart';
+import 'package:final_year_project/models/order_model.dart';
+import 'package:final_year_project/models/review_model.dart';
 import 'package:final_year_project/models/store_model.dart';
+import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/homepage/listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +26,8 @@ class StoreListingDetail extends StatefulWidget {
 
 class _StoreListingDetailState extends State<StoreListingDetail> {
   List<Listing> matchedList = [];
+  double totalRatingStar = 0;
+  int sales = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -43,381 +49,551 @@ class _StoreListingDetailState extends State<StoreListingDetail> {
                 return item.storeId == widget.store.storeId;
               }).toList();
 
-              return Scaffold(
-                body: SafeArea(
-                    child: Container(
-                  margin: const EdgeInsets.all(5),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 40, child: TopAppBar()),
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  IconButton(
-                                    padding: const EdgeInsets.all(0),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    icon: const Icon(Icons.arrow_back_ios),
-                                    iconSize: 20,
-                                    alignment: Alignment.topLeft,
-                                  ),
-                                  const SizedBox(
-                                    width: 110,
-                                  ),
-                                  Container(
-                                    width: 60,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: const Color.fromARGB(
-                                            250, 233, 221, 221),
-                                        border: Border.all(
-                                            width: 0.5, color: Colors.grey)),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Image.network(
-                                          widget.store.imagePath,
-                                          fit: BoxFit.cover),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                widget.store.businessName,
-                                style: boldContentTitle,
-                              ),
-                              RatingBar.builder(
-                                  glow: false,
-                                  updateOnDrag: true,
-                                  initialRating: 1,
-                                  unratedColor: Colors.grey[300],
-                                  minRating: 1,
-                                  itemSize: 20,
-                                  itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: secondaryColor,
-                                      ),
-                                  onRatingUpdate: (rating) {
-                                    //print(rating);
-                                  }),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              // Container(
-                              //   height: 25,
-                              //   alignment: Alignment.center,
-                              //   child: ListView.builder(
-                              //       shrinkWrap: true,
-                              //       scrollDirection: Axis.horizontal,
-                              //       itemCount: 2,
-                              //       itemBuilder: (context, index) {
-                              //         List<String> categorylist = [
-                              //           // matchedList[index].selectedCategory
-                              //           matchedStoreItem![index]
-                              //               .selectedCategory
-                              //         ];
-                              //         List<String> subCategorylist = [
-                              //           matchedStoreItem[index]
-                              //               .selectedSubCategory
-                              //           // matchedList[index].selectedSubCategory
-                              //           // ['selectedSubCategory']
-                              //         ];
-                              //         List<List<String>> categoryDistinctList =
-                              //             [
-                              //           LinkedHashSet<String>.from(categorylist)
-                              //               .toList(),
-                              //           LinkedHashSet<String>.from(
-                              //                   subCategorylist)
-                              //               .toList()
-                              //         ];
+              return StreamBuilder<List<Review>>(
+                  stream: DatabaseService(uid: "").review,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<Review>? reviews = snapshot.data;
+                      List<Review>? matchedReviews = [];
 
-                              // return Padding(
-                              //   padding:
-                              //       const EdgeInsets.only(right: 5),
-                              //   child: Container(
-                              //     decoration: BoxDecoration(
-                              //         border: Border.all(
-                              //             color: Colors.grey),
-                              //         borderRadius:
-                              //             BorderRadius.circular(5)),
-                              //     child: Padding(
-                              //       padding: const EdgeInsets.symmetric(
-                              //           horizontal: 10, vertical: 5),
-                              //       child: Text(
-                              //         categoryDistinctList[index][0],
-                              //         style: const TextStyle(
-                              //             fontSize: 12,
-                              //             fontFamily: 'Roboto'),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // );
-                              //       }),
-                              // ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: Icon(
-                                      Icons.location_pin,
-                                      size: 20,
-                                    ),
-                                  ),
-                                  Flexible(
-                                      child: Text(
-                                    widget.store.address,
-                                    style: const TextStyle(
-                                        fontSize: 12, fontFamily: 'Roboto'),
-                                  ))
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: Icon(
-                                      Icons.access_time,
-                                      size: 20,
-                                    ),
-                                  ),
-                                  Flexible(
-                                      child: Text(
-                                    '${widget.store.startTime} - ${widget.store.endTime}',
-                                    style: const TextStyle(
-                                        fontSize: 12, fontFamily: 'Roboto'),
-                                  ))
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Row(children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 10),
-                                        child: Icon(
-                                          Icons.phone_rounded,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      Text(
-                                        widget.store.phoneNumber,
-                                        style: const TextStyle(
-                                            fontSize: 12, fontFamily: 'Roboto'),
-                                      ),
-                                    ]),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        if (widget.store.facebookLink != "")
-                                          SizedBox(
-                                            height: 25,
-                                            width: 25,
-                                            child: IconButton(
-                                              padding: const EdgeInsets.all(0),
-                                              alignment: Alignment.centerRight,
-                                              onPressed: () async {
-                                                String url =
-                                                    widget.store.facebookLink;
+                      matchedReviews = reviews?.where((review) {
+                        return review.storeId == widget.store.storeId;
+                      }).toList();
 
-                                                if (await canLaunchUrlString(
-                                                    url)) {
-                                                  await launchUrlString(url);
-                                                } else {
-                                                  throw 'Could not launch $url';
-                                                }
-                                              },
-                                              icon: const Icon(
-                                                  FontAwesomeIcons
-                                                      .facebookSquare,
-                                                  color: Color.fromRGBO(
-                                                      66, 103, 178, 1)),
-                                            ),
-                                          ),
-                                        if (widget.store.instagramLink != "")
-                                          SizedBox(
-                                            height: 25,
-                                            width: 25,
-                                            child: IconButton(
-                                              padding: const EdgeInsets.all(0),
-                                              alignment: Alignment.centerRight,
-                                              onPressed: () async {
-                                                String url =
-                                                    widget.store.instagramLink;
+                      for (int i = 0; i < matchedReviews!.length; i++) {
+                        if (i == 0) {
+                          totalRatingStar =
+                              double.parse(matchedReviews[0].ratingStar);
+                        } else {
+                          double nextRating = 0;
 
-                                                if (await canLaunchUrlString(
-                                                    url)) {
-                                                  await launchUrlString(url);
-                                                } else {
-                                                  throw 'Could not launch $url';
-                                                }
-                                              },
-                                              icon: const Icon(
-                                                  FontAwesomeIcons
-                                                      .instagramSquare,
-                                                  color: Color.fromRGBO(
-                                                      233, 89, 80, 1)),
-                                            ),
-                                          ),
-                                        if (widget.store.whatsappLink != "")
-                                          SizedBox(
-                                            height: 25,
-                                            width: 25,
-                                            child: IconButton(
-                                              padding: const EdgeInsets.all(0),
-                                              alignment: Alignment.centerRight,
-                                              onPressed: () async {
-                                                String url =
-                                                    widget.store.whatsappLink;
+                          nextRating =
+                              double.parse(matchedReviews[i].ratingStar);
+                          totalRatingStar = totalRatingStar + nextRating;
+                        }
+                      }
 
-                                                if (await canLaunchUrlString(
-                                                    url)) {
-                                                  await launchUrlString(url);
-                                                } else {
-                                                  throw 'Could not launch $url';
-                                                }
-                                              },
-                                              icon: const Icon(
-                                                  FontAwesomeIcons
-                                                      .whatsappSquare,
-                                                  color: Color.fromRGBO(
-                                                      40, 209, 70, 1)),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                  height: 400,
-                                  child: StoreTabBar(
-                                    listingBody: SingleChildScrollView(
-                                      child: SizedBox(
-                                          height: 350,
-                                          child: ListView.builder(
-                                              itemCount:
-                                                  matchedStoreItem.length,
-                                              itemBuilder: (context, index) {
-                                                return Card(
-                                                    elevation: 3,
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ListingDetail(
-                                                                listing:
-                                                                    matchedStoreItem![
-                                                                        index],
-                                                              ),
-                                                            ));
-                                                      },
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(5),
-                                                        child: ListTile(
-                                                          title: Text(
-                                                            matchedStoreItem![
-                                                                    index]
-                                                                .listingName,
-                                                            // matchedList[index].listingName,
-                                                            // ['listingName'],
-                                                            style:
-                                                                boldContentTitle,
+                      if (matchedReviews.isEmpty) {
+                        totalRatingStar = 0;
+                      } else {
+                        totalRatingStar =
+                            totalRatingStar / matchedReviews.length;
+                      }
+
+                      storeRatingUpdating(totalRatingStar);
+
+                      return StreamBuilder<List<AllUser>>(
+                          stream: DatabaseService(uid: "").allUser,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<AllUser>? allUser = snapshot.data;
+                              List<AllUser>? matchedUser = [];
+
+                              for (int i = 0; i < matchedReviews!.length; i++) {
+                                for (int j = 0; j < allUser!.length; j++) {
+                                  if (matchedReviews[i].userId ==
+                                      allUser[j].userId) {
+                                    matchedUser.add(allUser[j]);
+                                  }
+                                }
+                              }
+
+                              List<Listing>? matchedUserItem = [];
+
+                              for (int i = 0; i < matchedReviews.length; i++) {
+                                for (int j = 0; j < item.length; j++) {
+                                  if (matchedReviews[i].listingId ==
+                                      item[j].listingId) {
+                                    matchedUserItem.add(item[j]);
+                                  }
+                                }
+                              }
+
+                              return StreamBuilder<List<Order>>(
+                                  stream: DatabaseService(uid: "").order,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      List<Order>? orders = snapshot.data;
+                                      List<int> matchedOrderQuantity = [];
+
+                                      for (int i = 0; i < orders!.length; i++) {
+                                        for (int j = 0;
+                                            j < orders[i].orderItem.length;
+                                            j++) {
+                                          if (orders[i].orderItem[j]['store'] ==
+                                                  widget.store.storeId &&
+                                              orders[i].orderItem[j]
+                                                      ['orderStatus'] ==
+                                                  'Completed') {
+                                            matchedOrderQuantity.add(orders[i]
+                                                .orderItem[j]['quantity']);
+                                          }
+                                        }
+                                      }
+
+                                      if (matchedOrderQuantity.isNotEmpty) {
+                                        if (matchedOrderQuantity.length == 1) {
+                                          sales = matchedOrderQuantity[0];
+                                        } else {
+                                          sales = matchedOrderQuantity
+                                              .reduce((a, b) => a + b);
+                                        }
+                                      }
+
+                                      storeSalesUpdating(sales);
+
+                                      return Scaffold(
+                                        body: SafeArea(
+                                            child: Container(
+                                          margin: const EdgeInsets.all(5),
+                                          child: SingleChildScrollView(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(
+                                                    height: 40,
+                                                    child: TopAppBar()),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(15),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          IconButton(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(0),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            icon: const Icon(Icons
+                                                                .arrow_back_ios),
+                                                            iconSize: 20,
+                                                            alignment: Alignment
+                                                                .topLeft,
                                                           ),
-                                                          subtitle: Text(
-                                                            'RM ${matchedStoreItem[index].price}',
-                                                            // 'RM ${matchedList[index].price}',
-                                                            // 'RM ${matchedList[index]['price']}',
-                                                            style:
-                                                                ratingLabelStyle,
+                                                          const SizedBox(
+                                                            width: 110,
                                                           ),
-                                                          leading: Container(
-                                                              width: 100,
-                                                              height: 50,
-                                                              decoration:
-                                                                  const BoxDecoration(
+                                                          Container(
+                                                            width: 60,
+                                                            height: 60,
+                                                            decoration: BoxDecoration(
                                                                 shape: BoxShape
-                                                                    .rectangle,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        249,
-                                                                        185,
-                                                                        181,
-                                                                        181),
-                                                              ),
-                                                              child: ClipRRect(
-                                                                  child: Image
-                                                                      .network(
-                                                                // matchedList[
-                                                                //         index][
-                                                                //     'listingImagePath'],
-                                                                // matchedList[index].listingImagePath,
-                                                                matchedStoreItem[
-                                                                        index]
-                                                                    .listingImagePath,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ))),
-                                                        ),
+                                                                    .circle,
+                                                                color: const Color
+                                                                        .fromARGB(
+                                                                    250,
+                                                                    233,
+                                                                    221,
+                                                                    221),
+                                                                border: Border.all(
+                                                                    width: 0.5,
+                                                                    color: Colors
+                                                                        .grey)),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                              child: Image.network(
+                                                                  widget.store
+                                                                      .imagePath,
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ));
-                                                // );
-                                              })),
-                                    ),
-                                    reviewBody: SingleChildScrollView(
-                                      child: SizedBox(
-                                          height: 350,
-                                          child: ListView.builder(
-                                              itemCount: 5,
-                                              //userStoreData.listing.length,
-                                              itemBuilder: (context, builder) {
-                                                return const ReviewComponent();
-                                              })),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )),
-              );
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
+                                                        widget
+                                                            .store.businessName,
+                                                        style: boldContentTitle,
+                                                      ),
+                                                      RatingBar.builder(
+                                                          allowHalfRating: true,
+                                                          ignoreGestures: true,
+                                                          glow: false,
+                                                          updateOnDrag: true,
+                                                          initialRating:
+                                                              double.parse(
+                                                                  widget.store
+                                                                      .rating),
+                                                          unratedColor:
+                                                              Colors.grey[300],
+                                                          minRating: 1,
+                                                          itemSize: 20,
+                                                          itemBuilder:
+                                                              (context, _) =>
+                                                                  const Icon(
+                                                                    Icons.star,
+                                                                    color:
+                                                                        secondaryColor,
+                                                                  ),
+                                                          onRatingUpdate:
+                                                              (rating) {}),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        'Sales: ${widget.store.totalSales}',
+                                                        style: buttonLabelStyle,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    right: 10),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .location_pin,
+                                                              size: 20,
+                                                            ),
+                                                          ),
+                                                          Flexible(
+                                                              child: Text(
+                                                            widget
+                                                                .store.address,
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontFamily:
+                                                                        'Roboto'),
+                                                          ))
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    right: 10),
+                                                            child: Icon(
+                                                              Icons.access_time,
+                                                              size: 20,
+                                                            ),
+                                                          ),
+                                                          Flexible(
+                                                              child: Text(
+                                                            '${widget.store.startTime} - ${widget.store.endTime}',
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontFamily:
+                                                                        'Roboto'),
+                                                          ))
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Row(
+                                                                children: [
+                                                                  const Padding(
+                                                                    padding: EdgeInsets.only(
+                                                                        right:
+                                                                            10),
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .phone_rounded,
+                                                                      size: 20,
+                                                                    ),
+                                                                  ),
+                                                                  Text(
+                                                                    widget.store
+                                                                        .phoneNumber,
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontFamily:
+                                                                            'Roboto'),
+                                                                  ),
+                                                                ]),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                if (widget.store
+                                                                        .facebookLink !=
+                                                                    "")
+                                                                  SizedBox(
+                                                                    height: 25,
+                                                                    width: 25,
+                                                                    child:
+                                                                        IconButton(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              0),
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .centerRight,
+                                                                      onPressed:
+                                                                          () async {
+                                                                        String url = widget
+                                                                            .store
+                                                                            .facebookLink;
+
+                                                                        if (await canLaunchUrlString(
+                                                                            url)) {
+                                                                          await launchUrlString(
+                                                                              url);
+                                                                        } else {
+                                                                          throw 'Could not launch $url';
+                                                                        }
+                                                                      },
+                                                                      icon: const Icon(
+                                                                          FontAwesomeIcons
+                                                                              .facebookSquare,
+                                                                          color: Color.fromRGBO(
+                                                                              66,
+                                                                              103,
+                                                                              178,
+                                                                              1)),
+                                                                    ),
+                                                                  ),
+                                                                if (widget.store
+                                                                        .instagramLink !=
+                                                                    "")
+                                                                  SizedBox(
+                                                                    height: 25,
+                                                                    width: 25,
+                                                                    child:
+                                                                        IconButton(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              0),
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .centerRight,
+                                                                      onPressed:
+                                                                          () async {
+                                                                        String url = widget
+                                                                            .store
+                                                                            .instagramLink;
+
+                                                                        if (await canLaunchUrlString(
+                                                                            url)) {
+                                                                          await launchUrlString(
+                                                                              url);
+                                                                        } else {
+                                                                          throw 'Could not launch $url';
+                                                                        }
+                                                                      },
+                                                                      icon: const Icon(
+                                                                          FontAwesomeIcons
+                                                                              .instagramSquare,
+                                                                          color: Color.fromRGBO(
+                                                                              233,
+                                                                              89,
+                                                                              80,
+                                                                              1)),
+                                                                    ),
+                                                                  ),
+                                                                if (widget.store
+                                                                        .whatsappLink !=
+                                                                    "")
+                                                                  SizedBox(
+                                                                    height: 25,
+                                                                    width: 25,
+                                                                    child:
+                                                                        IconButton(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              0),
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .centerRight,
+                                                                      onPressed:
+                                                                          () async {
+                                                                        String url = widget
+                                                                            .store
+                                                                            .whatsappLink;
+
+                                                                        if (await canLaunchUrlString(
+                                                                            url)) {
+                                                                          await launchUrlString(
+                                                                              url);
+                                                                        } else {
+                                                                          throw 'Could not launch $url';
+                                                                        }
+                                                                      },
+                                                                      icon: const Icon(
+                                                                          FontAwesomeIcons
+                                                                              .whatsappSquare,
+                                                                          color: Color.fromRGBO(
+                                                                              40,
+                                                                              209,
+                                                                              70,
+                                                                              1)),
+                                                                    ),
+                                                                  ),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      SizedBox(
+                                                          height: 400,
+                                                          child: StoreTabBar(
+                                                              listingBody:
+                                                                  SingleChildScrollView(
+                                                                child: SizedBox(
+                                                                    height:
+                                                                        matchedStoreItem!.length *
+                                                                            80,
+                                                                    child: ListView
+                                                                        .builder(
+                                                                            itemCount:
+                                                                                matchedStoreItem.length,
+                                                                            itemBuilder: (context, index) {
+                                                                              return Card(
+                                                                                  elevation: 3,
+                                                                                  child: InkWell(
+                                                                                    onTap: () {
+                                                                                      Navigator.push(
+                                                                                          context,
+                                                                                          MaterialPageRoute(
+                                                                                            builder: (context) => ListingDetail(
+                                                                                              listing: matchedStoreItem![index],
+                                                                                            ),
+                                                                                          ));
+                                                                                    },
+                                                                                    child: Padding(
+                                                                                      padding: const EdgeInsets.all(5),
+                                                                                      child: ListTile(
+                                                                                        title: Text(
+                                                                                          matchedStoreItem![index].listingName,
+                                                                                          style: boldContentTitle,
+                                                                                        ),
+                                                                                        subtitle: Text(
+                                                                                          'RM ${matchedStoreItem[index].price}',
+                                                                                          style: ratingLabelStyle,
+                                                                                        ),
+                                                                                        leading: Container(
+                                                                                            width: 100,
+                                                                                            height: 50,
+                                                                                            decoration: const BoxDecoration(
+                                                                                              shape: BoxShape.rectangle,
+                                                                                              color: Color.fromARGB(249, 185, 181, 181),
+                                                                                            ),
+                                                                                            child: ClipRRect(
+                                                                                                child: Image.network(
+                                                                                              matchedStoreItem[index].listingImagePath,
+                                                                                              fit: BoxFit.cover,
+                                                                                            ))),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ));
+                                                                              // );
+                                                                            })),
+                                                              ),
+                                                              reviewBody:
+                                                                  SingleChildScrollView(
+                                                                child: SizedBox(
+                                                                    height: 350,
+                                                                    child: matchedReviews!
+                                                                            .isEmpty
+                                                                        ? Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(top: 10),
+                                                                            child:
+                                                                                Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: const [
+                                                                                Text(
+                                                                                  'No reviews currently.',
+                                                                                  style: ratingLabelStyle,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          )
+                                                                        : ListView.builder(
+                                                                            itemCount: matchedReviews.length,
+                                                                            itemBuilder: (context, index) {
+                                                                              return ReviewComponent(
+                                                                                review: matchedReviews![index],
+                                                                                user: matchedUser[index],
+                                                                                listing: matchedUserItem[index],
+                                                                              );
+                                                                            })),
+                                                              ))),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )),
+                                      );
+                                    } else {
+                                      return const Loading();
+                                    }
+                                  });
+                            } else {
+                              return const Loading();
+                            }
+                          });
+                    } else {
+                      return const Loading();
+                    }
+                  });
             } else {
               return const Loading();
             }
           }),
     );
+  }
+
+  storeRatingUpdating(double rating) async {
+    var a = await FirebaseFirestore.instance
+        .collection("store")
+        .where("storeId", isEqualTo: widget.store.storeId)
+        .get();
+    String id = a.docs[0].id;
+    await DatabaseService(uid: "").updateStoreRating(id, rating.toString());
+  }
+
+  storeSalesUpdating(int sales) async {
+    var a = await FirebaseFirestore.instance
+        .collection("store")
+        .where("storeId", isEqualTo: widget.store.storeId)
+        .get();
+    String id = a.docs[0].id;
+    await DatabaseService(uid: "").updateStoreSales(id, sales);
   }
 }

@@ -1,5 +1,7 @@
+import 'package:final_year_project/models/order_model.dart';
 import 'package:final_year_project/models/user_model.dart';
-import 'package:final_year_project/pages/cart_page.dart';
+import 'package:final_year_project/pages/make_order/cart_page.dart';
+import 'package:final_year_project/pages/profile/business_order/business_order.dart';
 import 'package:final_year_project/pages/profile/manage_listing/manage_listing.dart';
 import 'package:final_year_project/pages/profile/seller_profile/seller_profile.dart';
 import 'package:final_year_project/pages/filter/filter.dart';
@@ -8,11 +10,12 @@ import 'package:final_year_project/pages/homepage/home_page.dart';
 import 'package:final_year_project/components/location_map.dart';
 import 'package:final_year_project/pages/onboarding/login.dart';
 import 'package:final_year_project/pages/profile/profile.dart';
+import 'package:final_year_project/pages/profile/user_order/user_order.dart';
 import 'package:final_year_project/pages/profile/user_profile/update_user_profile.dart';
 import 'package:final_year_project/pages/profile/user_profile/user_profile.dart';
 import 'package:final_year_project/pages/profile/view_store.dart';
 import 'package:final_year_project/pages/sign_up_store/register_business.dart';
-import 'package:final_year_project/pages/save_list.dart';
+import 'package:final_year_project/pages/save_list/save_list.dart';
 import 'package:final_year_project/pages/profile/seller_profile/update_seller_profile.dart';
 import 'package:final_year_project/pages_controller.dart';
 import 'package:final_year_project/services/auth.dart';
@@ -48,6 +51,8 @@ Future<void> main() async {
           '/cartpage': (context) => const CartPage(),
           '/userprofile': (context) => const UserProfile(),
           '/updateuserprofile': (context) => const UpdateUserProfile(),
+          '/userorder': (context) => const UserOrder(),
+          '/businessorder': (context) => const BusinessOrder(),
         },
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,

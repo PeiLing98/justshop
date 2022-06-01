@@ -1,6 +1,8 @@
 import 'package:final_year_project/components/button.dart';
+import 'package:final_year_project/components/input_text_box.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class AlertTextModal extends StatefulWidget {
   final String alertContent;
@@ -138,6 +140,210 @@ class _YesNoAlertModalState extends State<YesNoAlertModal> {
                   ],
                 ),
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OrderStatusModal extends StatefulWidget {
+  final VoidCallback inProgressOnClick;
+  final VoidCallback completedOnClick;
+  const OrderStatusModal(
+      {Key? key,
+      required this.inProgressOnClick,
+      required this.completedOnClick})
+      : super(key: key);
+
+  @override
+  _OrderStatusModalState createState() => _OrderStatusModalState();
+}
+
+class _OrderStatusModalState extends State<OrderStatusModal> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Dialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: SizedBox(
+          height: 180,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 25,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: CloseButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Change Order Status',
+                      style: boldContentTitle,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'If the order is delivered,',
+                      style: ratingLabelStyle,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                        width: 80,
+                        height: 30,
+                        child: PurpleTextButton(
+                            buttonText: 'Delivered',
+                            onClick: widget.inProgressOnClick)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'If the order is completed,',
+                      style: ratingLabelStyle,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                        width: 80,
+                        height: 30,
+                        child: PurpleTextButton(
+                            buttonText: 'Complete',
+                            onClick: widget.completedOnClick)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ReviewModal extends StatefulWidget {
+  final void Function(double) updateStars;
+  final Function(String) reviewUpdate;
+  final VoidCallback confirmOnClick;
+  const ReviewModal(
+      {Key? key,
+      required this.updateStars,
+      required this.confirmOnClick,
+      required this.reviewUpdate})
+      : super(key: key);
+
+  @override
+  _ReviewModalState createState() => _ReviewModalState();
+}
+
+class _ReviewModalState extends State<ReviewModal> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Dialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: SizedBox(
+          height: 250,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 25,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: CloseButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'How many stars would you give this listing?',
+                      style: boldContentTitle,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    RatingBar.builder(
+                      glow: false,
+                      updateOnDrag: true,
+                      initialRating: 1,
+                      unratedColor: Colors.grey[300],
+                      minRating: 1,
+                      itemSize: 20,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: secondaryColor,
+                      ),
+                      onRatingUpdate: widget.updateStars,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'How do you review this listing?',
+                      style: boldContentTitle,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    StringTextArea(
+                        label: 'Write your review',
+                        textLine: 4,
+                        onChanged: widget.reviewUpdate),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                            width: 100,
+                            height: 30,
+                            child: PurpleTextButton(
+                                buttonText: 'Confirm',
+                                onClick: widget.confirmOnClick)),
+                      ],
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),

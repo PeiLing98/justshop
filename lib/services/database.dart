@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_year_project/models/cart_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
+import 'package:final_year_project/models/order_model.dart';
+import 'package:final_year_project/models/review_model.dart';
 import 'package:final_year_project/models/save_list_model.dart';
 import 'package:final_year_project/models/store_model.dart';
 import 'package:final_year_project/models/user_model.dart';
-import 'package:final_year_project/pages/save_list.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 
 class DatabaseService {
   final String? uid;
@@ -18,28 +20,56 @@ class DatabaseService {
 
   Future updateUserData(String username, String email, String phoneNumber,
       String address, String postcode, String city, String state) async {
+    List searchHistory = [];
     return await userCollection.doc(uid).set({
+      'userId': uid,
       'username': username,
       'email': email,
       'phoneNumber': phoneNumber,
       'address': address,
       'postcode': postcode,
       'city': city,
-      'state': state
+      'state': state,
+      'searchHistory': searchHistory
     });
+  }
+
+  Future updateSearchHistory(String uid, String searchHistory) async {
+    return await userCollection.doc(uid).update({
+      'searchHistory': FieldValue.arrayUnion([searchHistory])
+    });
+  }
+
+  List<AllUser> _allUserFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return AllUser(
+          userId: doc.get('userId') ?? "",
+          username: doc.get('username') ?? "",
+          email: doc.get('email') ?? "",
+          phoneNumber: doc.get('phoneNumber') ?? '',
+          address: doc.get('address') ?? '',
+          postcode: doc.get('postcode') ?? '',
+          city: doc.get('city') ?? '',
+          state: doc.get('state') ?? '',
+          searchHistory: doc.get('searchHistory') ?? '');
+    }).toList();
   }
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
-      uid: uid!,
-      username: snapshot.get('username'),
-      email: snapshot.get('email'),
-      phoneNumber: snapshot.get('phoneNumber'),
-      address: snapshot.get('address'),
-      postcode: snapshot.get('postcode'),
-      city: snapshot.get('city'),
-      state: snapshot.get('state'),
-    );
+        uid: uid!,
+        username: snapshot.get('username'),
+        email: snapshot.get('email'),
+        phoneNumber: snapshot.get('phoneNumber'),
+        address: snapshot.get('address'),
+        postcode: snapshot.get('postcode'),
+        city: snapshot.get('city'),
+        state: snapshot.get('state'),
+        searchHistory: snapshot.get('searchHistory'));
+  }
+
+  Stream<List<AllUser>> get allUser {
+    return userCollection.snapshots().map(_allUserFromSnapshot);
   }
 
   Stream<UserData> get userData {
@@ -65,8 +95,9 @@ class DatabaseService {
     String facebookLink,
     String instagramLink,
     String whatsappLink,
-    // List listing,
   ) async {
+    String rating = "0";
+    int totalSales = 0;
     return await storeCollection.doc(uid).set({
       'storeId': storeId,
       'imagePath': imagePath,
@@ -82,28 +113,39 @@ class DatabaseService {
       'facebookLink': facebookLink,
       'instagramLink': instagramLink,
       'whatsappLink': whatsappLink,
+      'rating': rating,
+      'totalSales': totalSales
     });
+  }
+
+  Future updateStoreRating(String uid, String rating) async {
+    return await storeCollection.doc(uid).update({'rating': rating});
+  }
+
+  Future updateStoreSales(String uid, int sales) async {
+    return await storeCollection.doc(uid).update({'totalSales': sales});
   }
 
   //store list from snapshot
   List<Store> _storeListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Store(
-        storeId: doc.get('storeId') ?? '',
-        imagePath: doc.get('imagePath') ?? '',
-        businessName: doc.get('businessName') ?? '',
-        latitude: doc.get('latitude') ?? '',
-        longtitude: doc.get('longtitude') ?? '',
-        address: doc.get('address') ?? '',
-        city: doc.get('city') ?? '',
-        state: doc.get('state') ?? '',
-        startTime: doc.get('startTime') ?? '',
-        endTime: doc.get('endTime') ?? '',
-        phoneNumber: doc.get('phoneNumber') ?? '',
-        facebookLink: doc.get('facebookLink') ?? '',
-        instagramLink: doc.get('instagramLink') ?? '',
-        whatsappLink: doc.get('whatsappLink') ?? '',
-      );
+          storeId: doc.get('storeId') ?? '',
+          imagePath: doc.get('imagePath') ?? '',
+          businessName: doc.get('businessName') ?? '',
+          latitude: doc.get('latitude') ?? '',
+          longtitude: doc.get('longtitude') ?? '',
+          address: doc.get('address') ?? '',
+          city: doc.get('city') ?? '',
+          state: doc.get('state') ?? '',
+          startTime: doc.get('startTime') ?? '',
+          endTime: doc.get('endTime') ?? '',
+          phoneNumber: doc.get('phoneNumber') ?? '',
+          facebookLink: doc.get('facebookLink') ?? '',
+          instagramLink: doc.get('instagramLink') ?? '',
+          whatsappLink: doc.get('whatsappLink') ?? '',
+          rating: doc.get('rating') ?? '',
+          totalSales: doc.get('totalSales') ?? '');
     }).toList();
   }
 
@@ -125,6 +167,8 @@ class DatabaseService {
       facebookLink: snapshot.get('facebookLink'),
       instagramLink: snapshot.get('instagramLink'),
       whatsappLink: snapshot.get('whatsappLink'),
+      rating: snapshot.get('rating'),
+      totalSales: snapshot.get('totalSales'),
     );
   }
 
@@ -154,6 +198,8 @@ class DatabaseService {
     String listingDescription,
   ) async {
     String listingId = const Uuid().v1();
+    String rating = "0";
+    int totalSales = 0;
     return await itemCollection.doc(listingId).set({
       'storeId': storeId,
       'storeName': storeName,
@@ -165,6 +211,8 @@ class DatabaseService {
       'price': price,
       'listingName': listingName,
       'listingDescription': listingDescription,
+      'rating': rating,
+      'totalSales': totalSales
     });
   }
 
@@ -197,6 +245,14 @@ class DatabaseService {
     return await itemCollection.doc(docId).delete();
   }
 
+  Future updateItemRating(String listingId, String rating) async {
+    return await itemCollection.doc(listingId).update({'rating': rating});
+  }
+
+  Future updateItemSales(String listingId, int sales) async {
+    return await itemCollection.doc(listingId).update({'totalSales': sales});
+  }
+
   List<Listing> _itemFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Listing(
@@ -210,6 +266,8 @@ class DatabaseService {
         price: doc.get('price') ?? '',
         listingName: doc.get('listingName') ?? '',
         listingDescription: doc.get('listingDescription') ?? '',
+        rating: doc.get('rating') ?? '',
+        totalSales: doc.get('totalSales') ?? '',
       );
     }).toList();
   }
@@ -227,6 +285,8 @@ class DatabaseService {
       price: snapshot.get('price'),
       listingName: snapshot.get('listingName'),
       listingDescription: snapshot.get('listingDescription'),
+      rating: snapshot.get('rating'),
+      totalSales: snapshot.get('totalSales'),
     );
   }
 
@@ -366,5 +426,147 @@ class DatabaseService {
         .doc(uid)
         .snapshots()
         .map(_userSaveListDataFromSnapshot);
+  }
+
+// --------------------------------------- order ------------------------------------------
+  final CollectionReference orderCollection =
+      FirebaseFirestore.instance.collection('order');
+
+  Future addOrderData(
+    String userId,
+    List orderItem,
+    String totalPrice,
+    String recipientName,
+    String recipientPhoneNumber,
+    String recipientAddress,
+    String recipientPostcode,
+    String recipientCity,
+    String recipientState,
+  ) async {
+    String orderId = const Uuid().v1();
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+
+    return await orderCollection.doc(orderId).set({
+      'orderId': orderId,
+      'userId': userId,
+      'orderItem': orderItem,
+      'totalPrice': totalPrice,
+      'recipientName': recipientName,
+      'recipientPhoneNumber': recipientPhoneNumber,
+      'recipientAddress': recipientAddress,
+      'recipientPostcode': recipientPostcode,
+      'recipientCity': recipientCity,
+      'recipientState': recipientState,
+      'createdAt': dateFormat.format(DateTime.now())
+    });
+  }
+
+  Future updateOrderStatus(List order, String orderId) async {
+    return await orderCollection.doc(orderId).update({
+      'orderItem': order,
+    });
+  }
+
+  List<Order> _orderFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Order(
+        orderId: doc.get('orderId') ?? '',
+        userId: doc.get('userId') ?? '',
+        orderItem: doc.get('orderItem') ?? '',
+        totalPrice: doc.get('totalPrice') ?? '',
+        recipientName: doc.get('recipientName') ?? '',
+        recipientPhoneNumber: doc.get('recipientPhoneNumber') ?? '',
+        recipientAddress: doc.get('recipientAddress') ?? '',
+        recipientPostcode: doc.get('recipientPostcode') ?? '',
+        recipientCity: doc.get('recipientCity') ?? '',
+        recipientState: doc.get('recipientState') ?? '',
+        createdAt: doc.get('createdAt') ?? '',
+      );
+    }).toList();
+  }
+
+  UserOrderData _userOrderDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserOrderData(
+      uid: uid!,
+      orderId: snapshot.get('orderId'),
+      userId: snapshot.get('userId'),
+      orderItem: snapshot.get('orderItem'),
+      totalPrice: snapshot.get('totalPrice'),
+      recipientName: snapshot.get('recipientName'),
+      recipientPhoneNumber: snapshot.get('recipientPhoneNumber'),
+      recipientAddress: snapshot.get('recipientAddress'),
+      recipientPostcode: snapshot.get('recipientPostcode'),
+      recipientCity: snapshot.get('recipientCity'),
+      recipientState: snapshot.get('recipientState'),
+      createdAt: snapshot.get('createdAt'),
+    );
+  }
+
+  // get item stream
+  Stream<List<Order>> get order {
+    return orderCollection.snapshots().map(_orderFromSnapshot);
+  }
+
+  //get users item doc stream
+  Stream<UserOrderData> get userOrderData {
+    return orderCollection.doc(uid).snapshots().map(_userOrderDataFromSnapshot);
+  }
+
+// --------------------------------------- review ------------------------------------------
+  final CollectionReference reviewCollection =
+      FirebaseFirestore.instance.collection('review');
+
+  Future addReviewData(String userId, String storeId, String listingId,
+      String orderId, String ratingStar, String review) async {
+    String reviewId = const Uuid().v1();
+    return await reviewCollection.doc(reviewId).set({
+      'reviewId': reviewId,
+      'userId': userId,
+      'storeId': storeId,
+      'listingId': listingId,
+      'orderId': orderId,
+      'ratingStar': ratingStar,
+      'review': review
+    });
+  }
+
+  List<Review> _reviewFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Review(
+        reviewId: doc.get('reviewId') ?? '',
+        userId: doc.get('userId') ?? '',
+        storeId: doc.get('storeId') ?? '',
+        listingId: doc.get('listingId') ?? '',
+        orderId: doc.get('orderId') ?? '',
+        ratingStar: doc.get('ratingStar') ?? '',
+        review: doc.get('review') ?? '',
+      );
+    }).toList();
+  }
+
+  UserReviewData _userReviewDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserReviewData(
+      uid: uid!,
+      reviewId: snapshot.get('reviewId'),
+      userId: snapshot.get('userId'),
+      storeId: snapshot.get('storeId'),
+      listingId: snapshot.get('listingId'),
+      orderId: snapshot.get('orderId'),
+      ratingStar: snapshot.get('ratingStar'),
+      review: snapshot.get('review'),
+    );
+  }
+
+  // get item stream
+  Stream<List<Review>> get review {
+    return reviewCollection.snapshots().map(_reviewFromSnapshot);
+  }
+
+  //get users item doc stream
+  Stream<UserReviewData> get userReviewData {
+    return reviewCollection
+        .doc(uid)
+        .snapshots()
+        .map(_userReviewDataFromSnapshot);
   }
 }

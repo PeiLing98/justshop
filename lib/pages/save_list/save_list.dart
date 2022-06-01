@@ -1,6 +1,6 @@
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/loading.dart';
-import 'package:final_year_project/components/save_list_component.dart';
+import 'package:final_year_project/pages/save_list/save_list_component.dart';
 import 'package:final_year_project/components/tab_bar.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/listing_model.dart';

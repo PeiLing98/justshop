@@ -26,8 +26,9 @@ class _ProfileState extends State<Profile> {
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user?.uid).userData,
         builder: (context, snapshot) {
-          UserData? userData = snapshot.data;
           if (snapshot.hasData) {
+            UserData? userData = snapshot.data;
+
             return Container(
               margin: const EdgeInsets.all(5),
               child: Column(
@@ -47,6 +48,7 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 Text(
                                   'Hi, ${userData!.username} !',
+                                  // '123',
                                   style: secondaryFontStyle,
                                 )
                               ],
@@ -76,7 +78,11 @@ class _ProfileState extends State<Profile> {
                               onClick: () {
                                 Navigator.pushNamed(context, '/userprofile');
                               }),
-                          ProfileButton(buttonText: 'Order', onClick: () {}),
+                          ProfileButton(
+                              buttonText: 'Order',
+                              onClick: () {
+                                Navigator.pushNamed(context, '/userorder');
+                              }),
                           const SizedBox(
                             height: 30,
                           ),
@@ -116,7 +122,10 @@ class _ProfileState extends State<Profile> {
                                         }),
                                     ProfileButton(
                                         buttonText: 'Business Order',
-                                        onClick: () {}),
+                                        onClick: () {
+                                          Navigator.pushNamed(
+                                              context, '/businessorder');
+                                        }),
                                   ],
                                 );
                               } else {

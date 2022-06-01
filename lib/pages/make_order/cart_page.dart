@@ -1,13 +1,13 @@
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/button.dart';
-import 'package:final_year_project/components/cart_page_component.dart';
+import 'package:final_year_project/pages/make_order/cart_page_component.dart';
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/components/tab_bar.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/cart_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
 import 'package:final_year_project/models/user_model.dart';
-import 'package:final_year_project/pages/place_order.dart';
+import 'package:final_year_project/pages/make_order/place_order.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

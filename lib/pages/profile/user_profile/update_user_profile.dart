@@ -129,6 +129,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                                 : null,
                                             onChanged: (val) => setState(
                                                 () => _currentUsername = val),
+                                            isBold: true,
                                           ),
                                         )
                                       ],
@@ -143,6 +144,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             textFieldHeight: 30,
                                             isReadOnly: true,
                                             isNotUpdated: true,
+                                            isBold: true,
                                           ),
                                         )
                                       ],
@@ -162,6 +164,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                                 : null,
                                             onChanged: (val) => setState(() =>
                                                 _currentPhoneNumber = val),
+                                            isBold: true,
                                           ),
                                         )
                                       ],
@@ -179,6 +182,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                                 val!.isEmpty ? 'Address' : null,
                                             onChanged: (val) => setState(
                                                 () => _currentAddress = val),
+                                            isBold: true,
                                           ),
                                         )
                                       ],
@@ -196,7 +200,9 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                                 ? 'Postcode'
                                                 : null,
                                             onChanged: (val) => setState(
-                                                () => _currentPostcode = val),
+                                              () => _currentPostcode = val,
+                                            ),
+                                            isBold: true,
                                           ),
                                         ),
                                         const SizedBox(
@@ -213,6 +219,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             //     val!.isEmpty ? 'City' : null,
                                             onChanged: (val) => setState(
                                                 () => _currentCity = val),
+                                            isBold: true,
                                           ),
                                         ),
                                       ],

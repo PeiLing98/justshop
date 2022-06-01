@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/store_model.dart';
 import 'package:final_year_project/pages/homepage/store_listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class StoreListing extends StatefulWidget {
   const StoreListing({Key? key}) : super(key: key);
@@ -24,6 +26,7 @@ class _StoreListingState extends State<StoreListing> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Store>? store = snapshot.data;
+
           return SizedBox(
             height: (115 * store!.length).toDouble(),
             child: GridView.builder(
@@ -71,12 +74,37 @@ class _StoreListingState extends State<StoreListing> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              store[index].businessName,
-                              style: buttonLabelStyle,
-                            ),
+                            RatingBar.builder(
+                                allowHalfRating: true,
+                                ignoreGestures: true,
+                                glow: false,
+                                updateOnDrag: true,
+                                initialRating:
+                                    double.parse(store[index].rating),
+                                unratedColor: Colors.grey[300],
+                                minRating: 1,
+                                itemSize: 15,
+                                itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: secondaryColor,
+                                    ),
+                                onRatingUpdate: (rating) {
+                                  //print(rating);
+                                }),
                             const SizedBox(
                               height: 5,
+                            ),
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                store[index].businessName,
+                                style: buttonLabelStyle,
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
                             ),
                             Row(
                               children: [
@@ -130,33 +158,6 @@ class _StoreListingState extends State<StoreListing> {
                                     )),
                               ],
                             ),
-                            // SizedBox(
-                            //   height: 25,
-                            //   width: 50,
-                            //   child: ListView(
-                            //     shrinkWrap: true,
-                            //     scrollDirection: Axis.horizontal,
-                            //     children: [
-                            //       Padding(
-                            //         padding: const EdgeInsets.only(right: 5),
-                            //         child: Container(
-                            //           decoration: BoxDecoration(
-                            //               border: Border.all(color: Colors.grey),
-                            //               borderRadius: BorderRadius.circular(5)),
-                            //           child: Padding(
-                            //             padding: const EdgeInsets.symmetric(
-                            //                 horizontal: 10, vertical: 5),
-                            //             child: Text(
-                            //               '123',
-                            //               style: const TextStyle(
-                            //                   fontSize: 12, fontFamily: 'Roboto'),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // )
                           ],
                         ),
                       ),

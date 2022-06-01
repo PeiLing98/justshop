@@ -1,9 +1,11 @@
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/listing_model.dart';
+import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/search/search_listing.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({Key? key}) : super(key: key);
@@ -46,9 +48,13 @@ class _SearchBarState extends State<SearchBar> {
 class CustomSearchDelegate extends SearchDelegate {
   @override
   List<Widget> buildActions(BuildContext context) {
+    final userId = Provider.of<MyUser?>(context)?.uid;
+
     return [
       IconButton(
-        onPressed: () {
+        onPressed: () async {
+          await DatabaseService(uid: userId)
+              .updateSearchHistory(userId!, query);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -79,6 +85,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    final userId = Provider.of<MyUser?>(context)?.uid;
     return StreamBuilder<List<Listing>>(
       stream: DatabaseService(uid: "").item,
       builder: (context, snapshot) {
@@ -112,8 +119,10 @@ class CustomSearchDelegate extends SearchDelegate {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           query = matchQuery[index].listingName;
+                          await DatabaseService(uid: userId)
+                              .updateSearchHistory(userId!, query);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -146,6 +155,8 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final userId = Provider.of<MyUser?>(context)?.uid;
+
     return StreamBuilder<List<Listing>>(
       stream: DatabaseService(uid: "").item,
       builder: (context, snapshot) {
@@ -179,8 +190,10 @@ class CustomSearchDelegate extends SearchDelegate {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           query = resultName;
+                          await DatabaseService(uid: userId)
+                              .updateSearchHistory(userId!, query);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

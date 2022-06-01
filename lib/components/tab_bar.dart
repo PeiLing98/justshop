@@ -237,3 +237,125 @@ class _RatingMonthTabBarState extends State<RatingMonthTabBar> {
     );
   }
 }
+
+class OrderStatusTabBar extends StatefulWidget {
+  final Widget toShipBody;
+  final Widget toReceiveBody;
+  final Widget completedBody;
+
+  const OrderStatusTabBar(
+      {Key? key,
+      required this.toShipBody,
+      required this.toReceiveBody,
+      required this.completedBody})
+      : super(key: key);
+
+  @override
+  _OrderStatusTabBarState createState() => _OrderStatusTabBarState();
+}
+
+class _OrderStatusTabBarState extends State<OrderStatusTabBar> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Column(
+        children: [
+          const TabBar(
+            labelColor: Colors.black,
+            labelStyle: buttonLabelStyle,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: secondaryColor,
+            indicatorWeight: 3,
+            indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+            tabs: [
+              Tab(
+                text: 'To Ship',
+                height: 30,
+              ),
+              Tab(
+                text: 'To Receive',
+                height: 30,
+              ),
+              Tab(
+                text: 'Completed',
+                height: 30,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: TabBarView(children: [
+                widget.toShipBody,
+                widget.toReceiveBody,
+                widget.completedBody
+              ]),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class BusinessOrderStatus extends StatefulWidget {
+  final Widget newOrderBody;
+  final Widget deliveredBody;
+  final Widget completedBody;
+
+  const BusinessOrderStatus(
+      {Key? key,
+      required this.newOrderBody,
+      required this.deliveredBody,
+      required this.completedBody})
+      : super(key: key);
+
+  @override
+  _BusinessOrderStatusState createState() => _BusinessOrderStatusState();
+}
+
+class _BusinessOrderStatusState extends State<BusinessOrderStatus> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Column(
+        children: [
+          const TabBar(
+            labelColor: Colors.black,
+            labelStyle: buttonLabelStyle,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: secondaryColor,
+            indicatorWeight: 3,
+            indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+            tabs: [
+              Tab(
+                text: 'New Order',
+                height: 30,
+              ),
+              Tab(
+                text: ' Delivered Order',
+                height: 30,
+              ),
+              Tab(
+                text: 'Completed Order',
+                height: 30,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: TabBarView(children: [
+                widget.newOrderBody,
+                widget.deliveredBody,
+                widget.completedBody
+              ]),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

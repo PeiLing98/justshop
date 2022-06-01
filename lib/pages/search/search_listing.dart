@@ -3,7 +3,6 @@ import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/components/search_bar.dart';
 import 'package:final_year_project/constant.dart';
-import 'package:final_year_project/models/category_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
 import 'package:final_year_project/pages/homepage/listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
@@ -155,9 +154,11 @@ class _SearchListingState extends State<SearchListing> {
                                           });
                                         },
                                         child: SizedBox(
-                                          width: 76,
+                                          width: 150,
                                           child: FilterOptionButton(
-                                            buttonText: '${index + 1} Stars',
+                                            buttonText: index == 4
+                                                ? '5 Stars'
+                                                : '${index + 1} Stars And Above',
                                           ),
                                         ),
                                       );
@@ -177,7 +178,7 @@ class _SearchListingState extends State<SearchListing> {
                                     });
                                   },
                                   child: const FilterOptionButton(
-                                    buttonText: 'Popularity',
+                                    buttonText: 'Top Sales',
                                   ),
                                 ),
                               ),
@@ -215,7 +216,9 @@ class _SearchListingState extends State<SearchListing> {
                                       ),
                                     if (isRate)
                                       SelectedFilterOption(
-                                        buttonText: '$currentRank Stars',
+                                        buttonText: currentRank == 5
+                                            ? '5 Stars'
+                                            : '$currentRank Stars And Above',
                                         isClose: true,
                                         closeButtonAction: () {
                                           setState(() {
@@ -226,7 +229,7 @@ class _SearchListingState extends State<SearchListing> {
                                       ),
                                     if (isPopular)
                                       SelectedFilterOption(
-                                          buttonText: 'Sorted by popularity',
+                                          buttonText: 'Sorted by top sales',
                                           isClose: true,
                                           closeButtonAction: () {
                                             setState(() {
@@ -325,10 +328,12 @@ class _SearchListingState extends State<SearchListing> {
                                                   'RM$minPrice - RM$maxPrice'),
                                         if (rating != 0)
                                           SelectedFilterOption(
-                                              buttonText: '$rating Stars'),
+                                              buttonText: rating == 5
+                                                  ? '5 Stars'
+                                                  : '$rating Stars And Above'),
                                         if (sortedByPopularity == true)
                                           const SelectedFilterOption(
-                                            buttonText: 'Sorted by popularity',
+                                            buttonText: 'Sorted by top sales',
                                           ),
                                       ])),
                               Expanded(
@@ -367,17 +372,68 @@ class _SearchListingState extends State<SearchListing> {
                                   }
                                 }
 
-                                if (minPrice != 0 ||
-                                    maxPrice != 0 ||
-                                    rating != 0 ||
+                                if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    rating != 0 &&
                                     sortedByPopularity) {
-                                  if (minPrice != 0 && maxPrice != 0) {
-                                    matchedItem = matchedItem.where((item) {
-                                      return (int.parse(item.price) >=
-                                              minPrice &&
-                                          int.parse(item.price) <= maxPrice);
-                                    }).toList();
-                                  }
+                                  matchedItem = matchedItem.where((item) {
+                                    return (double.parse(item.price) >=
+                                                minPrice.toDouble() &&
+                                            double.parse(item.price) <=
+                                                maxPrice.toDouble()) &&
+                                        double.parse(item.rating) >=
+                                            rating.toDouble();
+                                  }).toList();
+                                  matchedItem.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    rating != 0) {
+                                  matchedItem = matchedItem.where((item) {
+                                    return double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble() &&
+                                        double.parse(item.rating) >=
+                                            rating.toDouble();
+                                  }).toList();
+                                } else if (minPrice != 0 &&
+                                    maxPrice != 0 &&
+                                    sortedByPopularity) {
+                                  matchedItem = matchedItem.where((item) {
+                                    return (double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble());
+                                  }).toList();
+                                  matchedItem.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (rating != 0 && sortedByPopularity) {
+                                  matchedItem = matchedItem.where((item) {
+                                    return double.parse(item.rating) >=
+                                        rating.toDouble();
+                                  }).toList();
+                                  matchedItem.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
+                                } else if (minPrice != 0 && maxPrice != 0) {
+                                  matchedItem = matchedItem.where((item) {
+                                    return (double.parse(item.price) >=
+                                            minPrice.toDouble() &&
+                                        double.parse(item.price) <=
+                                            maxPrice.toDouble());
+                                  }).toList();
+                                } else if (rating != 0) {
+                                  matchedItem = matchedItem.where((item) {
+                                    return double.parse(item.rating) >=
+                                        rating.toDouble();
+                                  }).toList();
+                                } else if (sortedByPopularity) {
+                                  matchedItem.sort((b, a) {
+                                    return a.totalSales.compareTo(b.totalSales);
+                                  });
                                 }
 
                                 if (matchedItem.isEmpty) {
@@ -397,10 +453,10 @@ class _SearchListingState extends State<SearchListing> {
                                       child: GridView.builder(
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            mainAxisSpacing: 5,
-                                            crossAxisSpacing: 5,
-                                          ),
+                                                  crossAxisCount: 2,
+                                                  mainAxisSpacing: 5,
+                                                  crossAxisSpacing: 5,
+                                                  childAspectRatio: 0.9),
                                           itemCount: matchedItem.length,
                                           itemBuilder: (context, index) {
                                             return SizedBox(
@@ -497,9 +553,11 @@ class _SearchListingState extends State<SearchListing> {
                                                                           .start,
                                                                   children: [
                                                                     RatingBar.builder(
+                                                                        allowHalfRating: true,
+                                                                        ignoreGestures: true,
                                                                         glow: false,
                                                                         updateOnDrag: true,
-                                                                        initialRating: 1,
+                                                                        initialRating: double.parse(matchedItem[index].rating),
                                                                         unratedColor: Colors.grey[300],
                                                                         minRating: 1,
                                                                         itemSize: 15,
@@ -571,6 +629,27 @@ class _SearchListingState extends State<SearchListing> {
                                                                       style:
                                                                           listingDescription,
                                                                     ),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    Text(
+                                                                      'Sold: ${matchedItem[index].totalSales}',
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              10,
+                                                                          fontFamily:
+                                                                              'Roboto',
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          color:
+                                                                              secondaryColor),
+                                                                    )
                                                                   ],
                                                                 )
                                                               ],
