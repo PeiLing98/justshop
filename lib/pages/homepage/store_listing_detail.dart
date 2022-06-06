@@ -49,6 +49,12 @@ class _StoreListingDetailState extends State<StoreListingDetail> {
                 return item.storeId == widget.store.storeId;
               }).toList();
 
+              matchedStoreItem.sort((a, b) {
+                return a.listingName
+                    .toLowerCase()
+                    .compareTo(b.listingName.toLowerCase());
+              });
+
               return StreamBuilder<List<Review>>(
                   stream: DatabaseService(uid: "").review,
                   builder: (context, snapshot) {
@@ -59,6 +65,10 @@ class _StoreListingDetailState extends State<StoreListingDetail> {
                       matchedReviews = reviews?.where((review) {
                         return review.storeId == widget.store.storeId;
                       }).toList();
+
+                      matchedReviews?.sort((b, a) {
+                        return a.ratingStar.compareTo(b.ratingStar);
+                      });
 
                       for (int i = 0; i < matchedReviews!.length; i++) {
                         if (i == 0) {
@@ -472,13 +482,11 @@ class _StoreListingDetailState extends State<StoreListingDetail> {
                                                               listingBody:
                                                                   SingleChildScrollView(
                                                                 child: SizedBox(
-                                                                    height:
-                                                                        matchedStoreItem!.length *
-                                                                            80,
+                                                                    height: 320,
                                                                     child: ListView
                                                                         .builder(
                                                                             itemCount:
-                                                                                matchedStoreItem.length,
+                                                                                matchedStoreItem?.length,
                                                                             itemBuilder: (context, index) {
                                                                               return Card(
                                                                                   elevation: 3,

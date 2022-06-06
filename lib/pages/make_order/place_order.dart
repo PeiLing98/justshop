@@ -94,16 +94,13 @@ class _PlaceOrderState extends State<PlaceOrder> {
                       }
 
                       for (int i = 0; i < widget.selectedCart.length; i++) {
-                        order.add(
-                          {
-                            'store': matchedStore[i].storeId,
-                            'listing': widget.selectedCart[i]['item'].listingId,
-                            'quantity': widget.selectedCart[i]['cart'].quantity,
-                            'request': requestList![i],
-                            'orderStatus': orderStatus
-                          }
-                        );
-                        
+                        order.add({
+                          'store': matchedStore[i].storeId,
+                          'listing': widget.selectedCart[i]['item'].listingId,
+                          'quantity': widget.selectedCart[i]['cart'].quantity,
+                          'request': requestList![i],
+                          'orderStatus': orderStatus
+                        });
                       }
 
                       return Scaffold(
@@ -116,11 +113,15 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                   children: [
                                     const SizedBox(
                                         height: 40, child: TopAppBar()),
-                                    const TitleAppBar(
-                                        title: 'Check Out',
-                                        iconFlex: 3,
-                                        titleFlex: 5,
-                                        hasArrow: true),
+                                    TitleAppBar(
+                                      title: 'Check Out',
+                                      iconFlex: 3,
+                                      titleFlex: 5,
+                                      hasArrow: true,
+                                      onClick: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15),

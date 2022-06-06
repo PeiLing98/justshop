@@ -129,10 +129,15 @@ class _BusinessFullOrderState extends State<BusinessFullOrder> {
                                     const SizedBox(
                                         height: 40, child: TopAppBar()),
                                     TitleAppBar(
-                                        title: 'Order #${widget.orderNo}',
-                                        iconFlex: 4,
-                                        titleFlex: 6,
-                                        hasArrow: true),
+                                      title: 'Order #${widget.orderNo}',
+                                      iconFlex: 4,
+                                      titleFlex: 6,
+                                      hasArrow: true,
+                                      onClick: () {
+                                        Navigator.pushNamed(
+                                            context, '/businessorder');
+                                      },
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15),

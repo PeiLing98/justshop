@@ -3,6 +3,7 @@ import 'package:final_year_project/components/input_text_box.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AlertTextModal extends StatefulWidget {
   final String alertContent;
@@ -339,6 +340,113 @@ class _ReviewModalState extends State<ReviewModal> {
                             child: PurpleTextButton(
                                 buttonText: 'Confirm',
                                 onClick: widget.confirmOnClick)),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ShareSocialMediaModal extends StatefulWidget {
+  final VoidCallback facebookOnClick;
+  final VoidCallback instagramOnClick;
+  final VoidCallback whatsappOnClick;
+  const ShareSocialMediaModal(
+      {Key? key,
+      required this.facebookOnClick,
+      required this.instagramOnClick,
+      required this.whatsappOnClick})
+      : super(key: key);
+
+  @override
+  _ShareSocialMediaModalState createState() => _ShareSocialMediaModalState();
+}
+
+class _ShareSocialMediaModalState extends State<ShareSocialMediaModal> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Dialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: SizedBox(
+          height: 180,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 25,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: CloseButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+              const Text(
+                'Share With Others',
+                style: boldContentTitle,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: widget.facebookOnClick,
+                          iconSize: 50,
+                          icon: const Icon(FontAwesomeIcons.facebookSquare,
+                              color: Color.fromRGBO(66, 103, 178, 1)),
+                        ),
+                        const Text(
+                          'Facebook',
+                          style: buttonLabelStyle,
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: widget.instagramOnClick,
+                          iconSize: 50,
+                          icon: const Icon(FontAwesomeIcons.instagramSquare,
+                              color: Color.fromRGBO(233, 89, 80, 1)),
+                        ),
+                        const Text(
+                          'Instagram',
+                          style: buttonLabelStyle,
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: widget.whatsappOnClick,
+                          iconSize: 50,
+                          icon: const Icon(FontAwesomeIcons.whatsappSquare,
+                              color: Color.fromRGBO(40, 209, 70, 1)),
+                        ),
+                        const Text(
+                          'WhatsApp',
+                          style: buttonLabelStyle,
+                        )
                       ],
                     )
                   ],

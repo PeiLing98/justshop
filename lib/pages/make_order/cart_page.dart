@@ -122,11 +122,16 @@ class _CartPageState extends State<CartPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 40, child: TopAppBar()),
-                                const TitleAppBar(
-                                    title: 'Cart',
-                                    iconFlex: 3,
-                                    titleFlex: 4,
-                                    hasArrow: true),
+                                TitleAppBar(
+                                  title: 'Cart',
+                                  iconFlex: 3,
+                                  titleFlex: 4,
+                                  hasArrow: true,
+                                  onClick: () {
+                                    Navigator.pushNamed(
+                                        context, '/pagescontroller');
+                                  },
+                                ),
                                 SizedBox(
                                     height: 550,
                                     child: ListingTabBar(

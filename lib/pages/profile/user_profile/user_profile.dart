@@ -38,13 +38,16 @@ class _UserProfileState extends State<UserProfile> {
                 child: Column(
                   children: [
                     const SizedBox(height: 40, child: TopAppBar()),
-                    const Expanded(
+                    Expanded(
                       flex: 1,
                       child: TitleAppBar(
                         title: "User Profile",
                         iconFlex: 3,
                         titleFlex: 5,
                         hasArrow: true,
+                        onClick: () {
+                          Navigator.pushNamed(context, '/profile');
+                        },
                       ),
                     ),
                     Expanded(

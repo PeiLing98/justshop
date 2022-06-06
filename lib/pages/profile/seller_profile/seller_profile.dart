@@ -37,13 +37,16 @@ class _SellerProfileState extends State<SellerProfile> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const Expanded(flex: 1, child: TopAppBar()),
-                  const Expanded(
+                  Expanded(
                     flex: 1,
                     child: TitleAppBar(
                       title: "Business Profile",
                       iconFlex: 3,
                       titleFlex: 6,
                       hasArrow: true,
+                      onClick: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
                     ),
                   ),
                   Expanded(

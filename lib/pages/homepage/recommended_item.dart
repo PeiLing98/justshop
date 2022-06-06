@@ -4,15 +4,16 @@ import 'package:final_year_project/models/listing_model.dart';
 import 'package:final_year_project/pages/homepage/listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class ItemListing extends StatefulWidget {
-  const ItemListing({Key? key}) : super(key: key);
+class RecommendedItem extends StatefulWidget {
+  const RecommendedItem({Key? key}) : super(key: key);
 
   @override
-  _ItemListingState createState() => _ItemListingState();
+  _RecommendedItemState createState() => _RecommendedItemState();
 }
 
-class _ItemListingState extends State<ItemListing> {
+class _RecommendedItemState extends State<RecommendedItem> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Listing>>(
@@ -63,11 +64,6 @@ class _ItemListingState extends State<ItemListing> {
                                 MaterialPageRoute(
                                     builder: (context) => ListingDetail(
                                           listing: item[index],
-                                          // storeImagePath:
-                                          //     matchedStore![index]
-                                          //         .imagePath,
-                                          // storeName: matchedStore[index]
-                                          //     .businessName
                                         )));
                           },
                           child: Row(
@@ -101,7 +97,7 @@ class _ItemListingState extends State<ItemListing> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
-                                        height: 50,
+                                        height: 62,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -111,6 +107,27 @@ class _ItemListingState extends State<ItemListing> {
                                               style: buttonLabelStyle,
                                               overflow: TextOverflow.visible,
                                             ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            RatingBar.builder(
+                                                allowHalfRating: true,
+                                                ignoreGestures: true,
+                                                glow: false,
+                                                updateOnDrag: true,
+                                                initialRating: double.parse(
+                                                    item[index].rating),
+                                                unratedColor: Colors.grey[300],
+                                                minRating: 1,
+                                                itemSize: 13,
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                      Icons.star,
+                                                      color: secondaryColor,
+                                                    ),
+                                                onRatingUpdate: (rating) {
+                                                  //print(rating);
+                                                }),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -124,19 +141,16 @@ class _ItemListingState extends State<ItemListing> {
                                           ],
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
                                       SizedBox(
-                                        height: 15,
+                                        height: 10,
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
-                                          children: const [
+                                          children: [
                                             Text(
-                                              '5 Sold',
-                                              style: TextStyle(
-                                                  fontSize: 12,
+                                              'Sales: ${item[index].totalSales}',
+                                              style: const TextStyle(
+                                                  fontSize: 10,
                                                   fontFamily: 'Roboto',
                                                   fontWeight: FontWeight.bold,
                                                   color: secondaryColor),

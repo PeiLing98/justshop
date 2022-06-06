@@ -2,7 +2,7 @@ import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/pages/filter/filter.dart';
 import 'package:final_year_project/pages/homepage/home_page.dart';
 import 'package:final_year_project/pages/profile/profile.dart';
-import 'package:final_year_project/pages/ranking_blog.dart';
+import 'package:final_year_project/pages/ranking_blog/ranking_blog.dart';
 import 'package:final_year_project/pages/sign_up_store/register_business.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +35,8 @@ class _PagesControllerState extends State<PagesController> {
       },
       child: Scaffold(
         body: SafeArea(
-          child: screens[currentIndex],
+          child: IndexedStack(
+              index: currentIndex, children: [screens[currentIndex]]),
         ),
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(

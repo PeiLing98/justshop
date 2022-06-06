@@ -4,7 +4,7 @@ import 'package:final_year_project/components/search_bar.dart';
 import 'package:final_year_project/pages/homepage/deals_near_you.dart';
 import 'package:final_year_project/pages/homepage/store_listing.dart';
 import 'package:flutter/material.dart';
-import 'package:final_year_project/pages/item_listing.dart';
+import 'package:final_year_project/pages/homepage/recommended_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
-                child: SizedBox(height: 100, child: ItemListing()),
+                child: SizedBox(height: 100, child: RecommendedItem()),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),

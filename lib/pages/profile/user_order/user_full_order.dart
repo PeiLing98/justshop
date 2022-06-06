@@ -115,11 +115,16 @@ class _UserFullOrderState extends State<UserFullOrder> {
                                                   height: 40,
                                                   child: TopAppBar()),
                                               TitleAppBar(
-                                                  title:
-                                                      'Order #${widget.orderNo}',
-                                                  iconFlex: 4,
-                                                  titleFlex: 6,
-                                                  hasArrow: true),
+                                                title:
+                                                    'Order #${widget.orderNo}',
+                                                iconFlex: 4,
+                                                titleFlex: 6,
+                                                hasArrow: true,
+                                                onClick: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/userorder');
+                                                },
+                                              ),
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(

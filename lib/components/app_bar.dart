@@ -45,13 +45,15 @@ class TitleAppBar extends StatefulWidget {
   final int iconFlex;
   final int titleFlex;
   final bool hasArrow;
+  final VoidCallback? onClick;
 
   const TitleAppBar(
       {Key? key,
       required this.title,
       required this.iconFlex,
       required this.titleFlex,
-      required this.hasArrow})
+      required this.hasArrow,
+      this.onClick})
       : super(key: key);
 
   @override
@@ -71,9 +73,7 @@ class _TitleAppBarState extends State<TitleAppBar> {
             Expanded(
               flex: widget.iconFlex,
               child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: widget.onClick,
                 icon: const Icon(Icons.arrow_back_ios),
                 iconSize: 20,
                 alignment: Alignment.centerLeft,

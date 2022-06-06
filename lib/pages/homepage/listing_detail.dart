@@ -13,9 +13,11 @@ import 'package:final_year_project/models/store_model.dart';
 import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/homepage/store_listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
+import 'package:final_year_project/services/dynamic_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ListingDetail extends StatefulWidget {
   final Listing listing;
@@ -34,6 +36,12 @@ class _ListingDetailState extends State<ListingDetail> {
   bool isSelected = false;
   double listingAverageRating = 0;
   int sales = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    DynamicLink.initDynamicLink(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -334,7 +342,13 @@ class _ListingDetailState extends State<ListingDetail> {
                                                                           IconButton(
                                                                               padding: const EdgeInsets.all(0),
                                                                               alignment: Alignment.centerRight,
-                                                                              onPressed: () {},
+                                                                              onPressed: () async {
+                                                                                String generatedLink = await DynamicLink.createDynamicLink(false, widget.listing);
+
+                                                                                Share.share(generatedLink);
+
+                                                                                //print(generatedLink);
+                                                                              },
                                                                               icon: const Icon(
                                                                                 Icons.share_outlined,
                                                                                 size: 25,

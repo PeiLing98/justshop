@@ -78,11 +78,16 @@ class _SaveListState extends State<SaveList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 40, child: TopAppBar()),
-                              const TitleAppBar(
-                                  title: 'Save List',
-                                  iconFlex: 2,
-                                  titleFlex: 3,
-                                  hasArrow: true),
+                              TitleAppBar(
+                                title: 'Save List',
+                                iconFlex: 2,
+                                titleFlex: 3,
+                                hasArrow: true,
+                                onClick: () {
+                                  Navigator.pushNamed(
+                                      context, '/pagescontroller');
+                                },
+                              ),
                               SizedBox(
                                 height: 580,
                                 child: ListingTabBar(

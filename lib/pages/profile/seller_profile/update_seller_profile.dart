@@ -164,13 +164,16 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     const Expanded(flex: 1, child: TopAppBar()),
-                    const Expanded(
+                    Expanded(
                       flex: 1,
                       child: TitleAppBar(
                         title: "Update Business Profile",
                         iconFlex: 2,
                         titleFlex: 7,
                         hasArrow: true,
+                        onClick: () {
+                          Navigator.pushNamed(context, '/sellerprofile');
+                        },
                       ),
                     ),
                     Expanded(

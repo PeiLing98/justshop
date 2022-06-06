@@ -91,11 +91,14 @@ class _AddListingState extends State<AddListing> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40, child: TopAppBar()),
-                const TitleAppBar(
+                TitleAppBar(
                   title: 'Add Listing',
                   iconFlex: 2,
                   titleFlex: 3,
                   hasArrow: true,
+                  onClick: () {
+                    Navigator.pushNamed(context, '/managelisting');
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),

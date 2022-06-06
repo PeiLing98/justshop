@@ -72,13 +72,16 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                     child: Column(
                       children: [
                         const SizedBox(height: 40, child: TopAppBar()),
-                        const Expanded(
+                        Expanded(
                           flex: 1,
                           child: TitleAppBar(
                             title: "Update User Profile",
                             iconFlex: 3,
                             titleFlex: 7,
                             hasArrow: true,
+                            onClick: () {
+                              Navigator.pushNamed(context, '/userprofile');
+                            },
                           ),
                         ),
                         Expanded(

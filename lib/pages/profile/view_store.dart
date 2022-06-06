@@ -53,6 +53,12 @@ class _ViewStoreState extends State<ViewStore> {
                           return item.storeId == userStoreData!.storeId;
                         }).toList();
 
+                        matchedStoreItem?.sort((a, b) {
+                          return a.listingName
+                              .toLowerCase()
+                              .compareTo(b.listingName.toLowerCase());
+                        });
+
                         if (snapshot.hasData) {
                           return StreamBuilder<List<Review>>(
                               stream: DatabaseService(uid: "").review,
@@ -65,6 +71,10 @@ class _ViewStoreState extends State<ViewStore> {
                                     return review.storeId ==
                                         userStoreData?.storeId;
                                   }).toList();
+
+                                  matchedReviews?.sort((b, a) {
+                                    return a.ratingStar.compareTo(b.ratingStar);
+                                  });
 
                                   return StreamBuilder<List<AllUser>>(
                                       stream: DatabaseService(uid: "").allUser,

@@ -103,11 +103,14 @@ class _SetupStoreState extends State<SetupStore> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 40, child: TopAppBar()),
-                  const TitleAppBar(
+                  TitleAppBar(
                     title: '2: Set Up Your Store',
                     iconFlex: 1,
                     titleFlex: 3,
                     hasArrow: true,
+                    onClick: () {
+                      Navigator.pop(context);
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),

@@ -54,11 +54,14 @@ class _ManageListingState extends State<ManageListing> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 40, child: TopAppBar()),
-                                const TitleAppBar(
+                                TitleAppBar(
                                   title: 'Manage Listing',
                                   iconFlex: 2,
                                   titleFlex: 4,
                                   hasArrow: true,
+                                  onClick: () {
+                                    Navigator.pushNamed(context, '/profile');
+                                  },
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 5),

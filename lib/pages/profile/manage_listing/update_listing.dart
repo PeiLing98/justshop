@@ -110,11 +110,14 @@ class _UpdateListingState extends State<UpdateListing> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40, child: TopAppBar()),
-                const TitleAppBar(
+                TitleAppBar(
                   title: 'Update Listing',
                   iconFlex: 1,
                   titleFlex: 2,
                   hasArrow: true,
+                  onClick: () {
+                    Navigator.pushNamed(context, '/managelisting');
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),

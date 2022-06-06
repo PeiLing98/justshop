@@ -94,13 +94,16 @@ class _BusinessOrderState extends State<BusinessOrder> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 40, child: TopAppBar()),
-                          const Expanded(
+                          Expanded(
                             flex: 1,
                             child: TitleAppBar(
                               title: "Business Order",
                               iconFlex: 3,
                               titleFlex: 6,
                               hasArrow: true,
+                              onClick: () {
+                                Navigator.pushNamed(context, '/profile');
+                              },
                             ),
                           ),
                           Expanded(
