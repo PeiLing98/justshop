@@ -35,8 +35,7 @@ class _PagesControllerState extends State<PagesController> {
       },
       child: Scaffold(
         body: SafeArea(
-          child: IndexedStack(
-              index: currentIndex, children: [screens[currentIndex]]),
+          child: screens[currentIndex],
         ),
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(

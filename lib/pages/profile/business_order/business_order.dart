@@ -50,43 +50,34 @@ class _BusinessOrderState extends State<BusinessOrder> {
 
                   for (int i = 0; i < matchedOrder.length; i++) {
                     for (int j = 0; j < matchedOrder[i].orderItem.length; j++) {
-                      if (matchedOrder[i].orderItem[j]["orderStatus"] ==
-                          "To Ship") {
+                      if ((matchedOrder[i].orderItem[j]["orderStatus"] ==
+                                  "To Ship" &&
+                              matchedOrder[i].orderItem[j]["store"] ==
+                                  userStoreData?.storeId) ||
+                          (matchedOrder[i].orderItem[j]["orderStatus"] ==
+                                  "Preparing" &&
+                              matchedOrder[i].orderItem[j]["store"] ==
+                                  userStoreData?.storeId)) {
                         if (!newOrder.contains(matchedOrder[i])) {
                           newOrder.add(matchedOrder[i]);
                         }
                       } else if (matchedOrder[i].orderItem[j]["orderStatus"] ==
-                          "To Receive") {
+                              "To Receive" &&
+                          matchedOrder[i].orderItem[j]["store"] ==
+                              userStoreData?.storeId) {
                         if (!deliveredOrder.contains(matchedOrder[i])) {
                           deliveredOrder.add(matchedOrder[i]);
                         }
-                      } else {
+                      } else if (matchedOrder[i].orderItem[j]["orderStatus"] ==
+                              "Completed" &&
+                          matchedOrder[i].orderItem[j]["store"] ==
+                              userStoreData?.storeId) {
                         if (!completedOrder.contains(matchedOrder[i])) {
                           completedOrder.add(matchedOrder[i]);
                         }
                       }
                     }
                   }
-
-                  // for (int i = 0; i < newOrder.length; i++) {
-                  //   for (int j = 0; j < newOrder[i].orderItem.length; j++) {
-                  //     if (newOrder[i].orderItem[j]['store'] ==
-                  //         userStoreData?.storeId) {
-                  //       if (!(newOrder[i].orderItem.every((orderItem) =>
-                  //           orderItem['orderStatus'] == "To Ship"))) {
-                  //         // if (newOrder.contains(newOrder[i])) {
-                  //         //   if (newOrder.length == 1) {
-                  //         //     newOrder.clear();
-                  //         //   }
-                  //         newOrder.remove(newOrder[i]);
-                  //         //j = newOrder[i].orderItem.length - 1;
-                  //         // }
-                  //       }
-                  //     }
-                  //   }
-                  // }
-
-                  //print(newOrder.length);
 
                   return Scaffold(
                     body: SafeArea(

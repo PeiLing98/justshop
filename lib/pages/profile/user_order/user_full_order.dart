@@ -29,6 +29,7 @@ class UserFullOrder extends StatefulWidget {
 class _UserFullOrderState extends State<UserFullOrder> {
   double stars = 0;
   String review = "";
+  String orderStatus = "";
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser?>(context);
@@ -83,6 +84,7 @@ class _UserFullOrderState extends State<UserFullOrder> {
                                 List<Review>? matchedReview = [];
                                 List orderedMatchedReview =
                                     List.filled(matchedItem.length, "");
+                                List allOrder = [];
 
                                 matchedReview = reviews?.where((review) {
                                   return review.orderId == widget.order.orderId;
@@ -99,6 +101,15 @@ class _UserFullOrderState extends State<UserFullOrder> {
                                       orderedMatchedReview[i] =
                                           matchedReview[j];
                                     }
+                                  }
+                                }
+
+                                for (int i = 0;
+                                    i < widget.order.orderItem.length;
+                                    i++) {
+                                  if (allOrder.length <
+                                      widget.order.orderItem.length) {
+                                    allOrder.add(widget.order.orderItem[i]);
                                   }
                                 }
 
@@ -384,7 +395,47 @@ class _UserFullOrderState extends State<UserFullOrder> {
                                                                                   },
                                                                                 ),
                                                                               ),
-                                                                              if (orderedMatchedReview[index] == "")
+                                                                              if (widget.order.orderItem[index]['orderStatus'] == "To Receive")
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.only(left: 10),
+                                                                                  child: SizedBox(
+                                                                                    width: 100,
+                                                                                    height: 30,
+                                                                                    child: PurpleTextButton(
+                                                                                      buttonText: 'Order Received',
+                                                                                      onClick: () {
+                                                                                        showDialog(
+                                                                                            context: context,
+                                                                                            builder: (context) {
+                                                                                              return YesNoAlertModal(
+                                                                                                  alertContent: 'Have you received the order?',
+                                                                                                  closeOnClick: () {
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  yesOnClick: () async {
+                                                                                                    setState(() {
+                                                                                                      orderStatus = "Completed";
+                                                                                                      widget.order.orderItem[index]['orderStatus'] = orderStatus;
+                                                                                                    });
+
+                                                                                                    for (int i = 0; i < allOrder.length; i++) {
+                                                                                                      if (allOrder[i]['listing'] == widget.order.orderItem[index]['listing']) {
+                                                                                                        allOrder[i] = widget.order.orderItem[index];
+                                                                                                      }
+                                                                                                    }
+
+                                                                                                    await DatabaseService(uid: user?.uid).updateOrderStatus(allOrder, widget.order.orderId);
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  noOnClick: () {
+                                                                                                    Navigator.pop(context);
+                                                                                                  });
+                                                                                            });
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              if (orderedMatchedReview[index] == "" && widget.order.orderItem[index]['orderStatus'] == "Completed")
                                                                                 Padding(
                                                                                   padding: const EdgeInsets.only(left: 10),
                                                                                   child: SizedBox(

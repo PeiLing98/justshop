@@ -37,7 +37,9 @@ class _UserOrderState extends State<UserOrder> {
 
             for (int i = 0; i < matchedOrder!.length; i++) {
               for (int j = 0; j < matchedOrder[i].orderItem.length; j++) {
-                if (matchedOrder[i].orderItem[j]["orderStatus"] == "To Ship") {
+                if (matchedOrder[i].orderItem[j]["orderStatus"] == "To Ship" ||
+                    matchedOrder[i].orderItem[j]["orderStatus"] ==
+                        "Preparing") {
                   if (!toShipOrder.contains(matchedOrder[i])) {
                     toShipOrder.add(matchedOrder[i]);
                   }

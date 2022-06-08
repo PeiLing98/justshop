@@ -150,12 +150,12 @@ class _YesNoAlertModalState extends State<YesNoAlertModal> {
 }
 
 class OrderStatusModal extends StatefulWidget {
-  final VoidCallback inProgressOnClick;
-  final VoidCallback completedOnClick;
+  final VoidCallback preparingOnClick;
+  final VoidCallback deliveredOnClick;
   const OrderStatusModal(
       {Key? key,
-      required this.inProgressOnClick,
-      required this.completedOnClick})
+      required this.deliveredOnClick,
+      required this.preparingOnClick})
       : super(key: key);
 
   @override
@@ -205,6 +205,22 @@ class _OrderStatusModalState extends State<OrderStatusModal> {
                       height: 10,
                     ),
                     const Text(
+                      'If the order is preparing now,',
+                      style: ratingLabelStyle,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                        width: 80,
+                        height: 30,
+                        child: PurpleTextButton(
+                            buttonText: 'Preparing',
+                            onClick: widget.preparingOnClick)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
                       'If the order is delivered,',
                       style: ratingLabelStyle,
                     ),
@@ -216,23 +232,7 @@ class _OrderStatusModalState extends State<OrderStatusModal> {
                         height: 30,
                         child: PurpleTextButton(
                             buttonText: 'Delivered',
-                            onClick: widget.inProgressOnClick)),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      'If the order is completed,',
-                      style: ratingLabelStyle,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SizedBox(
-                        width: 80,
-                        height: 30,
-                        child: PurpleTextButton(
-                            buttonText: 'Complete',
-                            onClick: widget.completedOnClick)),
+                            onClick: widget.deliveredOnClick)),
                   ],
                 ),
               ),

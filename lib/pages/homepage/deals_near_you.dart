@@ -2,12 +2,12 @@ import 'package:final_year_project/components/loading.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/models/listing_model.dart';
 import 'package:final_year_project/models/store_model.dart';
-import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/homepage/listing_detail.dart';
 import 'package:final_year_project/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoder2/geocoder2.dart' as geoCo;
 
 class DealsNearYou extends StatefulWidget {
   const DealsNearYou({Key? key}) : super(key: key);
@@ -17,15 +17,45 @@ class DealsNearYou extends StatefulWidget {
 }
 
 class _DealsNearYouState extends State<DealsNearYou> {
+  final kGoogleApiKey = 'AIzaSyCoho5rQrIjW0KGmJXpwZmuo_dgJXCgTTs';
+  String currentState = "";
+  String currentCity = "";
+
+  Future<Position> getCurrentPosition() async {
+    Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        forceAndroidLocationManager: true);
+
+    return currentPosition;
+  }
+
+  getFormattedAddressFromCoordinates(double latitude, double longtitude) async {
+    var address = await geoCo.Geocoder2.getDataFromCoordinates(
+        latitude: latitude,
+        longitude: longtitude,
+        googleMapApiKey: kGoogleApiKey);
+    var city = address.postalCode;
+    var state = address.state;
+
+    setState(() {
+      currentCity = city;
+      currentState = state;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser?>(context);
-
-    return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user?.uid).userData,
-        builder: (context, snapshot) {
+    return FutureBuilder(
+        future: getCurrentPosition(),
+        builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
           if (snapshot.hasData) {
-            UserData? userData = snapshot.data;
+            Position? position = snapshot.data;
+            if (position != null) {
+              double lat = position.latitude;
+              double long = position.longitude;
+              getFormattedAddressFromCoordinates(lat, long);
+            }
+
             return StreamBuilder<List<Store>>(
                 stream: DatabaseService(uid: "").stores,
                 builder: (context, snapshot) {
@@ -33,8 +63,8 @@ class _DealsNearYouState extends State<DealsNearYou> {
                     List<Store>? stores = snapshot.data;
                     List<Store>? matchedStoreItem;
                     matchedStoreItem = stores!.where((stores) {
-                      return stores.city == userData?.postcode ||
-                          stores.state == userData?.state;
+                      return stores.city == currentCity ||
+                          stores.state == currentState;
                     }).toList();
 
                     if (matchedStoreItem.isEmpty) {
@@ -64,8 +94,12 @@ class _DealsNearYouState extends State<DealsNearYou> {
                                 List<Listing>? matchedItem;
                                 matchedItem = item!.where((item) {
                                   return item.storeId ==
-                                      matchedStoreItem![index].storeId;
+                                      matchedStoreItem?[index].storeId;
                                 }).toList();
+
+                                matchedItem.sort((b, a) {
+                                  return a.rating.compareTo(b.rating);
+                                });
 
                                 if (matchedItem.isEmpty) {
                                   return SizedBox(
@@ -244,42 +278,27 @@ class _DealsNearYouState extends State<DealsNearYou> {
                                                 )),
                                           ),
                                         );
-                                        //   } else {
-                                        //     return const Loading();
-                                        //   }
-                                        // });
                                       }),
                                 );
                               } else {
-                                return SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Text(
-                                        'No store is near you currently.',
-                                        style: boldContentTitle,
-                                      )
-                                    ],
-                                  ),
-                                );
+                                // return SizedBox(
+                                //   width: MediaQuery.of(context).size.width,
+                                //   child: Row(
+                                //     mainAxisAlignment: MainAxisAlignment.center,
+                                //     children: const [
+                                //       Text(
+                                //         'No store is near you currently.',
+                                //         style: boldContentTitle,
+                                //       )
+                                //     ],
+                                //   ),
+                                // );
+                                return const Loading();
                               }
                             });
                       },
                     );
                   } else {
-                    // return SizedBox(
-                    //   width: MediaQuery.of(context).size.width,
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: const [
-                    //       Text(
-                    //         'No store is near you currently.',
-                    //         style: boldContentTitle,
-                    //       )
-                    //     ],
-                    //   ),
-                    // );
                     return const Loading();
                   }
                 });

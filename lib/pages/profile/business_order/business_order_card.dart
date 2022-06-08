@@ -107,9 +107,12 @@ class _BusinessOrderCardState extends State<BusinessOrderCard> {
                                           matchedOrderStatus[index] == "To Ship"
                                               ? 'New Order!'
                                               : matchedOrderStatus[index] ==
-                                                      "To Receive"
-                                                  ? 'Order Delivered'
-                                                  : "Completed",
+                                                      "Preparing"
+                                                  ? 'Preparing'
+                                                  : matchedOrderStatus[index] ==
+                                                          "To Receive"
+                                                      ? 'Order Delivered'
+                                                      : "Completed",
                                           style: priceLabelStyle,
                                         ),
                                       ],

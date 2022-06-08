@@ -197,9 +197,11 @@ class _BusinessFullOrderState extends State<BusinessFullOrder> {
                                                                             'To Ship'
                                                                         ? 'New Order!'
                                                                         : matchedOrderItem[index]['order']['orderStatus'] ==
-                                                                                'To Receive'
-                                                                            ? 'Order Delivered'
-                                                                            : 'Completed',
+                                                                                'Preparing'
+                                                                            ? 'Preparing'
+                                                                            : matchedOrderItem[index]['order']['orderStatus'] == 'To Receive'
+                                                                                ? 'Order Delivered'
+                                                                                : 'Completed',
                                                                     style:
                                                                         priceLabelStyle,
                                                                   ),
@@ -361,10 +363,10 @@ class _BusinessFullOrderState extends State<BusinessFullOrder> {
                                                                               context,
                                                                           builder:
                                                                               (context) {
-                                                                            return OrderStatusModal(inProgressOnClick:
+                                                                            return OrderStatusModal(preparingOnClick:
                                                                                 () async {
                                                                               setState(() {
-                                                                                orderStatus = "To Receive";
+                                                                                orderStatus = "Preparing";
                                                                                 matchedOrderItem[index]['order']['orderStatus'] = orderStatus;
                                                                               });
 
@@ -376,10 +378,10 @@ class _BusinessFullOrderState extends State<BusinessFullOrder> {
 
                                                                               await DatabaseService(uid: user?.uid).updateOrderStatus(allOrder, widget.order.orderId);
                                                                               Navigator.pop(context);
-                                                                            }, completedOnClick:
+                                                                            }, deliveredOnClick:
                                                                                 () async {
                                                                               setState(() {
-                                                                                orderStatus = "Completed";
+                                                                                orderStatus = "To Receive";
                                                                                 matchedOrderItem[index]['order']['orderStatus'] = orderStatus;
                                                                               });
                                                                               for (int i = 0; i < allOrder.length; i++) {

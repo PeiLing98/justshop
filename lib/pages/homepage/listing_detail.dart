@@ -76,6 +76,10 @@ class _ListingDetailState extends State<ListingDetail> {
                         return review.listingId == widget.listing.listingId;
                       }).toList();
 
+                      matchedReviews?.sort((b, a) {
+                        return a.ratingStar.compareTo(b.ratingStar);
+                      });
+
                       for (int i = 0; i < matchedReviews!.length; i++) {
                         if (i == 0) {
                           listingAverageRating =
