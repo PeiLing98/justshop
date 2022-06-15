@@ -142,7 +142,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                               SizedBox(
                                                 height:
                                                     widget.selectedCart.length *
-                                                        185,
+                                                        188,
                                                 child: ListView.builder(
                                                     physics:
                                                         const NeverScrollableScrollPhysics(),
@@ -246,7 +246,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                                                             Row(
                                                                               children: [
                                                                                 Text(
-                                                                                  'RM ' + widget.selectedCart[index]['item'].price,
+                                                                                  'RM ' + (widget.selectedCart[index]['item'].price == "" ? '-' : widget.selectedCart[index]['item'].price),
                                                                                   style: priceLabelStyle,
                                                                                 ),
                                                                                 Text(
@@ -260,7 +260,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                                                               crossAxisAlignment: CrossAxisAlignment.end,
                                                                               children: [
                                                                                 Text(
-                                                                                  'Subtotal: RM' + (double.parse(widget.selectedCart[index]['item'].price) * widget.selectedCart[index]['cart'].quantity).toStringAsFixed(2),
+                                                                                  'Subtotal: RM' + (double.parse(widget.selectedCart[index]['item'].price == "" ? '0' : widget.selectedCart[index]['item'].price) * widget.selectedCart[index]['cart'].quantity).toStringAsFixed(2),
                                                                                   style: priceLabelStyle,
                                                                                 )
                                                                               ],

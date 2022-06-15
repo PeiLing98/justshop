@@ -139,7 +139,7 @@ class _UpdateListingState extends State<UpdateListing> {
                   height: 5,
                 ),
                 SizedBox(
-                  height: 510,
+                  height: 330,
                   child: Form(
                       key: formKey,
                       child: Padding(
@@ -158,6 +158,13 @@ class _UpdateListingState extends State<UpdateListing> {
                                       children: [
                                         const Text('Image',
                                             style: boldContentTitle),
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            '*',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
                                         SizedBox(
                                           height: 20,
                                           child: IconButton(
@@ -167,9 +174,16 @@ class _UpdateListingState extends State<UpdateListing> {
                                             onPressed: selectFile,
                                           ),
                                         ),
-                                        const SizedBox(width: 100),
+                                        const SizedBox(width: 90),
                                         const Text('Listing Category',
                                             style: boldContentTitle),
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            '*',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
                                       ]),
                                   const SizedBox(height: 5),
                                   Row(
@@ -237,10 +251,6 @@ class _UpdateListingState extends State<UpdateListing> {
                                                       subCategoryList = category
                                                           .subCategory[2];
                                                     }
-                                                    print(
-                                                        "category: $_currentSelectedCategory");
-                                                    // print(
-                                                    //     "subCategory: $selectedSubCategory");
                                                   });
                                                 },
                                               ),
@@ -253,8 +263,6 @@ class _UpdateListingState extends State<UpdateListing> {
                                                   setState(() {
                                                     _currentSelectedSubCategory =
                                                         val!;
-                                                    print(
-                                                        "subCategory: $_currentSelectedSubCategory");
                                                   });
                                                 },
                                               )
@@ -273,11 +281,18 @@ class _UpdateListingState extends State<UpdateListing> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: const [
-                                        Text('Listing Price',
+                                        Text('Listing Price (RM)',
                                             style: boldContentTitle),
-                                        SizedBox(width: 110),
+                                        SizedBox(width: 75),
                                         Text('Listing Name',
                                             style: boldContentTitle),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            '*',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
                                       ]),
                                   const SizedBox(height: 5),
                                   SizedBox(
@@ -297,7 +312,6 @@ class _UpdateListingState extends State<UpdateListing> {
                                               onChanged: (val) {
                                                 setState(() {
                                                   _currentPrice = val;
-                                                  print(_currentPrice);
                                                 });
                                               },
                                             ),
@@ -313,9 +327,11 @@ class _UpdateListingState extends State<UpdateListing> {
                                             label:
                                                 'Nasi Lemak / Face Mask / Design',
                                             textLine: 1,
+                                            validator: (val) => val!.isEmpty
+                                                ? 'Listing name is required.'
+                                                : null,
                                             onChanged: (val) {
                                               _currentListingName = val;
-                                              print(_currentListingName);
                                             },
                                           ),
                                         ),
@@ -326,12 +342,23 @@ class _UpdateListingState extends State<UpdateListing> {
                               ),
                             ),
                             SizedBox(
-                              height: 105,
+                              height: 150,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Listing Description',
-                                      style: boldContentTitle),
+                                  Row(
+                                    children: const [
+                                      Text('Listing Description',
+                                          style: boldContentTitle),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          '*',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   const SizedBox(
                                     height: 5,
                                   ),
@@ -339,10 +366,12 @@ class _UpdateListingState extends State<UpdateListing> {
                                     initialValue:
                                         widget.listing.listingDescription,
                                     label: 'Describe Your Listing In Details',
-                                    textLine: 4,
+                                    textLine: 6,
+                                    validator: (val) => val!.isEmpty
+                                        ? 'Listing Description is required.'
+                                        : null,
                                     onChanged: (val) {
                                       _currentListingDescription = val;
-                                      print(_currentListingDescription);
                                     },
                                   ),
                                 ],

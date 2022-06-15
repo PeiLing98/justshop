@@ -270,7 +270,7 @@ class _UserFullOrderState extends State<UserFullOrder> {
                                                                                         Row(
                                                                                           children: [
                                                                                             Text(
-                                                                                              'RM ' + matchedItem[index].price,
+                                                                                              'RM ' + (matchedItem[index].price == "" ? '-' : matchedItem[index].price),
                                                                                               style: priceLabelStyle,
                                                                                             ),
                                                                                             Text(
@@ -284,7 +284,7 @@ class _UserFullOrderState extends State<UserFullOrder> {
                                                                                           crossAxisAlignment: CrossAxisAlignment.end,
                                                                                           children: [
                                                                                             Text(
-                                                                                              'Subtotal: RM' + (double.parse(matchedItem[index].price) * widget.order.orderItem[index]["quantity"]).toStringAsFixed(2),
+                                                                                              'Subtotal: RM' + (double.parse(matchedItem[index].price == "" ? '0' : matchedItem[index].price) * widget.order.orderItem[index]["quantity"]).toStringAsFixed(2),
                                                                                               style: priceLabelStyle,
                                                                                             )
                                                                                           ],

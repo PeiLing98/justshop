@@ -415,7 +415,7 @@ class _ListingDetailState extends State<ListingDetail> {
                                                                             Row(
                                                                               children: [
                                                                                 Text(
-                                                                                  'RM ${widget.listing.price}',
+                                                                                  widget.listing.price == "" ? "RM -" : 'RM ${widget.listing.price}',
                                                                                   style: const TextStyle(
                                                                                     fontSize: 12,
                                                                                     fontFamily: 'Roboto',

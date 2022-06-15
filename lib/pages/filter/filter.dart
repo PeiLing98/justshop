@@ -272,7 +272,7 @@ class _FilterState extends State<Filter> {
                                     style: ratingLabelStyle,
                                     decoration: const InputDecoration(
                                         hintText:
-                                            'Search food, product, service here',
+                                            'Search store here...',
                                         hintStyle: ratingLabelStyle,
                                         border: InputBorder.none,
                                         isCollapsed: true),

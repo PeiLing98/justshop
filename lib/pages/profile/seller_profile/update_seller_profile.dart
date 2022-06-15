@@ -82,6 +82,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
       _currentLongtitude = result[2];
       _currentCity = result[3];
       _currentState = result[4];
+      print(_currentAddress);
     });
   }
 
@@ -179,7 +180,7 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                     Expanded(
                         flex: 13,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: SingleChildScrollView(
                             child: Form(
                               key: _formKey,
@@ -240,22 +241,52 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                     textFieldLine: 1,
                                     textFieldHeight: 30,
                                     isReadOnly: false,
-                                    validator: (val) =>
-                                        val!.isEmpty ? 'Business Name' : null,
+                                    isBold: true,
+                                    isRequired: true,
+                                    validator: (val) => val!.isEmpty
+                                        ? 'Business name is required. '
+                                        : null,
                                     onChanged: (val) => setState(
                                         () => _currentBusinessName = val),
                                   ),
-                                  ProfileTextField(
-                                    textFieldLabel: 'Business Location',
-                                    textFieldValue: userStoreData.address,
-                                    textFieldLine: 3,
-                                    textFieldHeight: 60,
-                                    isReadOnly: false,
-                                    validator: (val) =>
-                                        val!.isEmpty ? 'Address' : null,
-                                    onChanged: (val) =>
-                                        setState(() => _currentAddress = val),
+                                  Row(
+                                    children: const [
+                                      Text('Business Location',
+                                          style: buttonLabelStyle),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          '*',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      )
+                                    ],
                                   ),
+                                  const SizedBox(height: 5),
+                                  Container(
+                                      height: 75,
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black),
+                                      ),
+                                      child: Text(
+                                        _currentAddress ??
+                                            userStoreData.address,
+                                        style: ratingLabelStyle,
+                                      )),
+                                  const SizedBox(height: 5),
+                                  // ProfileTextField(
+                                  //   textFieldLabel: 'Business Location',
+                                  //   textFieldValue: userStoreData.address,
+                                  //   textFieldLine: 3,
+                                  //   textFieldHeight: 60,
+                                  //   isReadOnly: false,
+                                  //   validator: (val) =>
+                                  //       val!.isEmpty ? 'Address' : null,
+                                  //   // onChanged: (val) =>
+                                  //   //     setState(() => va_currentAddress),
+                                  // ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -300,25 +331,35 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                     textFieldLine: 1,
                                     textFieldHeight: 30,
                                     isReadOnly: true,
-                                    validator1: (val) =>
-                                        val!.isEmpty ? 'Start Time' : null,
+                                    isRequired: true,
+                                    validator1: (val) => val!.isEmpty
+                                        ? 'Start time is required.'
+                                        : null,
                                     onChanged1: (val) =>
                                         setState(() => _currentStartTime = val),
                                     onTap1: () => pickStartTime(context),
-                                    validator2: (val) =>
-                                        val!.isEmpty ? 'End Time' : null,
+                                    validator2: (val) => val!.isEmpty
+                                        ? 'End time is required.'
+                                        : null,
                                     onChanged2: (val) =>
                                         setState(() => _currentEndTime = val),
                                     onTap2: () => pickEndTime(context),
                                   ),
                                   ProfileTextField(
+                                    keyboardType: TextInputType.phone,
                                     textFieldLabel: 'Contact Number',
                                     textFieldValue: userStoreData.phoneNumber,
                                     textFieldLine: 1,
                                     textFieldHeight: 30,
                                     isReadOnly: false,
-                                    validator: (val) =>
-                                        val!.isEmpty ? 'PhoneNumber' : null,
+                                    isBold: true,
+                                    isRequired: true,
+                                    validator: (val) => val!.isEmpty
+                                        ? 'Phone number is required.'
+                                        : (!RegExp(phoneNumberPattern)
+                                                .hasMatch(val))
+                                            ? 'Please enter valid phone number.'
+                                            : null,
                                     onChanged: (val) => setState(
                                         () => _currentPhoneNumber = val),
                                   ),
@@ -331,18 +372,21 @@ class _UpdateSellerProfileState extends State<UpdateSellerProfile> {
                                         userStoreData.instagramLink,
                                     textFieldValue3: userStoreData.whatsappLink,
                                     isReadOnly: false,
-                                    validator1: (val) =>
-                                        val!.isEmpty ? 'Facebook Link' : null,
-                                    onChanged1: (val) => setState(
-                                        () => _currentFacebookLink = val),
-                                    validator2: (val) =>
-                                        val!.isEmpty ? 'Instagram Link' : null,
-                                    onChanged2: (val) => setState(
-                                        () => _currentInstagramLink = val),
-                                    validator3: (val) =>
-                                        val!.isEmpty ? 'Whatsapp Link' : null,
-                                    onChanged3: (val) => setState(
-                                        () => _currentWhatsappLink = val),
+                                    onChanged1: (val) {
+                                      setState(() {
+                                        _currentFacebookLink = val;
+                                      });
+                                    },
+                                    onChanged2: (val) {
+                                      setState(() {
+                                        _currentInstagramLink = val;
+                                      });
+                                    },
+                                    onChanged3: (val) {
+                                      setState(() {
+                                        _currentWhatsappLink = val;
+                                      });
+                                    },
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,

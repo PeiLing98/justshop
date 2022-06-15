@@ -156,8 +156,12 @@ class _BusinessOrderCardState extends State<BusinessOrderCard> {
                                                 children: [
                                                   Text(
                                                     'RM ' +
-                                                        matchedItem[index]
-                                                            .price,
+                                                        (matchedItem[index]
+                                                                    .price ==
+                                                                ""
+                                                            ? '-'
+                                                            : matchedItem[index]
+                                                                .price),
                                                     style: priceLabelStyle,
                                                   ),
                                                   Text(

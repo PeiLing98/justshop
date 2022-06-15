@@ -197,9 +197,25 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                         children: const [
                                           Text('Business Logo',
                                               style: boldContentTitle),
-                                          SizedBox(width: 107),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5),
+                                            child: Text(
+                                              '*',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                          SizedBox(width: 95),
                                           Text('Business Name',
                                               style: boldContentTitle),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5),
+                                            child: Text(
+                                              '*',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                       const SizedBox(height: 5),
@@ -254,6 +270,10 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                                     child: StringTextArea(
                                                       label: 'Business Name',
                                                       textLine: 4,
+                                                      validator: (val) => val!
+                                                              .isEmpty
+                                                          ? 'Business name is required.'
+                                                          : null,
                                                       onChanged: (val) {
                                                         setState(() =>
                                                             businessName = val);
@@ -271,8 +291,20 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text('Business Location',
-                                            style: boldContentTitle),
+                                        Row(
+                                          children: const [
+                                            Text('Business Location',
+                                                style: boldContentTitle),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 5),
+                                              child: Text(
+                                                '*',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                         const SizedBox(height: 5),
                                         SizedBox(
                                           child: Column(
@@ -343,11 +375,27 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                           children: const [
                                             Text('Opening Time',
                                                 style: boldContentTitle),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 5),
+                                              child: Text(
+                                                '*',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ),
                                             SizedBox(
-                                              width: 115,
+                                              width: 103,
                                             ),
                                             Text('Contact Number',
                                                 style: boldContentTitle),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 5),
+                                              child: Text(
+                                                '*',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         const SizedBox(height: 5),
@@ -393,14 +441,13 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                                   child: StringTextArea(
                                                     label: 'Phone Number',
                                                     textLine: 1,
-                                                    // validator: (val) {
-                                                    //   if (val!.isEmpty ||
-                                                    //       !RegExp(phoneReg).hasMatch(val)) {
-                                                    //     return 'PLease enter correct phone number';
-                                                    //   } else {
-                                                    //     return null;
-                                                    //   }
-                                                    // },
+                                                    validator: (val) => val!
+                                                            .isEmpty
+                                                        ? 'Phone number is required.'
+                                                        : (!RegExp(phoneNumberPattern)
+                                                                .hasMatch(val))
+                                                            ? 'Please enter valid phone number.'
+                                                            : null,
                                                     onChanged: (val) {
                                                       setState(() =>
                                                           phoneNumber = val);

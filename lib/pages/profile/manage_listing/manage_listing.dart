@@ -304,31 +304,31 @@ class _ManageListingState extends State<ManageListing> {
                                                                   .start,
                                                           children: [
                                                             ProfileTextField(
-                                                                textFieldLabel:
-                                                                    'Category',
-                                                                textFieldValue:
-                                                                    matchedStoreItem[
-                                                                            index]
-                                                                        .selectedCategory,
-                                                                textFieldLine:
-                                                                    1,
-                                                                textFieldHeight:
-                                                                    30,
-                                                                isReadOnly:
-                                                                    true),
+                                                              textFieldLabel:
+                                                                  'Category',
+                                                              textFieldValue:
+                                                                  matchedStoreItem[
+                                                                          index]
+                                                                      .selectedCategory,
+                                                              textFieldLine: 1,
+                                                              textFieldHeight:
+                                                                  30,
+                                                              isReadOnly: true,
+                                                              isBold: true,
+                                                            ),
                                                             ProfileTextField(
-                                                                textFieldLabel:
-                                                                    'Sub Category',
-                                                                textFieldValue:
-                                                                    matchedStoreItem[
-                                                                            index]
-                                                                        .selectedSubCategory,
-                                                                textFieldLine:
-                                                                    1,
-                                                                textFieldHeight:
-                                                                    30,
-                                                                isReadOnly:
-                                                                    true)
+                                                              textFieldLabel:
+                                                                  'Sub Category',
+                                                              textFieldValue:
+                                                                  matchedStoreItem[
+                                                                          index]
+                                                                      .selectedSubCategory,
+                                                              textFieldLine: 1,
+                                                              textFieldHeight:
+                                                                  30,
+                                                              isReadOnly: true,
+                                                              isBold: true,
+                                                            )
                                                           ],
                                                         ),
                                                       )
@@ -342,15 +342,17 @@ class _ManageListingState extends State<ManageListing> {
                                                       Expanded(
                                                         flex: 1,
                                                         child: ProfileTextField(
-                                                            textFieldLabel:
-                                                                'Price',
-                                                            textFieldValue:
-                                                                matchedStoreItem[
-                                                                        index]
-                                                                    .price,
-                                                            textFieldLine: 1,
-                                                            textFieldHeight: 30,
-                                                            isReadOnly: true),
+                                                          textFieldLabel:
+                                                              'Price (RM)',
+                                                          textFieldValue:
+                                                              matchedStoreItem[
+                                                                      index]
+                                                                  .price,
+                                                          textFieldLine: 1,
+                                                          textFieldHeight: 30,
+                                                          isReadOnly: true,
+                                                          isBold: true,
+                                                        ),
                                                       ),
                                                       const SizedBox(
                                                         width: 20,
@@ -358,15 +360,17 @@ class _ManageListingState extends State<ManageListing> {
                                                       Expanded(
                                                         flex: 2,
                                                         child: ProfileTextField(
-                                                            textFieldLabel:
-                                                                'Name',
-                                                            textFieldValue:
-                                                                matchedStoreItem[
-                                                                        index]
-                                                                    .listingName,
-                                                            textFieldLine: 1,
-                                                            textFieldHeight: 30,
-                                                            isReadOnly: true),
+                                                          textFieldLabel:
+                                                              'Name',
+                                                          textFieldValue:
+                                                              matchedStoreItem[
+                                                                      index]
+                                                                  .listingName,
+                                                          textFieldLine: 1,
+                                                          textFieldHeight: 30,
+                                                          isReadOnly: true,
+                                                          isBold: true,
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -374,15 +378,17 @@ class _ManageListingState extends State<ManageListing> {
                                                     children: [
                                                       Expanded(
                                                         child: ProfileTextField(
-                                                            textFieldLabel:
-                                                                'Description',
-                                                            textFieldValue:
-                                                                matchedStoreItem[
-                                                                        index]
-                                                                    .listingDescription,
-                                                            textFieldLine: 4,
-                                                            textFieldHeight: 80,
-                                                            isReadOnly: true),
+                                                          textFieldLabel:
+                                                              'Description',
+                                                          textFieldValue:
+                                                              matchedStoreItem[
+                                                                      index]
+                                                                  .listingDescription,
+                                                          textFieldLine: 6,
+                                                          textFieldHeight: 80,
+                                                          isReadOnly: true,
+                                                          isBold: true,
+                                                        ),
                                                       )
                                                     ],
                                                   ),

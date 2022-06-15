@@ -127,8 +127,9 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             textFieldLine: 1,
                                             textFieldHeight: 30,
                                             isReadOnly: false,
+                                            isRequired: true,
                                             validator: (val) => val!.isEmpty
-                                                ? 'Username'
+                                                ? 'Username is required. '
                                                 : null,
                                             onChanged: (val) => setState(
                                                 () => _currentUsername = val),
@@ -147,6 +148,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             textFieldHeight: 30,
                                             isReadOnly: true,
                                             isNotUpdated: true,
+                                            isRequired: true,
                                             isBold: true,
                                           ),
                                         )
@@ -162,8 +164,9 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             textFieldLine: 1,
                                             textFieldHeight: 30,
                                             isReadOnly: false,
+                                            isRequired: true,
                                             validator: (val) => val!.isEmpty
-                                                ? 'Phone Number'
+                                                ? 'Phone number is required.'
                                                 : null,
                                             onChanged: (val) => setState(() =>
                                                 _currentPhoneNumber = val),
@@ -181,8 +184,10 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             textFieldLine: 2,
                                             textFieldHeight: 50,
                                             isReadOnly: false,
-                                            validator: (val) =>
-                                                val!.isEmpty ? 'Address' : null,
+                                            isRequired: true,
+                                            validator: (val) => val!.isEmpty
+                                                ? 'Address is required. '
+                                                : null,
                                             onChanged: (val) => setState(
                                                 () => _currentAddress = val),
                                             isBold: true,
@@ -199,8 +204,9 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             textFieldLine: 1,
                                             textFieldHeight: 30,
                                             isReadOnly: false,
+                                            isRequired: true,
                                             validator: (val) => val!.isEmpty
-                                                ? 'Postcode'
+                                                ? 'Postcode is required. '
                                                 : null,
                                             onChanged: (val) => setState(
                                               () => _currentPostcode = val,
@@ -234,9 +240,22 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              const Text(
-                                                'State',
-                                                style: buttonLabelStyle,
+                                              Row(
+                                                children: const [
+                                                  Text(
+                                                    'State',
+                                                    style: buttonLabelStyle,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 5),
+                                                    child: Text(
+                                                      '*',
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                               const SizedBox(
                                                 height: 5,

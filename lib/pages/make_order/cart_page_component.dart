@@ -307,7 +307,11 @@ class _CartPageComponentState extends State<CartPageComponent> {
                                                                     .spaceBetween,
                                                             children: [
                                                               Text(
-                                                                'RM ${matchedStore[index]['listing'].price}',
+                                                                matchedStore[index]['listing']
+                                                                            .price ==
+                                                                        ""
+                                                                    ? 'RM -'
+                                                                    : 'RM ${matchedStore[index]['listing'].price}',
                                                                 style:
                                                                     priceLabelStyle,
                                                               ),

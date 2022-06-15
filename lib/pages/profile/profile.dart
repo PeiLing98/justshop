@@ -62,9 +62,9 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                           child: SizedBox(
-                            height: 390,
+                            height: 410,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -88,8 +88,13 @@ class _ProfileState extends State<Profile> {
                                       Navigator.pushNamed(
                                           context, '/userorder');
                                     }),
+                                ProfileButton(
+                                    buttonText: 'Chat',
+                                    onClick: () {
+                                      Navigator.pushNamed(context, '/userchat');
+                                    }),
                                 const SizedBox(
-                                  height: 30,
+                                  height: 20,
                                 ),
                                 StreamBuilder<UserStoreData>(
                                   stream: DatabaseService(uid: user?.uid)
@@ -132,6 +137,12 @@ class _ProfileState extends State<Profile> {
                                               onClick: () {
                                                 Navigator.pushNamed(
                                                     context, '/businessorder');
+                                              }),
+                                          ProfileButton(
+                                              buttonText: 'Chat With Customer',
+                                              onClick: () {
+                                                Navigator.pushNamed(
+                                                    context, '/businesschat');
                                               }),
                                         ],
                                       );

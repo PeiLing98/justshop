@@ -209,3 +209,18 @@ class UserReviewData {
     required this.review,
   });
 }
+
+class UserChatData {
+  final String uid;
+  final String chatId;
+  final String user1;
+  final String user2;
+  final List message;
+
+  UserChatData(
+      {required this.uid,
+      required this.chatId,
+      required this.user1,
+      required this.user2,
+      required this.message});
+}

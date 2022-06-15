@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_year_project/models/cart_model.dart';
+import 'package:final_year_project/models/chat_model.dart';
 import 'package:final_year_project/models/listing_model.dart';
 import 'package:final_year_project/models/order_model.dart';
 import 'package:final_year_project/models/review_model.dart';
@@ -568,5 +569,55 @@ class DatabaseService {
         .doc(uid)
         .snapshots()
         .map(_userReviewDataFromSnapshot);
+  }
+
+// ------------------------------- chat -------------------------------------------
+  final CollectionReference chatCollection =
+      FirebaseFirestore.instance.collection('chat');
+
+  Future createChatRoom(String user1Id, String user2Id, List message) async {
+    String chatId = const Uuid().v1();
+    return await chatCollection.doc(chatId).set({
+      'chatId': chatId,
+      'user1': user1Id,
+      'user2': user2Id,
+      'message': message
+    });
+  }
+
+  Future updateMessage(String chatId, List message) async {
+    return await chatCollection
+        .doc(chatId)
+        .update({'message': FieldValue.arrayUnion(message)});
+  }
+
+  List<Chat> _chatFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Chat(
+          chatId: doc.get('chatId') ?? '',
+          user1: doc.get('user1') ?? '',
+          user2: doc.get('user2') ?? '',
+          message: doc.get('message') ?? '');
+    }).toList();
+  }
+
+  UserChatData _userChatDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserChatData(
+      uid: uid!,
+      chatId: snapshot.get('chatId'),
+      user1: snapshot.get('user1'),
+      user2: snapshot.get('user2'),
+      message: snapshot.get('message'),
+    );
+  }
+
+  // get item stream
+  Stream<List<Chat>> get chat {
+    return chatCollection.snapshots().map(_chatFromSnapshot);
+  }
+
+  //get users item doc stream
+  Stream<UserChatData> get userChatData {
+    return chatCollection.doc(uid).snapshots().map(_userChatDataFromSnapshot);
   }
 }

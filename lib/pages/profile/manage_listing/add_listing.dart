@@ -120,7 +120,7 @@ class _AddListingState extends State<AddListing> {
                   height: 5,
                 ),
                 SizedBox(
-                  height: 510,
+                  height: 330,
                   child: Form(
                       key: formKey,
                       child: Padding(
@@ -139,6 +139,13 @@ class _AddListingState extends State<AddListing> {
                                       children: [
                                         const Text('Image',
                                             style: boldContentTitle),
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            '*',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
                                         SizedBox(
                                           height: 20,
                                           child: IconButton(
@@ -148,9 +155,16 @@ class _AddListingState extends State<AddListing> {
                                             onPressed: selectFile,
                                           ),
                                         ),
-                                        const SizedBox(width: 100),
+                                        const SizedBox(width: 90),
                                         const Text('Listing Category',
                                             style: boldContentTitle),
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            '*',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
                                       ]),
                                   const SizedBox(height: 5),
                                   Row(
@@ -246,11 +260,18 @@ class _AddListingState extends State<AddListing> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: const [
-                                        Text('Listing Price',
+                                        Text('Listing Price (RM)',
                                             style: boldContentTitle),
-                                        SizedBox(width: 110),
+                                        SizedBox(width: 75),
                                         Text('Listing Name',
                                             style: boldContentTitle),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            '*',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
                                       ]),
                                   const SizedBox(height: 5),
                                   SizedBox(
@@ -281,6 +302,9 @@ class _AddListingState extends State<AddListing> {
                                             label:
                                                 'Nasi Lemak / Face Mask / Design',
                                             textLine: 1,
+                                            validator: (val) => val!.isEmpty
+                                                ? 'Listing name is required.'
+                                                : null,
                                             onChanged: (val) {
                                               listingName = val;
                                             },
@@ -293,18 +317,32 @@ class _AddListingState extends State<AddListing> {
                               ),
                             ),
                             SizedBox(
-                              height: 105,
+                              height: 150,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Listing Description',
-                                      style: boldContentTitle),
+                                  Row(
+                                    children: const [
+                                      Text('Listing Description',
+                                          style: boldContentTitle),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          '*',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   const SizedBox(
                                     height: 5,
                                   ),
                                   StringTextArea(
                                     label: 'Describe Your Listing In Details',
-                                    textLine: 4,
+                                    textLine: 6,
+                                    validator: (val) => val!.isEmpty
+                                        ? 'Listing description is required.'
+                                        : null,
                                     onChanged: (val) {
                                       listingDescription = val;
                                     },

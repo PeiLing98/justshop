@@ -86,6 +86,7 @@ class _SellerProfileState extends State<SellerProfile> {
                               textFieldLine: 1,
                               textFieldHeight: 30,
                               isReadOnly: true,
+                              isBold: true,
                             ),
                             ProfileTextField(
                               textFieldLabel: 'Business Location',
@@ -93,6 +94,7 @@ class _SellerProfileState extends State<SellerProfile> {
                               textFieldLine: 3,
                               textFieldHeight: 60,
                               isReadOnly: true,
+                              isBold: true,
                             ),
                             ProfileTwoTextField(
                               textFieldLabel: 'Opening Time',
@@ -108,6 +110,7 @@ class _SellerProfileState extends State<SellerProfile> {
                               textFieldLine: 1,
                               textFieldHeight: 30,
                               isReadOnly: true,
+                              isBold: true,
                             ),
                             ProfileThreeTextField(
                               textFieldLabel: 'Business Social Media',

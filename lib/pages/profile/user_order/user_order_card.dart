@@ -145,8 +145,12 @@ class _UserOrderCardState extends State<UserOrderCard> {
                                                 children: [
                                                   Text(
                                                     'RM ' +
-                                                        matchedItem[index]
-                                                            .price,
+                                                        (matchedItem[index]
+                                                                    .price ==
+                                                                ""
+                                                            ? '-'
+                                                            : matchedItem[index]
+                                                                .price),
                                                     style: priceLabelStyle,
                                                   ),
                                                   Text(

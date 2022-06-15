@@ -377,9 +377,13 @@ class _SearchListingState extends State<SearchListing> {
                                     rating != 0 &&
                                     sortedByPopularity) {
                                   matchedItem = matchedItem.where((item) {
-                                    return (double.parse(item.price) >=
+                                    return (double.parse(item.price == ""
+                                                    ? '1'
+                                                    : item.price) >=
                                                 minPrice.toDouble() &&
-                                            double.parse(item.price) <=
+                                            double.parse(item.price == ""
+                                                    ? '1'
+                                                    : item.price) <=
                                                 maxPrice.toDouble()) &&
                                         double.parse(item.rating) >=
                                             rating.toDouble();
@@ -391,9 +395,13 @@ class _SearchListingState extends State<SearchListing> {
                                     maxPrice != 0 &&
                                     rating != 0) {
                                   matchedItem = matchedItem.where((item) {
-                                    return double.parse(item.price) >=
+                                    return double.parse(item.price == ""
+                                                ? '1'
+                                                : item.price) >=
                                             minPrice.toDouble() &&
-                                        double.parse(item.price) <=
+                                        double.parse(item.price == ""
+                                                ? '1'
+                                                : item.price) <=
                                             maxPrice.toDouble() &&
                                         double.parse(item.rating) >=
                                             rating.toDouble();
@@ -402,9 +410,13 @@ class _SearchListingState extends State<SearchListing> {
                                     maxPrice != 0 &&
                                     sortedByPopularity) {
                                   matchedItem = matchedItem.where((item) {
-                                    return (double.parse(item.price) >=
+                                    return (double.parse(item.price == ""
+                                                ? '1'
+                                                : item.price) >=
                                             minPrice.toDouble() &&
-                                        double.parse(item.price) <=
+                                        double.parse(item.price == ""
+                                                ? '1'
+                                                : item.price) <=
                                             maxPrice.toDouble());
                                   }).toList();
                                   matchedItem.sort((b, a) {
@@ -420,9 +432,13 @@ class _SearchListingState extends State<SearchListing> {
                                   });
                                 } else if (minPrice != 0 && maxPrice != 0) {
                                   matchedItem = matchedItem.where((item) {
-                                    return (double.parse(item.price) >=
+                                    return (double.parse(item.price == ""
+                                                ? '1'
+                                                : item.price) >=
                                             minPrice.toDouble() &&
-                                        double.parse(item.price) <=
+                                        double.parse(item.price == ""
+                                                ? '1'
+                                                : item.price) <=
                                             maxPrice.toDouble());
                                   }).toList();
                                 } else if (rating != 0) {

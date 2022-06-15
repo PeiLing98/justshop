@@ -104,9 +104,10 @@ class _SignUpState extends State<SignUp> {
                                       return 'Enter a phone number';
                                     }
 
-                                    // if (!RegExp(pRegex).hasMatch(val)) {
-                                    //   return 'Please enter a valid phone number';
-                                    // }
+                                    if (!RegExp(phoneNumberPattern)
+                                        .hasMatch(val)) {
+                                      return 'Please enter a valid phone number';
+                                    }
 
                                     return null;
                                   }),

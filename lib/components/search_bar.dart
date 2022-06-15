@@ -54,7 +54,7 @@ class CustomSearchDelegate extends SearchDelegate {
       IconButton(
         onPressed: () async {
           await DatabaseService(uid: userId)
-              .updateSearchHistory(userId!, query);
+              .updateSearchHistory(userId!, query.toLowerCase());
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -122,7 +122,8 @@ class CustomSearchDelegate extends SearchDelegate {
                         onTap: () async {
                           query = matchQuery[index].listingName;
                           await DatabaseService(uid: userId)
-                              .updateSearchHistory(userId!, query);
+                              .updateSearchHistory(
+                                  userId!, query.toLowerCase());
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -193,7 +194,8 @@ class CustomSearchDelegate extends SearchDelegate {
                         onTap: () async {
                           query = resultName;
                           await DatabaseService(uid: userId)
-                              .updateSearchHistory(userId!, query);
+                              .updateSearchHistory(
+                                  userId!, query.toLowerCase());
                           Navigator.push(
                               context,
                               MaterialPageRoute(

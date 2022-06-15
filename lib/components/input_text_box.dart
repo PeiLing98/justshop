@@ -119,14 +119,14 @@ class StringTextArea extends StatefulWidget {
   final String? Function(String?)? validator;
   final String? initialValue;
 
-  const StringTextArea(
-      {Key? key,
-      required this.label,
-      required this.textLine,
-      required this.onChanged,
-      this.validator,
-      this.initialValue})
-      : super(key: key);
+  const StringTextArea({
+    Key? key,
+    required this.label,
+    required this.textLine,
+    required this.onChanged,
+    this.validator,
+    this.initialValue,
+  }) : super(key: key);
 
   @override
   _StringTextAreaState createState() => _StringTextAreaState();
@@ -166,6 +166,8 @@ class ProfileTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final bool? isNotUpdated;
   final bool? isBold;
+  final bool? isRequired;
+  final TextInputType? keyboardType;
 
   const ProfileTextField({
     Key? key,
@@ -178,6 +180,8 @@ class ProfileTextField extends StatefulWidget {
     this.onChanged,
     this.isNotUpdated,
     this.isBold,
+    this.keyboardType,
+    this.isRequired,
   }) : super(key: key);
 
   @override
@@ -190,9 +194,22 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.textFieldLabel,
-          style: widget.isBold == true ? buttonLabelStyle : ratingLabelStyle,
+        Row(
+          children: [
+            Text(
+              widget.textFieldLabel,
+              style:
+                  widget.isBold == true ? buttonLabelStyle : ratingLabelStyle,
+            ),
+            if (widget.isRequired == true)
+              const Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text(
+                  '*',
+                  style: TextStyle(color: Colors.red),
+                ),
+              )
+          ],
         ),
         const SizedBox(
           height: 5,
@@ -204,6 +221,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
             color:
                 widget.isNotUpdated == true ? Colors.grey[300] : Colors.white,
             child: TextFormField(
+              keyboardType: widget.keyboardType,
               validator: widget.validator,
               onChanged: widget.onChanged,
               readOnly: widget.isReadOnly,
@@ -236,6 +254,7 @@ class ProfileTwoTextField extends StatefulWidget {
   final int textFieldLine;
   final double textFieldHeight;
   final bool isReadOnly;
+  final bool? isRequired;
   final String? Function(String?)? validator1;
   final String? Function(String?)? validator2;
   final Function(String)? onChanged1;
@@ -256,7 +275,8 @@ class ProfileTwoTextField extends StatefulWidget {
       this.onChanged1,
       this.onChanged2,
       this.onTap1,
-      this.onTap2})
+      this.onTap2,
+      this.isRequired})
       : super(key: key);
 
   @override
@@ -269,9 +289,21 @@ class _ProfileTwoTextFieldState extends State<ProfileTwoTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.textFieldLabel,
-          style: buttonLabelStyle,
+        Row(
+          children: [
+            Text(
+              widget.textFieldLabel,
+              style: buttonLabelStyle,
+            ),
+            if (widget.isRequired == true)
+              const Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text(
+                  '*',
+                  style: TextStyle(color: Colors.red),
+                ),
+              )
+          ],
         ),
         const SizedBox(
           height: 5,
@@ -419,7 +451,7 @@ class _ProfileThreeTextFieldState extends State<ProfileThreeTextField> {
                     minLines: widget.textFieldLine,
                     maxLines: widget.textFieldLine,
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: EdgeInsets.all(5),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.zero,
                       ),
@@ -458,7 +490,7 @@ class _ProfileThreeTextFieldState extends State<ProfileThreeTextField> {
                     minLines: widget.textFieldLine,
                     maxLines: widget.textFieldLine,
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: EdgeInsets.all(5),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.zero,
                       ),
@@ -500,7 +532,7 @@ class _ProfileThreeTextFieldState extends State<ProfileThreeTextField> {
                     minLines: widget.textFieldLine,
                     maxLines: widget.textFieldLine,
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: EdgeInsets.all(5),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.zero,
                       ),

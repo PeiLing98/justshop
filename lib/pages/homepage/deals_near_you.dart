@@ -37,10 +37,18 @@ class _DealsNearYouState extends State<DealsNearYou> {
     var city = address.postalCode;
     var state = address.state;
 
+    // if (mounted) {
     setState(() {
       currentCity = city;
       currentState = state;
     });
+    // }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentPosition();
   }
 
   @override
@@ -55,6 +63,9 @@ class _DealsNearYouState extends State<DealsNearYou> {
               double long = position.longitude;
               getFormattedAddressFromCoordinates(lat, long);
             }
+
+            // print(currentCity);
+            // print(currentState);
 
             return StreamBuilder<List<Store>>(
                 stream: DatabaseService(uid: "").stores,

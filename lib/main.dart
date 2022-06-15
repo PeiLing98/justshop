@@ -1,6 +1,7 @@
 import 'package:final_year_project/models/order_model.dart';
 import 'package:final_year_project/models/user_model.dart';
 import 'package:final_year_project/pages/make_order/cart_page.dart';
+import 'package:final_year_project/pages/profile/business_chat/business_chat.dart';
 import 'package:final_year_project/pages/profile/business_order/business_order.dart';
 import 'package:final_year_project/pages/profile/manage_listing/manage_listing.dart';
 import 'package:final_year_project/pages/profile/seller_profile/seller_profile.dart';
@@ -10,6 +11,7 @@ import 'package:final_year_project/pages/homepage/home_page.dart';
 import 'package:final_year_project/components/location_map.dart';
 import 'package:final_year_project/pages/onboarding/login.dart';
 import 'package:final_year_project/pages/profile/profile.dart';
+import 'package:final_year_project/pages/profile/user_chat/user_chat.dart';
 import 'package:final_year_project/pages/profile/user_order/user_order.dart';
 import 'package:final_year_project/pages/profile/user_profile/update_user_profile.dart';
 import 'package:final_year_project/pages/profile/user_profile/user_profile.dart';
@@ -53,6 +55,8 @@ Future<void> main() async {
           '/updateuserprofile': (context) => const UpdateUserProfile(),
           '/userorder': (context) => const UserOrder(),
           '/businessorder': (context) => const BusinessOrder(),
+          '/userchat': (context) => const UserChat(),
+          '/businesschat': (context) => const BusinessChat(),
         },
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,

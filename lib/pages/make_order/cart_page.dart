@@ -98,16 +98,22 @@ class _CartPageState extends State<CartPage> {
                       } else {
                         for (int i = 0; i < matchedSelectedItem.length; i++) {
                           if (i == 0) {
-                            firstPrice =
-                                (matchedSelectedItem[0]['cart'].quantity *
-                                    double.parse(
-                                        matchedSelectedItem[0]['item'].price));
+                            firstPrice = (matchedSelectedItem[0]['cart']
+                                    .quantity *
+                                double.parse(
+                                    matchedSelectedItem[0]['item'].price == ""
+                                        ? '0'
+                                        : matchedSelectedItem[0]['item']
+                                            .price));
                             totalPrice = firstPrice;
                           } else {
-                            secondPrice =
-                                (matchedSelectedItem[i]['cart'].quantity *
-                                    double.parse(
-                                        matchedSelectedItem[i]['item'].price));
+                            secondPrice = (matchedSelectedItem[i]['cart']
+                                    .quantity *
+                                double.parse(
+                                    matchedSelectedItem[i]['item'].price == ""
+                                        ? '0'
+                                        : matchedSelectedItem[i]['item']
+                                            .price));
                             totalPrice = totalPrice + secondPrice;
                           }
                         }

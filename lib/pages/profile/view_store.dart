@@ -468,7 +468,7 @@ class _ViewStoreState extends State<ViewStore> {
                                                                                           style: boldContentTitle,
                                                                                         ),
                                                                                         subtitle: Text(
-                                                                                          'RM ${matchedStoreItem[index].price}',
+                                                                                          matchedStoreItem[index].price == "" ? "RM -" : 'RM ${matchedStoreItem[index].price}',
                                                                                           style: ratingLabelStyle,
                                                                                         ),
                                                                                         leading: Container(

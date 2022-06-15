@@ -26,6 +26,10 @@ class _StoreListingState extends State<StoreListing> {
         if (snapshot.hasData) {
           List<Store>? store = snapshot.data;
 
+          store?.sort((b, a) {
+            return a.rating.compareTo(b.rating);
+          });
+
           return SizedBox(
             height: (115 * store!.length).toDouble(),
             child: GridView.builder(
