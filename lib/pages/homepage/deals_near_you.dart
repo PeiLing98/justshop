@@ -22,7 +22,14 @@ class _DealsNearYouState extends State<DealsNearYou> {
   String currentCity = "";
 
   Future<Position> getCurrentPosition() async {
-    Position currentPosition = await Geolocator.getCurrentPosition(
+    var _permissionGranted = await Geolocator.checkPermission();
+
+    if (_permissionGranted != LocationPermission.always ||
+        _permissionGranted != LocationPermission.whileInUse) {
+      await Geolocator.requestPermission();
+    }
+
+    final currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
         forceAndroidLocationManager: true);
 
@@ -48,7 +55,7 @@ class _DealsNearYouState extends State<DealsNearYou> {
   @override
   void initState() {
     super.initState();
-    getCurrentPosition();
+    // getCurrentPosition();
   }
 
   @override
@@ -63,9 +70,6 @@ class _DealsNearYouState extends State<DealsNearYou> {
               double long = position.longitude;
               getFormattedAddressFromCoordinates(lat, long);
             }
-
-            // print(currentCity);
-            // print(currentState);
 
             return StreamBuilder<List<Store>>(
                 stream: DatabaseService(uid: "").stores,
