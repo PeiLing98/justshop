@@ -72,24 +72,39 @@ class UserStoreData {
   final String rating;
   final int totalSales;
 
-  UserStoreData(
-      {required this.uid,
-      required this.storeId,
-      required this.imagePath,
-      required this.businessName,
-      required this.latitude,
-      required this.longtitude,
-      required this.address,
-      required this.city,
-      required this.state,
-      required this.startTime,
-      required this.endTime,
-      required this.phoneNumber,
-      required this.facebookLink,
-      required this.instagramLink,
-      required this.whatsappLink,
-      required this.rating,
-      required this.totalSales});
+  UserStoreData({
+    required this.uid,
+    required this.storeId,
+    required this.imagePath,
+    required this.businessName,
+    required this.latitude,
+    required this.longtitude,
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.startTime,
+    required this.endTime,
+    required this.phoneNumber,
+    required this.facebookLink,
+    required this.instagramLink,
+    required this.whatsappLink,
+    required this.rating,
+    required this.totalSales,
+  });
+}
+
+class UserStoreAboutBusiness {
+  final String uid;
+  final String storeId;
+  final String aboutBusiness;
+  final String videoBusiness;
+
+  UserStoreAboutBusiness({
+    required this.uid,
+    required this.storeId,
+    required this.aboutBusiness,
+    required this.videoBusiness,
+  });
 }
 
 class UserItemData {

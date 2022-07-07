@@ -1,8 +1,11 @@
+import 'dart:ffi';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:final_year_project/components/app_bar.dart';
 import 'package:final_year_project/components/button.dart';
 import 'package:final_year_project/components/input_text_box.dart';
 import 'package:final_year_project/components/location_map.dart';
+import 'package:final_year_project/components/video_player.dart';
 import 'package:final_year_project/constant.dart';
 import 'package:final_year_project/modals/alert_text_modal.dart';
 import 'package:final_year_project/models/user_model.dart';
@@ -14,6 +17,7 @@ import 'dart:io' as i;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:video_player/video_player.dart';
 
 class RegisterBusiness extends StatefulWidget {
   const RegisterBusiness({Key? key}) : super(key: key);
@@ -30,6 +34,9 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   String imagePath = '';
   String imageName = '';
 
+  String videoPath = '';
+  String videoName = '';
+
   String downloadLogoPath = "";
   String businessName = '';
   String latitude = '';
@@ -45,6 +52,10 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   String whatsappLink = '';
   String stringStartTime = '';
   String stringEndTime = '';
+  String aboutBusiness = "";
+  String downloadVideoPath = "";
+  i.File videoFile = i.File("");
+  VideoPlayerController controller = VideoPlayerController.file(new i.File(""));
 
   //select file from local device
   Future selectFile() async {
@@ -66,6 +77,31 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     setState(() {
       pickedFile = result.files.first;
       // pickedFile = result;
+    });
+  }
+
+  Future selectVideoFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['mp4'],
+    );
+
+    if (result == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('No image is selected.')));
+      return null;
+    }
+
+    videoPath = result.files.single.path!;
+    videoName = result.files.single.name;
+
+    setState(() {
+      videoFile = i.File(videoPath);
+      controller = VideoPlayerController.file(videoFile)
+        ..addListener(() => setState(() {}))
+        ..setLooping(true)
+        ..initialize().then((_) => controller.play());
     });
   }
 
@@ -132,6 +168,17 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
       city = result[3];
       state = result[4];
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -557,6 +604,83 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                       ]),
                                 ),
                                 SizedBox(
+                                    height: 300,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text('About Your Business',
+                                              style: boldContentTitle),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          SizedBox(
+                                              height: 100,
+                                              child: StringTextArea(
+                                                label:
+                                                    'Write more about your business',
+                                                textLine: 6,
+                                                onChanged: (val) {
+                                                  setState(() =>
+                                                      aboutBusiness = val);
+                                                },
+                                              )),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          SizedBox(
+                                            height: 30,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Video extension allowed: .mp4',
+                                                  style: ratingLabelStyle,
+                                                ),
+                                                IconButton(
+                                                    padding:
+                                                        const EdgeInsets.all(0),
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    onPressed: selectVideoFile,
+                                                    icon: Icon(
+                                                      Icons.upload,
+                                                      size: 20,
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  height: 130,
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.rectangle,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              250,
+                                                              233,
+                                                              221,
+                                                              221),
+                                                      border: Border.all(
+                                                          width: 1,
+                                                          color: Colors.grey)),
+                                                  child: ClipRRect(
+                                                      child: videoPath != ""
+                                                          ? VideoPlayerBuilder(
+                                                              controller:
+                                                                  controller,
+                                                            )
+                                                          : null),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ])),
+                                SizedBox(
                                   height: 35,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -589,29 +713,42 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                                             .then((value) =>
                                                                 print('Done'));
 
+                                                        storage
+                                                            .uploadFile(
+                                                                videoPath,
+                                                                videoName)
+                                                            .then((value) =>
+                                                                print('Done'));
+
                                                         downloadLogoPath =
                                                             await storage
                                                                 .downloadURL(
                                                                     imageName);
 
+                                                        downloadVideoPath =
+                                                            await storage
+                                                                .downloadURL(
+                                                                    videoName);
+
                                                         await DatabaseService(
                                                                 uid: userId)
                                                             .updateStoreData(
-                                                          storeId,
-                                                          downloadLogoPath,
-                                                          businessName,
-                                                          latitude,
-                                                          longtitude,
-                                                          address,
-                                                          city,
-                                                          state,
-                                                          stringStartTime,
-                                                          stringEndTime,
-                                                          phoneNumber,
-                                                          facebookLink,
-                                                          instagramLink,
-                                                          whatsappLink,
-                                                        );
+                                                                storeId,
+                                                                downloadLogoPath,
+                                                                businessName,
+                                                                latitude,
+                                                                longtitude,
+                                                                address,
+                                                                city,
+                                                                state,
+                                                                stringStartTime,
+                                                                stringEndTime,
+                                                                phoneNumber,
+                                                                facebookLink,
+                                                                instagramLink,
+                                                                whatsappLink,
+                                                                aboutBusiness,
+                                                                downloadVideoPath);
 
                                                         Navigator.push(
                                                             context,

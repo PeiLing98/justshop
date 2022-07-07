@@ -96,6 +96,8 @@ class DatabaseService {
     String facebookLink,
     String instagramLink,
     String whatsappLink,
+    String aboutBusiness,
+    String videoBusiness,
   ) async {
     String rating = "0";
     int totalSales = 0;
@@ -115,7 +117,9 @@ class DatabaseService {
       'instagramLink': instagramLink,
       'whatsappLink': whatsappLink,
       'rating': rating,
-      'totalSales': totalSales
+      'totalSales': totalSales,
+      'aboutBusiness': aboutBusiness,
+      'videoBusiness': videoBusiness
     });
   }
 
@@ -131,22 +135,33 @@ class DatabaseService {
   List<Store> _storeListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Store(
+        storeId: doc.get('storeId') ?? '',
+        imagePath: doc.get('imagePath') ?? '',
+        businessName: doc.get('businessName') ?? '',
+        latitude: doc.get('latitude') ?? '',
+        longtitude: doc.get('longtitude') ?? '',
+        address: doc.get('address') ?? '',
+        city: doc.get('city') ?? '',
+        state: doc.get('state') ?? '',
+        startTime: doc.get('startTime') ?? '',
+        endTime: doc.get('endTime') ?? '',
+        phoneNumber: doc.get('phoneNumber') ?? '',
+        facebookLink: doc.get('facebookLink') ?? '',
+        instagramLink: doc.get('instagramLink') ?? '',
+        whatsappLink: doc.get('whatsappLink') ?? '',
+        rating: doc.get('rating') ?? '',
+        totalSales: doc.get('totalSales') ?? '',
+      );
+    }).toList();
+  }
+
+  List<StoreAboutBusiness> _storeAboutBusinessListFromSnapshot(
+      QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return StoreAboutBusiness(
           storeId: doc.get('storeId') ?? '',
-          imagePath: doc.get('imagePath') ?? '',
-          businessName: doc.get('businessName') ?? '',
-          latitude: doc.get('latitude') ?? '',
-          longtitude: doc.get('longtitude') ?? '',
-          address: doc.get('address') ?? '',
-          city: doc.get('city') ?? '',
-          state: doc.get('state') ?? '',
-          startTime: doc.get('startTime') ?? '',
-          endTime: doc.get('endTime') ?? '',
-          phoneNumber: doc.get('phoneNumber') ?? '',
-          facebookLink: doc.get('facebookLink') ?? '',
-          instagramLink: doc.get('instagramLink') ?? '',
-          whatsappLink: doc.get('whatsappLink') ?? '',
-          rating: doc.get('rating') ?? '',
-          totalSales: doc.get('totalSales') ?? '');
+          aboutBusiness: doc.get('aboutBusiness') ?? '',
+          videoBusiness: doc.get('videoBusiness') ?? '');
     }).toList();
   }
 
@@ -173,14 +188,35 @@ class DatabaseService {
     );
   }
 
+  UserStoreAboutBusiness _userStoreAboutBusinessFromSnapshot(
+      DocumentSnapshot snapshot) {
+    return UserStoreAboutBusiness(
+      uid: uid!,
+      storeId: snapshot.get('storeId'),
+      aboutBusiness: snapshot.get('aboutBusiness'),
+      videoBusiness: snapshot.get('videoBusiness'),
+    );
+  }
+
   // get store stream
   Stream<List<Store>> get stores {
     return storeCollection.snapshots().map(_storeListFromSnapshot);
   }
 
+  Stream<List<StoreAboutBusiness>> get storesAboutBusiness {
+    return storeCollection.snapshots().map(_storeAboutBusinessListFromSnapshot);
+  }
+
   //get users store doc stream
   Stream<UserStoreData> get userStoreData {
     return storeCollection.doc(uid).snapshots().map(_userStoreDataFromSnapshot);
+  }
+
+  Stream<UserStoreAboutBusiness> get userStoreAboutBusinessData {
+    return storeCollection
+        .doc(uid)
+        .snapshots()
+        .map(_userStoreAboutBusinessFromSnapshot);
   }
 
 // ----------------------------------- item listing ----------------------------------------------

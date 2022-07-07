@@ -120,11 +120,15 @@ class _FilterTabBarState extends State<FilterTabBar> {
 }
 
 class StoreTabBar extends StatefulWidget {
+  final Widget aboutUs;
   final Widget listingBody;
   final Widget reviewBody;
 
   const StoreTabBar(
-      {Key? key, required this.listingBody, required this.reviewBody})
+      {Key? key,
+      required this.listingBody,
+      required this.reviewBody,
+      required this.aboutUs})
       : super(key: key);
 
   @override
@@ -135,7 +139,7 @@ class _StoreTabBarState extends State<StoreTabBar> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Column(
         children: [
           const TabBar(
@@ -144,8 +148,12 @@ class _StoreTabBarState extends State<StoreTabBar> {
             unselectedLabelColor: Colors.grey,
             indicatorColor: Colors.black,
             indicatorWeight: 3,
-            indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
+            indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
             tabs: [
+              Tab(
+                text: 'ABOUT US',
+                height: 30,
+              ),
               Tab(
                 text: 'LISTINGS',
                 height: 30,
@@ -160,6 +168,7 @@ class _StoreTabBarState extends State<StoreTabBar> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
               child: TabBarView(children: [
+                widget.aboutUs,
                 widget.listingBody,
                 widget.reviewBody,
               ]),
