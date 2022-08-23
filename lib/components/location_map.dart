@@ -18,7 +18,7 @@ class LocationMap extends StatefulWidget {
   _LocationMapState createState() => _LocationMapState();
 }
 
-const kGoogleApiKey = 'AIzaSyCoho5rQrIjW0KGmJXpwZmuo_dgJXCgTTs';
+const kGoogleApiKey = '';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _LocationMapState extends State<LocationMap> {
