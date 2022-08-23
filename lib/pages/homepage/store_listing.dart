@@ -13,8 +13,6 @@ class StoreListing extends StatefulWidget {
   _StoreListingState createState() => _StoreListingState();
 }
 
-// const kGoogleApiKey = 'AIzaSyCoho5rQrIjW0KGmJXpwZmuo_dgJXCgTTs';
-
 class _StoreListingState extends State<StoreListing> {
   //var timeNow = TimeOfDay.now();
 
