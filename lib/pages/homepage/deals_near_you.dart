@@ -17,7 +17,7 @@ class DealsNearYou extends StatefulWidget {
 }
 
 class _DealsNearYouState extends State<DealsNearYou> {
-  final kGoogleApiKey = 'AIzaSyCoho5rQrIjW0KGmJXpwZmuo_dgJXCgTTs';
+  final kGoogleApiKey = '';
   String currentState = "";
   String currentCity = "";
 
